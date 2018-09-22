@@ -1,0 +1,9 @@
+{
+  "name": "fingerprint-server",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {},
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
