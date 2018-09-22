@@ -2,7 +2,9 @@
   "name": "fingerprint-server",
   "version": "0.1.0",
   "private": true,
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemon": "^1.18.4"
+  },
   "dependencies": {
     "express": "^4.16.3",
     "http": "0.0.0"
