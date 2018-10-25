@@ -1,59 +1,97 @@
 <template>
-  <div id="app">
-    <router-view/>
-  </div>
+<div>
+  <v-app dark>
+    <v-navigation-drawer
+      persistent
+      :mini-variant="miniVariant"
+      :clipped="clipped"
+      v-model="drawer"
+      enable-resize-watcher
+      fixed
+      app
+    >
+      <v-list>
+        <v-list-tile
+          value="true"
+          v-for="(item, i) in items"
+          :key="i"
+        >
+          <v-list-tile-action>
+            <v-icon v-html="item.icon"></v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title v-text="item.title"></v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
+    <v-toolbar
+      app
+      :clipped-left="clipped"
+    >
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-btn icon @click.stop="miniVariant = !miniVariant">
+        <v-icon v-html="miniVariant ? 'mdi-chevron-right' : 'mdi-chevron-left'"></v-icon>
+      </v-btn>
+      <v-btn icon @click.stop="clipped = !clipped">
+        <v-icon>mdi-web</v-icon>
+      </v-btn>
+      <v-btn icon @click.stop="fixed = !fixed">
+        <v-icon>mdi-minus</v-icon>
+      </v-btn>
+      <v-toolbar-title v-text="title"></v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon @click.stop="rightDrawer = !rightDrawer">
+        <v-icon>mdi-menu</v-icon>
+      </v-btn>
+    </v-toolbar>
+    <v-content>
+      <router-view/>
+    </v-content>
+    <v-navigation-drawer
+      temporary
+      :right="right"
+      v-model="rightDrawer"
+      fixed
+      app
+    >
+      <v-list>
+        <v-list-tile @click="right = !right">
+          <v-list-tile-action>
+            <v-icon>mdi-arrows-left-right-bold-outline</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title>Switch drawer (click me)</v-list-tile-title>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
+    <v-footer :fixed="fixed" app>
+      <span>&copy; 2017</span>
+    </v-footer>
+  </v-app>
+</div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  data () {
+    return {
+      clipped: false,
+      drawer: true,
+      fixed: false,
+      items: [{
+        icon: 'mdi-chart-bubble',
+        title: 'Inspire'
+      }],
+      miniVariant: false,
+      right: true,
+      rightDrawer: false,
+      title: 'GAMIESTE'
+    }
+  }
 }
 </script>
 
 <style>
-#app {
-  padding:5% 0px 50% 0px;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  background-image: linear-gradient(#999 , #fff);
-  text-align: center;
-  margin: 8px ;
-  color: #000;
-  text-shadow: 2px 2px 4px white;
-}
-
-.button {
-    background-image: radial-gradient(#000 , #444);
-    padding: 12px 20px;
-    margin: 8px 0;
-    border-radius: 10px;
-    color: white;
-    text-align: center-left;
-    text-decoration: none;
-    text-shadow: 2px 2px 4px white;
-    box-shadow:2px 2px 4px black;
-    transition: box-shadow 0.3s;
-}
-.button:hover{
-    background-image: radial-gradient(#000 , #444);
-    padding: 12px 20px;
-    margin: 8px 0;
-    border-radius: 10px;
-    color: white;
-    text-align: center-left;
-    text-decoration: none;
-    text-shadow: 2px 2px 4px white;
-    box-shadow:0px 0px 10px white;
-}
-input[type=text] {
-    padding: 12px 20px;
-    margin: 8px 0;
-    box-sizing: border-box;
-    border:1px solid, black;
-    box-shadow:2px 2px 4px black;
-    border-radius: 10px;
-    background-image: radial-gradient(white ,#cccccc);
-    color: black;
-    text-shadow: 2px 2px 4px #666;
-}
 
 </style>

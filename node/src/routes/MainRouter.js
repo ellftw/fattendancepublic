@@ -1,15 +1,19 @@
 const apiRouter = require('express').Router()
 const authRouter = require('./AuthRouter')
+const Student = require('../models/Student')
 
 apiRouter.use('/auth', authRouter)
 
-apiRouter.get('/getAllStudents', (req, res) => {
+// new Student({
+// 	name: "donald",
+// 	surname: "duck",
+// 	arithmosMitroou: -1
+// }).save()
+
+apiRouter.get('/getAllStudents', async (req, res) => {
 	console.log("kapios patise to koumpi")
-	
-	res.status(200).json({students : [
-		{'name': 'alex', 'arithmosMitroou': '3253', 'surname': 'kalaitzidis', 'present': true},
-		{'name': 'giannis', 'arithmosMitroou': '3254', 'surname': 'gkikas', 'present': false},
-	  ]})
+	let students = await Student.find({}).exec()
+	res.status(200).json({students : students})
 })
 
 apiRouter.get('/', (req, res) => {
