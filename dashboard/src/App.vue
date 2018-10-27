@@ -2,12 +2,12 @@
 <div>
   <v-app dark>
     <v-navigation-drawer
-      persistent
       :mini-variant="miniVariant"
       :clipped="clipped"
       v-model="drawer"
       enable-resize-watcher
       fixed
+      temporary
       app
     >
       <v-list>
@@ -76,8 +76,8 @@ export default {
   name: 'App',
   data () {
     return {
-      clipped: false,
-      drawer: true,
+      clipped: true,
+      drawer: false,
       fixed: false,
       items: [{
         icon: 'mdi-chart-bubble',
