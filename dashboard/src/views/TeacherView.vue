@@ -30,6 +30,7 @@
       <v-layout row wrap>
         <v-flex xs6>
         <v-btn @click="onClickListSubjects()">List Subjects</v-btn>
+        <v-btn @click="onClickListLectures()">List Lectures</v-btn>
         </v-flex>
         <v-flex xs6>
         </v-flex>
@@ -43,8 +44,9 @@ export default {
   data () {
     return {
       subjects: [],
-      teacher: { name: 'georgios', surname: 'papadopoulos', email: 'ilove.xounta1967@greekarmy.com' },
+      teacher: { name: 'γεωργιος', surname: 'papadopoulos', email: 'ilove.xounta1967@greekarmy.com' },
       subjectsLoading: false,
+      lecturesLoading: false,
       headers: [
         {
           text: 'Kwdikos Mathimatos',
@@ -60,11 +62,19 @@ export default {
       this.subjectsLoading = true
       try {
         this.subjects = await UserService.getSubjectsForTeacher(this.teacher)
-        console.log(this.subjects)
       } catch (error) {
         alert(error)
       }
       this.subjectsLoading = false
+    },
+    async onClickListLectures () {
+      this.lecturesLoading = true
+      try {
+        this.subjects = await UserService.getLecturesForSubject(this.subjects)
+      } catch (error) {
+        alert(error)
+      }
+      this.lecturesLoading = false
     }
   }
 }
