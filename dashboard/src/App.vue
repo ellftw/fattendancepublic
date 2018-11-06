@@ -1,68 +1,49 @@
 <template>
-<div>
   <v-app dark>
-    <v-navigation-drawer :clipped="clipped" v-model="drawer" enable-resize-watcher fixed temporary app>
-
-      <v-list>
-        <v-list-tile :to="item.route" value="true" v-for="(item, i) in items" :key="i">
-          <v-list-tile-action >
-            <v-icon v-html="item.icon"></v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title v-text="item.title"></v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
-    <v-toolbar app :clipped-left="clipped">
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title v-text="title"></v-toolbar-title>
-      <v-spacer></v-spacer>
-    </v-toolbar>
+    <navigation-drawer/>
+    <toolbar/>
     <v-content>
-      <router-view/>
+      <transition appear name="fade" mode="out-in">
+        <router-view/>
+      </transition>
     </v-content>
   </v-app>
-</div>
 </template>
 
 <script>
+import NavigationDrawer from '@/layout/NavigationDrawer.vue'
+import Toolbar from '@/layout/Toolbar.vue'
+
 export default {
   name: 'App',
+  components: {
+    NavigationDrawer,
+    Toolbar
+  },
   data () {
     return {
-      clipped: true,
-      drawer: false,
-      fixed: false,
-      items: [
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Αρχική',
-          route: '/'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Λίστα Μαθημάτων',
-          route: '/subjectList'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Επόμενο Μάθημα',
-          route: '/'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Ρυθμίσεις',
-          route: '/'
-        }
-      ],
-      right: true,
-      title: 'Ψηφιακό Παρουσιολόγιο'
     }
   }
 }
 </script>
 
 <style>
+.router-link-active {
+  color: red;
+}
 
+.fade-enter {
+  opacity: 0;
+}
+
+.fade-enter-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-leave {}
+
+.fade-leave-active {
+  transition: opacity 0.12s ease;
+  opacity: 0;
+}
 </style>

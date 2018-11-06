@@ -2,7 +2,6 @@
     <v-container align-center grid-list-md>
       <v-layout row wrap>
         <v-flex xs12>
-            <h1> {{teacher.name}}  {{teacher.surname}} </h1>
         <!-- <h3>
             Mathima - 05568 Athlitiki Eidiseografia II
         </h3>
@@ -18,10 +17,11 @@
         </ul> -->
         <v-data-table
           :headers="headers"
-          :items="subjects"
+          :items="students"
           class="elevation-8">
           <template slot="items" slot-scope="props">
-            <td>{{ props.item.kwdikosMathimatos }}</td>
+            <td>{{ props.item.arithmosMitroou }}</td>
+            <td>{{ props.item.surname }}</td>
             <td>{{ props.item.name }}</td>
           </template>
         </v-data-table>
@@ -29,42 +29,45 @@
       </v-layout>
       <v-layout row wrap>
         <v-flex xs6>
-        <v-btn @click="onClickListSubjects()">List Subjects</v-btn>
+        <v-btn @click="onClickListStudents()">List Students</v-btn>
         </v-flex>
         <v-flex xs6>
+        <v-btn @click="showStudents = !showStudents">Toggle Students</v-btn>
         </v-flex>
       </v-layout>
     </v-container>
 </template>
 <script>
-import UserService from '@/services/user.js'
+import UserService from '@/services/UserService.js'
 export default {
-  name: 'TeacherView',
+  name: 'MathimaView',
   data () {
     return {
-      subjects: [],
-      teacher: { name: 'georgios', surname: 'papadopoulos', email: 'ilove.xounta1967@greekarmy.com' },
-      subjectsLoading: false,
+      showStudents: true,
+      students: [],
+      teacher: 'Raptopoulos',
+      studentsLoading: false,
       headers: [
         {
-          text: 'Kwdikos Mathimatos',
+          text: 'Arithmos Mitroou',
           sortable: true,
-          value: 'kwdikosMathimatos'
+          value: 'arithmosMitroou'
         },
-        { text: 'Onoma', value: 'name' }
+        { text: 'Onoma', value: 'name' },
+        { text: 'Epitheto', value: 'surname' }
       ]
     }
   },
   methods: {
-    async onClickListSubjects () {
-      this.subjectsLoading = true
+    async onClickListStudents () {
+      this.studentsLoading = true
       try {
-        this.subjects = await UserService.getSubjectsForTeacher(this.teacher)
-        console.log(this.subjects)
+        this.students = await UserService.getAllStudents()
+        console.log(this.students)
       } catch (error) {
         alert(error)
       }
-      this.subjectsLoading = false
+      this.studentsLoading = false
     }
   }
 }

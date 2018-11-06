@@ -1,31 +1,78 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import MathimaView from '@/components/MathimaView'
-import GrammateiaView from '@/components/GrammateiaView'
-import TeacherView from '@/components/TeacherView'
-import SubjectList from '@/components/SubjectList'
+import store from '../store'
+
+// Views
+import MathimaView from '@/views/MathimaView'
+import GrammateiaView from '@/views/GrammateiaView'
+import TeacherView from '@/views/TeacherView'
+import SubjectListView from '@/views/SubjectListView'
+import LoginView from '@/views/LoginView'
+import InfoView from '@/views/InfoView'
 
 Vue.use(Router)
 
-export default new Router({
+let router = new Router({
   routes: [{
+    path: '/',
+    name: 'Αρχική'
+  },
+  {
+    path: '/login',
+    name: 'Είσοδος',
+    component: LoginView
+  },
+  {
+    path: '/info',
+    name: 'Πληροφορίες',
+    component: InfoView
+  },
+  {
     path: '/mathima',
-    name: 'mathima',
-    component: MathimaView
+    name: 'Μάθημα',
+    component: MathimaView,
+    meta: { requiresAuth: true, userType: 'teacher' }
   },
   {
     path: '/grammateia',
-    name: 'grammateia',
-    component: GrammateiaView
+    name: 'Γραμματεία',
+    component: GrammateiaView,
+    meta: { requiresAuth: true, userType: 'secretary' }
   },
   {
     path: '/teacherView',
-    name: 'teacherView',
-    component: TeacherView
+    name: 'Οθόνη Καθηγητή',
+    component: TeacherView,
+    meta: { requiresAuth: true, userType: 'teacher' }
   },
   {
     path: '/subjectList',
-    name: 'subjectList',
-    component: SubjectList
+    name: 'Λίστα μαθημάτων',
+    component: SubjectListView,
+    meta: { requiresAuth: true, userType: 'teacher' }
+  },
+  {
+    path: '*',
+    redirect: '/'
   }]
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (store.getters.isLoggedIn && to.matched.some(record => record.meta.userType === store.getters.user.userType)) {
+      next()
+    } else {
+      next('/')
+    }
+  } else if (to.matched.some(record => record.meta.requiresUnAuth)) {
+    if (store.getters.isLoggedIn) {
+      next(from)
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
+})
+
+export default router

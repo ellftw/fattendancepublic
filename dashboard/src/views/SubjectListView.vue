@@ -41,13 +41,12 @@
 </template>
 
 <script>
-import UserService from '@/services/user.js'
+import SubjectService from '@/services/SubjectService.js'
 export default {
   name: 'SubjectList',
   data () {
     return {
       subjects: [],
-      teacher: { name: 'georgios', surname: 'papadopoulos', email: 'ilove.xounta1967@greekarmy.com' },
       subjectsLoading: false,
       headers: [
         { text: 'Όνομα Μαθήματος', value: 'name' },
@@ -67,7 +66,8 @@ export default {
     async onClickListSubjects () {
       this.subjectsLoading = true
       try {
-        this.subjects = await UserService.getSubjectsForTeacher(this.teacher)
+        let teacher = this.$store.getters.user
+        this.subjects = await SubjectService.getSubjectsForTeacher(teacher)
       } catch (error) {
         alert(error)
       }

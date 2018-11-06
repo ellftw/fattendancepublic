@@ -2,6 +2,7 @@
     <v-container align-center grid-list-md>
       <v-layout row wrap>
         <v-flex xs12>
+            <h1> {{teacher.name}}  {{teacher.surname}} </h1>
         <!-- <h3>
             Mathima - 05568 Athlitiki Eidiseografia II
         </h3>
@@ -17,11 +18,10 @@
         </ul> -->
         <v-data-table
           :headers="headers"
-          :items="students"
+          :items="subjects"
           class="elevation-8">
           <template slot="items" slot-scope="props">
-            <td>{{ props.item.arithmosMitroou }}</td>
-            <td>{{ props.item.surname }}</td>
+            <td>{{ props.item.kwdikosMathimatos }}</td>
             <td>{{ props.item.name }}</td>
           </template>
         </v-data-table>
@@ -29,45 +29,42 @@
       </v-layout>
       <v-layout row wrap>
         <v-flex xs6>
-        <v-btn @click="onClickListStudents()">List Students</v-btn>
+        <v-btn @click="onClickListSubjects()">List Subjects</v-btn>
         </v-flex>
         <v-flex xs6>
-        <v-btn @click="showStudents = !showStudents">Toggle Students</v-btn>
         </v-flex>
       </v-layout>
     </v-container>
 </template>
 <script>
-import UserService from '@/services/user.js'
+import UserService from '@/services/UserService.js'
 export default {
-  name: 'MathimaView',
+  name: 'TeacherView',
   data () {
     return {
-      showStudents: true,
-      students: [],
-      teacher: 'Raptopoulos',
-      studentsLoading: false,
+      subjects: [],
+      teacher: { name: 'georgios', surname: 'papadopoulos', email: 'ilove.xounta1967@greekarmy.com' },
+      subjectsLoading: false,
       headers: [
         {
-          text: 'Arithmos Mitroou',
+          text: 'Kwdikos Mathimatos',
           sortable: true,
-          value: 'arithmosMitroou'
+          value: 'kwdikosMathimatos'
         },
-        { text: 'Onoma', value: 'name' },
-        { text: 'Epitheto', value: 'surname' }
+        { text: 'Onoma', value: 'name' }
       ]
     }
   },
   methods: {
-    async onClickListStudents () {
-      this.studentsLoading = true
+    async onClickListSubjects () {
+      this.subjectsLoading = true
       try {
-        this.students = await UserService.getAllStudents()
-        console.log(this.students)
+        this.subjects = await UserService.getSubjectsForTeacher(this.teacher)
+        console.log(this.subjects)
       } catch (error) {
         alert(error)
       }
-      this.studentsLoading = false
+      this.subjectsLoading = false
     }
   }
 }

@@ -1,27 +1,23 @@
 const authRouter = require('express').Router()
-const registerService = require('./../services/RegisterService')
+const authService = require('../services/AuthService')
 
-authRouter.post('/register', async (request, response) => {
-    if (request.body === undefined || request.body.fingerprintID === undefined || request.body.arithmosMitroou === undefined) {
-        response.json({ success: false, error: "Malformed request" })
-    }
+authRouter.post('/login', async (request, response) => {
     try {
-        await registerService.register(request.body.fingerprintID, request.body.arithmosMitroou)
-        response.json({ success: true, msg: "New user created!"})
+        console.log(request.body)
+        let responseObject = await authService.login(request.body.email, request.body.password)
+        return response.status(200).json({ success: true, responseObject })
     } catch(error) {
-        console.log('what')
-        response.json({ success: false, error: error})
+        return response.status(200).json({ success: false, error: `${error}` })
     }
 })
 
-authRouter.get('/attendance/:fingerprintID', (request, response) => {
-	if (users.indexOf(request.params.fingerprintID) === -1) {
-		console.log("No such user")
-		response.status(200).json({ "error" : "No such user. Please register at grammateia"})
-	} else {
-		console.log(request.params.fingerprintID)
-		response.status(200).json({"message" : "You are late" + request.params.fingerprintID})
-	}
+authRouter.post('/register', async (request, response) => {
+    try {
+        await authService.register(request.body)
+        return response.status(200).json({ success: true })
+    } catch(error) {
+        return response.status(200).json({ success: false, error: `${error}` })
+    }
 })
 
 module.exports = authRouter
