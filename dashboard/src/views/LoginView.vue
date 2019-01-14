@@ -38,6 +38,7 @@
 import { validationMixin } from 'vuelidate'
 import { required, minLength, email } from 'vuelidate/lib/validators'
 import UserService from '@/services/UserService.js'
+import util from '@/utils/util.js'
 
 export default {
   mixins: [validationMixin],
@@ -84,21 +85,30 @@ export default {
         this.alertMessage = 'Είσοδος επιτυχής!'
         this.alertType = 'success'
         this.showAlert = true
-        setTimeout(() => {
-          this.$store.commit('setUser', user)
-          this.$store.commit('setToken', user.token)
-          this.$router.push('/home')
-        }, 900)
+        await util.sleep(900)
+        this.$store.commit('setUser', user)
+        this.$store.commit('setToken', user.token)
+        this.$router.push('/home')
       } catch (error) {
         console.log(`${error}`)
         this.alertMessage = `${error}`
         this.alertType = 'error'
-        this.showAlert = true
+        await util.sleep(900)
       } finally {
+        this.showAlert = true
         this.loading = false
       }
     },
-    forgotPassword () {
+    async forgotPassword () {
+      this.showAlert = false
+      this.loading = true
+      try {
+        this.alertMessage = 'Παρακαλώ επικοινωνήστε με τη γραμματεία'
+        this.alertType = 'info'
+      } finally {
+        this.showAlert = true
+        this.loading = false
+      }
     }
   }
 }

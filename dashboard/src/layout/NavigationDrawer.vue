@@ -95,6 +95,7 @@ export default {
           route: '/settings'
         }
       ],
+      secretaryItems: [],
       unAuthorizedItems: [
         {
           icon: 'mdi-chart-bubble',

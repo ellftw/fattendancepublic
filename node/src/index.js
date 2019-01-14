@@ -6,6 +6,7 @@ const mongoose = require('mongoose')
 
 const authApi = require('./routes/AuthRouter')
 const teacherApi = require('./routes/TeacherRouter')
+const subjectApi = require('./routes/SubjectRouter')
 
 mongoose.connect('mongodb://172.17.0.1:27017/test', { useNewUrlParser: true })
 .catch((error) => console.log(error))
@@ -19,6 +20,7 @@ app.use(bodyParser.json())
 app.use(cors({}))
 app.use('/auth', authApi)
 app.use('/teacher', teacherApi)
+app.use('/subject', subjectApi)
 
 app.get('*', async (request, response) => {
     let message = `You are not supposed to be able to access this. This incident will be reported.`

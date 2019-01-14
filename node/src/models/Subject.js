@@ -5,8 +5,8 @@ const Lesson = require('./Lesson')
 
 const subjectSchema = new Schema({
     name: { index: true, unique: true, required: true, type: String },
-    kwdikosMathimatos: { index: true, unique: true, required: true, type: String },
-    synoloMathimaton: { required: true, type: Number },
+    subjectCode: { index: true, unique: true, required: true, type: String },
+    numberOfLessons: { required: true, type: Number },
     lessonList: { required: true, type: [Lesson.schema] }
 })
 

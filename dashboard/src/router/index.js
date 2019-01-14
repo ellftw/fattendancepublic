@@ -20,7 +20,8 @@ let router = new Router({
   {
     path: '/login',
     name: 'Είσοδος',
-    component: LoginView
+    component: LoginView,
+    meta: { requiresUnAuth: true }
   },
   {
     path: '/info',
@@ -28,16 +29,16 @@ let router = new Router({
     component: InfoView
   },
   {
-    path: '/mathima',
-    name: 'Μάθημα',
-    component: MathimaView,
-    meta: { requiresAuth: true, userType: 'teacher' }
-  },
-  {
     path: '/grammateia',
     name: 'Γραμματεία',
     component: GrammateiaView,
     meta: { requiresAuth: true, userType: 'secretary' }
+  },
+  {
+    path: '/mathima',
+    name: 'Μάθημα',
+    component: MathimaView,
+    meta: { requiresAuth: true, userType: 'teacher' }
   },
   {
     path: '/teacherView',
@@ -66,7 +67,7 @@ router.beforeEach((to, from, next) => {
     }
   } else if (to.matched.some(record => record.meta.requiresUnAuth)) {
     if (store.getters.isLoggedIn) {
-      next(from)
+      next(from.path)
     } else {
       next()
     }
