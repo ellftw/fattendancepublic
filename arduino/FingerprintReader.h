@@ -5,12 +5,8 @@
 #include <string.h>
 #include <Wire.h>
 
-#define FINGERPRINT_RX_PIN 2
-#define FINGERPRINT_TX_PIN 3
-
 using namespace std;
     
-
 struct FingerprintReadResult {
     uint8_t fingerprintID = 0;
     char *resultMessage = "";
@@ -25,6 +21,5 @@ class FingerprintReader {
         FingerprintReadResult readFingerprint();
 
     private:
-        SoftwareSerial * _fingerprintSerial;
         Adafruit_Fingerprint * _finger;
 };

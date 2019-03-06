@@ -1,8 +1,7 @@
 #include "FingerprintReader.h"
 
 FingerprintReader::FingerprintReader() {
-    _fingerprintSerial = new SoftwareSerial(2, 3);
-    _finger = new Adafruit_Fingerprint(_fingerprintSerial);
+    _finger = new Adafruit_Fingerprint(&Serial1);
 }
 
 bool FingerprintReader::isConnectionOK() {
@@ -78,10 +77,3 @@ FingerprintReadResult FingerprintReader::readFingerprint() {
     result.fingerprintID = p;
     return result;
 }
-
-
-
-
-
-
-
