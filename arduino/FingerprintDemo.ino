@@ -37,6 +37,7 @@ void setup() {
   Serial.begin(9600);
   Serial3.begin(9600);
   u8g2.begin();
+  u8g2.setFont(u8g2_font_ncenB08_tr);
   fReader.setupReader();
 
   while(true) {
@@ -44,7 +45,8 @@ void setup() {
     else Serial.println("Your fingerprint device is not working...Retrying in 100ms");
     delay(100);
   }
-  state = STATE_IDLE;
+  // Να αλλαξει οταν βαλω το μπουτον στο κυκλωμα
+  state = STATE_REGISTERING;
 }
 
 void loop() {
