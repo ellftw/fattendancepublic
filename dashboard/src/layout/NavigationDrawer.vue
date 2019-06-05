@@ -73,14 +73,16 @@ export default {
     return {
       clipped: true,
       fixed: false,
-      teacherItems: [
+      teacherItems: [],
+      secretaryItems: [],
+      unAuthorizedItems: [
         {
-          icon: 'mdi-chart-bubble',
+          icon: 'mdi-home',
           title: 'Αρχική',
           route: '/home'
         },
         {
-          icon: 'mdi-chart-bubble',
+          icon: 'mdi-library-books',
           title: 'Λίστα Μαθημάτων',
           route: '/subjectList'
         },
@@ -90,17 +92,19 @@ export default {
         //   route: '/'
         // },
         {
-          icon: 'mdi-chart-bubble',
+          icon: 'mdi-settings',
           title: 'Ρυθμίσεις',
           route: '/settings'
-        }
-      ],
-      secretaryItems: [],
-      unAuthorizedItems: [
+        },
         {
-          icon: 'mdi-chart-bubble',
+          icon: 'mdi-login',
           title: 'Είσοδος',
           route: '/login'
+        },
+        {
+          icon: 'mdi-account-plus',
+          title: 'Εγγραφή',
+          route: '/register'
         }
       ],
       additionalItems: [

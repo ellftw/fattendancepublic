@@ -7,22 +7,24 @@
         <router-view/>
       </transition>
     </v-content>
+  <Footer/>
   </v-app>
 </template>
 
 <script>
 import NavigationDrawer from '@/layout/NavigationDrawer.vue'
 import Toolbar from '@/layout/Toolbar.vue'
+import Footer from '@/layout/Footer.vue'
 
 export default {
   name: 'App',
   components: {
     NavigationDrawer,
-    Toolbar
+    Toolbar,
+    Footer
   },
   data () {
-    return {
-    }
+    return {}
   }
 }
 </script>
@@ -39,8 +41,6 @@ export default {
 .fade-enter-active {
   transition: opacity 0.3s ease;
 }
-
-.fade-leave {}
 
 .fade-leave-active {
   transition: opacity 0.12s ease;

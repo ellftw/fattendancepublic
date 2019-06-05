@@ -9,7 +9,7 @@
             Kathigitis : {{teacher}}
         </p> -->
         <!-- <ul v-if="showStudents">
-          <li class="li"  v-for="student in this.students" :key="student.arithmosMitroou" :style="[student.present ? {'color': 'green', 'textShadow': '2px 2px 4px white'} : {'color':'red', 'textShadow': '2px 2px 4px black'}]">
+          <li class="li"  v-for="student in this.students" :key="student.arithmosMitroou" :style="[student.present ? {'color': 'green'} : {'color':'red'}]">
               {{student.surname}}
               {{student.name}}
               {{student.arithmosMitroou}}
