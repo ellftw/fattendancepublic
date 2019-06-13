@@ -38,25 +38,22 @@ let router = new Router({
       component: GrammateiaView,
       meta: {
         requiresUnAuth: true,
-        // userType: 'secretary'
+        userType: 'γραμματέας'
       }
     },
     {
       path: '/mathima',
       name: 'Μάθημα',
       component: MathimaView,
-      // meta: { requiresAuth: true, userType: 'teacher' }
-      meta: {
-        requiresUnAuth: true
-      }
+      meta: { requiresAuth: true, userType: 'καθηγητής' }
     },
     {
       path: '/teacherView',
       name: 'Οθόνη Καθηγητή',
       component: TeacherView,
       meta: {
-        requiresUnAuth: true,
-        // userType: 'teacher'
+        requiresAuth: true,
+        userType: 'καθηγητής'
       }
     },
     {
@@ -64,8 +61,8 @@ let router = new Router({
       name: 'Λίστα μαθημάτων',
       component: SubjectListView,
       meta: {
-        requiresUnAuth: true,
-        // userType: 'teacher'
+        requiresAuth: true,
+        userType: 'καθηγητής'
       }
     },
     {
@@ -73,7 +70,8 @@ let router = new Router({
       name: 'Εγγραφή',
       component: SignUpView,
       meta: {
-        requiresUnAuth: true
+        requiresAuth: true,
+        userType: 'γραμματέας'
       }
     },
     {

@@ -9,7 +9,7 @@ apiRouter.use('/auth', authRouter)
 // new Subject({
 //     name: "Mathimatika III",
 //     synoloMathimaton: 7,
-//     kwdikosMathimatos: "hjkl"
+//     kwdikosMathimatos: "EYP-1550"
 // }).save()
 
 // new Teacher({

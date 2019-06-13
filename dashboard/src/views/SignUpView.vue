@@ -1,5 +1,5 @@
 <template>
-<v-flex xs6 offset-xs3>
+<v-flex xs6 offset-xs3 pb-5 mb-5>
   <v-form
     ref="form"
     v-model="valid"
@@ -35,12 +35,11 @@
       label="Department"
       required
     ></v-select>
-<template v-slot:activator="{ on }">
+<template>
           <v-text-field
             v-model="date"
             label="Ημερομηνία Γέννησης"
             prepend-icon=" mdi-calendar"
-            v-on="on"
           ></v-text-field>
 </template>
           <v-date-picker v-model="date" scrollable>

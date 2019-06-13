@@ -12,7 +12,7 @@
       </v-list-tile>
     </v-list>
 
-    <v-list v-if="isLoggedIn && userType === 'teacher'">
+    <v-list v-if="isLoggedIn && userType === 'καθηγητής'">
       <v-list-tile :to="item.route" value="true" v-for="(item, i) in teacherItems" :key="i">
         <v-list-tile-action >
           <v-icon v-html="item.icon"></v-icon>
@@ -23,7 +23,7 @@
       </v-list-tile>
     </v-list>
 
-    <v-list v-if="isLoggedIn && userType === 'secretary'">
+    <v-list v-if="isLoggedIn && userType === 'γραμματέας'">
       <v-list-tile :to="item.route" value="true" v-for="(item, i) in secretaryItems" :key="i">
         <v-list-tile-action >
           <v-icon v-html="item.icon"></v-icon>
@@ -73,18 +73,29 @@ export default {
     return {
       clipped: true,
       fixed: false,
-      teacherItems: [],
-      secretaryItems: [],
+      teacherItems: [   
+            {
+          icon: 'mdi-library-books',
+          title: 'Λίστα Μαθημάτων',
+          route: '/subjectList'
+        },
+                   {
+          icon: 'mdi-library-books',
+          title: 'Λίστα Μαθητών Μαθήματος',
+          route: '/mathima'
+        },
+        ],
+      secretaryItems: [      
+        {
+          icon: 'mdi-account-plus',
+          title: 'Εγγραφή',
+          route: '/register'
+        }],
       unAuthorizedItems: [
         {
           icon: 'mdi-home',
           title: 'Αρχική',
           route: '/home'
-        },
-        {
-          icon: 'mdi-library-books',
-          title: 'Λίστα Μαθημάτων',
-          route: '/subjectList'
         },
         // {
         //   icon: 'mdi-chart-bubble',
@@ -92,26 +103,21 @@ export default {
         //   route: '/'
         // },
         {
-          icon: 'mdi-settings',
-          title: 'Ρυθμίσεις',
-          route: '/settings'
-        },
-        {
           icon: 'mdi-login',
           title: 'Είσοδος',
           route: '/login'
         },
-        {
-          icon: 'mdi-account-plus',
-          title: 'Εγγραφή',
-          route: '/register'
-        }
       ],
       additionalItems: [
         {
           icon: 'mdi-information',
           title: 'Πληροφορίες',
           route: '/info'
+        },
+        {
+          icon: 'mdi-settings',
+          title: 'Ρυθμίσεις',
+          route: '/settings'
         }
       ]
     }

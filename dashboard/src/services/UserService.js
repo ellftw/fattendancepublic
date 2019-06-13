@@ -17,6 +17,13 @@ const UserService = {
     if (!response.data.success) throw new Error(response.data.error)
     let data = response.data.responseObject
     return { token: data.token, email: data.email, name: data.name, surname: data.surname, userType: data.userType }
+  },
+  registerStudent: async function (name, surname, email, userType) {
+    let requestBody = {name: name, surname: surname, email: email, userType: 'σπουδαστής'}
+    let response = await axios.post('http://0.0.0.0/auth/register', requestBody)
+    if (!response.data.success) throw new Error(response.data.error)
+    let data = response.data.responseObject
+    return {}
   }
 }
 export default UserService

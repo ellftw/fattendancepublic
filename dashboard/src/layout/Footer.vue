@@ -1,4 +1,4 @@
-<template>
+<template app>
   <v-footer dark height="auto">
     <v-card flat tile class="grey white--text text-xs-center">
       <v-card-text>
