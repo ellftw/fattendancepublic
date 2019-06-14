@@ -7,7 +7,7 @@ const UserService = {
   },
   getSubjectsForTeacher: async function (teacher) {
     console.log(teacher)
-    let response = await axios.get(`http://0.0.0.0:8080/getSubjectsForTeacher/${teacher.email}`)
+    let response = await axios.get(`http://0.0.0.0:8080/getSubjectsForTeacher/teacher/${teacher.email}`)
     return response.data.mathimata
   },
   login: async function (email, password) {
@@ -22,7 +22,7 @@ const UserService = {
     let requestBody = {name: name, surname: surname, email: email, userType: 'σπουδαστής'}
     let response = await axios.post('http://0.0.0.0/auth/register', requestBody)
     if (!response.data.success) throw new Error(response.data.error)
-    let data = response.data.responseObject
+    // let data = response.data.responseObject
     return {}
   }
 }

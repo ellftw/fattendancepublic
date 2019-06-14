@@ -29,7 +29,7 @@ teacherRouter.get('/byEmail/:email', async (request, response) => {
     }
 })
 
-teacherRouter.get('/getSubjectsForTeacher/:email', async (request, response) => {
+teacherRouter.get('/getSubjectsForTeacher/teacher/:email', async (request, response) => {
     try {
         let teacher = await TeacherService.findTeacherByEmail(request.params.email)
         let subjectList = await SubjectService.findSubjects(teacher.teachingSubjects)

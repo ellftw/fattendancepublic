@@ -2,7 +2,7 @@
     <v-container align-center grid-list-md>
       <v-layout row wrap>
         <v-flex xs12>
-            <h1> {{teacher.name}}  {{teacher.surname}} </h1>
+            <h1>Καλωσηρθες {{this.$store.getters.user.name}} {{this.$store.getters.user.surname}} </h1>
         <!-- <h3>
             Mathima - 05568 Athlitiki Eidiseografia II
         </h3>
@@ -44,7 +44,7 @@ export default {
   data () {
     return {
       subjects: [],
-      teacher: { name: 'γεωργιος', surname: 'papadopoulos', email: 'ilove.xounta1967@greekarmy.com' },
+      teacher: { name: 'Κλεφτης', surname: 'Κλεφτη', email: 'ilove.xounta1967@greekarmy.com' },
       subjectsLoading: false,
       lecturesLoading: false,
       headers: [
@@ -61,7 +61,7 @@ export default {
     async onClickListSubjects () {
       this.subjectsLoading = true
       try {
-        this.subjects = await UserService.getSubjectsForTeacher(this.teacher)
+        this.subjects = await UserService.getSubjectsForTeacher(this.$store.getters.user)
       } catch (error) {
         alert(error)
       }

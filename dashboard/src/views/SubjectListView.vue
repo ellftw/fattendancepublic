@@ -31,9 +31,10 @@
 
       <v-layout row wrap>
         <v-flex xs6>
-        <v-btn @click="onClickListSubjects()">List Subjects</v-btn>
+        <v-btn round @click="onClickListSubjects()">List Subjects</v-btn>
         </v-flex>
         <v-flex xs6>
+          <v-btn round href="/#/createSubject">Create new subject</v-btn>
         </v-flex>
       </v-layout>
 

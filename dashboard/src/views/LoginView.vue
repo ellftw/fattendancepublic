@@ -88,7 +88,13 @@ export default {
         await util.sleep(900)
         this.$store.commit('setUser', user)
         this.$store.commit('setToken', user.token)
-        this.$router.push('/home')
+        if (this.$store.getters.user.userType === 'καθηγητής') {
+          this.$router.push('/teacherView')
+        } else if (this.$store.getters.user.userType === 'γραμματέας') {
+          this.$router.push('/grammateia')
+        } else {
+          this.$router.push('/')
+        }
       } catch (error) {
         console.log(`${error}`)
         this.alertMessage = `${error}`

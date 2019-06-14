@@ -11,6 +11,7 @@ import SubjectListView from '@/views/SubjectListView'
 import LoginView from '@/views/LoginView'
 import InfoView from '@/views/InfoView'
 import SignUpView from '@/views/SignUpView'
+import createSubject from '@/views/createSubject'
 
 Vue.use(Router)
 
@@ -37,7 +38,7 @@ let router = new Router({
       name: 'Γραμματεία',
       component: GrammateiaView,
       meta: {
-        requiresUnAuth: true,
+        requiresAuth: true,
         userType: 'γραμματέας'
       }
     },
@@ -51,6 +52,15 @@ let router = new Router({
       path: '/teacherView',
       name: 'Οθόνη Καθηγητή',
       component: TeacherView,
+      meta: {
+        requiresAuth: true,
+        userType: 'καθηγητής'
+      }
+    },
+    {
+      path: '/createSubject',
+      name: 'Δημιουργία νεου μαθήματος',
+      component: createSubject,
       meta: {
         requiresAuth: true,
         userType: 'καθηγητής'

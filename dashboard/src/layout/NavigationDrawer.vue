@@ -73,19 +73,19 @@ export default {
     return {
       clipped: true,
       fixed: false,
-      teacherItems: [   
-            {
+      teacherItems: [
+        {
           icon: 'mdi-library-books',
           title: 'Λίστα Μαθημάτων',
           route: '/subjectList'
         },
-                   {
+        {
           icon: 'mdi-library-books',
           title: 'Λίστα Μαθητών Μαθήματος',
           route: '/mathima'
-        },
-        ],
-      secretaryItems: [      
+        }
+      ],
+      secretaryItems: [
         {
           icon: 'mdi-account-plus',
           title: 'Εγγραφή',
@@ -106,7 +106,7 @@ export default {
           icon: 'mdi-login',
           title: 'Είσοδος',
           route: '/login'
-        },
+        }
       ],
       additionalItems: [
         {
