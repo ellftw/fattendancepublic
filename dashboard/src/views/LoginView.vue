@@ -23,8 +23,8 @@
                 @input="$v.password.$touch()"
                 @blur="$v.password.$touch()"
               ></v-text-field>
-              <v-btn :disabled="disabledButton" :loading="loading" @click="login">Είσοδος</v-btn>
-              <v-btn @click="forgotPassword">Απωλεια Κωδικου</v-btn>
+              <v-btn :disabled="disabledButton" :loading="loading" @click="login" round>Είσοδος</v-btn>
+              <v-btn @click="forgotPassword" round>Απωλεια Κωδικου</v-btn>
               <v-alert :value="showAlert" :type="alertType" transition="scale-transition"> {{alertMessage}} </v-alert>
             </form>
           </v-card-text>

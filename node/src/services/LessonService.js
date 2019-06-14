@@ -6,10 +6,10 @@ LessonService.findLessons = async (subjectCode) => {
 }
 
 LessonService.createLesson = async (subjectCode) => {
-    let Lesson = new Lesson({
-        date: Lesson.date,
-        startTime: Lesson.startTime,
-        attendances: Lesson.attendances
+    let Lesson = new LessonService({
+        date: LessonService.date,
+        startTime: LessonService.startTime,
+        attendances: LessonService.attendances
     })
     await Lesson.save()
 }

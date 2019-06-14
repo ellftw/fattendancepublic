@@ -1,82 +1,62 @@
 <template>
-<v-flex xs6 offset-xs3 pb-5 mb-5>
-  <v-form
-    ref="form"
-    v-model="valid"
-    lazy-validation
-  >
-    <v-text-field
-      v-model="firstname"
-      :counter="30"
-      :rules="nameRules"
-      label="First Name"
-      required
-    ></v-text-field>
-
+  <v-flex xs6 offset-xs3 pb-5 mb-5>
+    <v-form ref="form" v-model="valid" lazy-validation>
       <v-text-field
-      v-model="lastname"
-      :counter="30"
-      :rules="nameRules"
-      label="Last Name"
-      required
-    ></v-text-field>
+        v-model="firstname"
+        :counter="30"
+        :rules="nameRules"
+        label="First Name"
+        required
+      ></v-text-field>
 
-    <v-text-field
-      v-model="email"
-      :rules="emailRules"
-      label="E-mail"
-      required
-    ></v-text-field>
+      <v-text-field v-model="lastname" :counter="30" :rules="nameRules" label="Last Name" required></v-text-field>
 
-    <v-select
-      v-model="select"
-      :items="items"
-      :rules="[v => !!v || 'Department is required']"
-      label="Department"
-      required
-    ></v-select>
-<template>
-          <v-text-field
-            v-model="date"
-            label="Ημερομηνία Γέννησης"
-            prepend-icon=" mdi-calendar"
-          ></v-text-field>
-</template>
-          <v-date-picker v-model="date" scrollable>
-          <v-spacer></v-spacer>
-          <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
-          <v-btn flat color="primary" @click="$refs.menu.save(date)">OK</v-btn>
-        </v-date-picker>
+      <v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
 
-    <v-checkbox
-      v-model="checkbox"
-      :rules="[v => !!v || 'You must agree to continue!']"
-      label="Do you agree?"
-      required
-    ></v-checkbox>
+      <v-select
+        v-model="select"
+        :items="items"
+        :rules="[v => !!v || 'Department is required']"
+        label="Department"
+        required
+      ></v-select>
+      <v-menu
+        ref="menu"
+        :close-on-content-click="false"
+        v-model="menu"
+        :nudge-right="40"
+        lazy
+        transition="scale-transition"
+        offset-y
+        full-width
+        min-width="290px"
+      >
+        <v-text-field
+          slot="activator"
+          v-model="date"
+          label="Birthday date"
+          prepend-icon="mdi-account"
+          readonly
+        ></v-text-field>
+        <v-date-picker
+          :rules="ageRules"
+          ref="picker"
+          v-model="date"
+          :max="new Date().toISOString().substr(0, 10)"
+          min="1970-01-01"
+          @change="save"
+        ></v-date-picker>
+      </v-menu>
 
-    <v-btn
-      :disabled="!valid"
-      color="success"
-      @click="validate"
-    >
-      Validate
-    </v-btn>
+      <v-checkbox
+        v-model="checkbox"
+        :rules="[v => !!v || 'You must agree to continue!']"
+        label="Do you agree?"
+        required
+      ></v-checkbox>
 
-    <v-btn
-      color="error"
-      @click="reset"
-    >
-      Reset Form
-    </v-btn>
-
-    <v-btn
-      color="warning"
-      @click="resetValidation"
-    >
-      Reset Validation
-    </v-btn>
-  </v-form>
+      <v-btn round :disabled="!valid" color="success" @click="validate">Validate</v-btn>
+    </v-form>
   </v-flex>
 </template>
 
@@ -86,7 +66,7 @@ export default {
     date: new Date().toISOString().substr(0, 10),
     menu: false,
     modal: false,
-    valid: true,
+    valid: false,
     firstname: '',
     lastname: '',
     nameRules: [
@@ -114,18 +94,20 @@ export default {
     ],
     checkbox: false
   }),
+  watch: {
+    menu (val) {
+      val && this.$nextTick(() => (this.$refs.picker.activePicker = 'YEAR'))
+    }
+  },
 
   methods: {
     validate () {
       if (this.$refs.form.validate()) {
-        this.snackbar = true
+        console.log('validated')
       }
     },
-    reset () {
-      this.$refs.form.reset()
-    },
-    resetValidation () {
-      this.$refs.form.resetValidation()
+    save (date) {
+      this.$refs.menu.save(date)
     }
   }
 }

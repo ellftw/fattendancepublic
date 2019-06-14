@@ -29,8 +29,8 @@
       </v-layout>
       <v-layout row wrap>
         <v-flex xs6>
-        <v-btn @click="onClickListSubjects()">List Subjects</v-btn>
-        <v-btn @click="onClickListLectures()">List Lectures</v-btn>
+        <v-btn round @click="onClickListSubjects()">List Subjects</v-btn>
+        <v-btn round @click="onClickListLectures()">List Lectures</v-btn>
         </v-flex>
         <v-flex xs6>
         </v-flex>
