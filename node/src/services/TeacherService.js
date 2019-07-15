@@ -12,6 +12,8 @@ teacherService.createTeacher = async (teacherToRegister) => {
     await teacher.save()
 }
 
+
+
 teacherService.addSubjectToTeacher = async (email, subjectCode) => {
     let teacher = await Teacher.findOne({ email: email })
 

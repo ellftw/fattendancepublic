@@ -29,10 +29,10 @@
       </v-layout>
       <v-layout row wrap>
         <v-flex xs6>
-        <v-btn @click="onClickListStudents()">List Students</v-btn>
+        <v-btn round @click="onClickListStudents()">List Students</v-btn>
         </v-flex>
         <v-flex xs6>
-        <v-btn @click="showStudents = !showStudents">Toggle Students</v-btn>
+        <v-btn round @click="showStudents = !showStudents">Toggle Students</v-btn>
         </v-flex>
       </v-layout>
     </v-container>
