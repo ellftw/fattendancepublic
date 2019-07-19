@@ -37,8 +37,8 @@
             @change="$v.checkbox.$touch()"
             @blur="$v.checkbox.$touch()"
           ></v-checkbox>
-          <v-btn round color="primary" @click="menu = false">Cancel</v-btn>
-            <v-btn round color="primary" @click="$refs.menu.save(dates)">OK</v-btn>
+          <v-btn round  @click="menu = false">Cancel</v-btn>
+            <v-btn round  @click="$refs.menu.save(dates)">OK</v-btn>
         </form>
       </v-flex>
     </v-layout>
