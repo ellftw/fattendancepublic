@@ -1,9 +1,9 @@
 const Attendance = require('../models/AttendanceEvent')
 
-let AttendanceEvent = new Object
+let AttendanceEvent = new Attendance
 
 AttendanceEvent.createAttendance = async () => {
-    let attendance = new Attendance{
+    let attendance = new Attendance ({
         
-    }
+    })
 }

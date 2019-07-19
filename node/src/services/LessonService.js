@@ -1,6 +1,6 @@
 const Lesson = require('../models/Lesson')
 
-let LessonService = new Object
+let LessonService = new Lesson
 
 
 LessonService.createLesson = async () => {
