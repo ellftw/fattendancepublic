@@ -7,12 +7,17 @@ const mongoose = require('mongoose')
 const authApi = require('./routes/AuthRouter')
 const teacherApi = require('./routes/TeacherRouter')
 const subjectApi = require('./routes/SubjectRouter')
+const studentApi = require('./routes/StudentRouter')
 
 mongoose.connect('mongodb://172.17.0.1:27017/test', { useNewUrlParser: true })
 .catch((error) => console.log(error))
 mongoose.set('useCreateIndex', true)
 
 let app = express()
+
+const util = require('./util/populateDatabase')
+
+// util.generateStudents()
 
 app.server = http.createServer(app)
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -22,6 +27,7 @@ app.use('/auth', authApi)
 app.use('/register', authApi)
 app.use('/teacher', teacherApi)
 app.use('/subject', subjectApi)
+app.use('/student', studentApi)
 
 app.get('*', async (request, response) => {
     let message = `You are not supposed to be able to access this. This incident will be reported.`

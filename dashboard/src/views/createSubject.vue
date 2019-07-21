@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-layout xs10 offset-xs1>
-      <v-flex>
+      <v-flex xs6 offset-xs3>
         <form>
           <v-text-field
             v-model="name"
@@ -74,7 +74,7 @@
 export default {
   data: () => ({
     dates: ['2018-09-15", "2018-09-20'],
-    menu: false
+    menu: true
   })
 }
 </script>

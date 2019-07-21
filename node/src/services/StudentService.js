@@ -1,13 +1,13 @@
 const Student =  require ("../models/Student")
+let StudentService = new Object
 
-let StudentService = new Student
-
-StudentService.createStudent = async () => {
-    let student = new StudentService ({
-        name: StudentService.name,
-        subjectCode: StudentService.subjectCode,
-        numberOfLessons: StudentService.numberOfLessons,
-        lessonList: StudentService.lessonList
+StudentService.createStudent = async (data) => {
+    let student = new Student ({
+        name: data.name,
+        surname: data.surname,
+        email: data.email,
+        arithmosMitroou: data.arithmosMitroou,
+        fingerprintID: data.fingerprintID
     })
     await student.save()
 }
@@ -18,6 +18,14 @@ StudentService.findStudent = async () => {
 
     return student
 }
+
+StudentService.getAllStudents = async () => {
+    let students = await Student.find({}).select('-_uid -__v')
+    if (!students) throw new Error ('Could not find any students')
+
+    return students
+}
+
 // same here
 StudentService.deleteStudent = async () => {
     let student = await Student.findOneAndDelete({name: name, subjectCode: subjectCode})

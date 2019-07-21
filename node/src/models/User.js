@@ -10,7 +10,11 @@ const Schema = mongoose.Schema
  */
 const validations = {
     userType: {
-        condition: (value) => (value === 'καθηγητής' || value === 'γραμματέας' || value === 'σπουδαστής'),
+        condition: (value) => (
+            value === 'καθηγητής'
+            || value === 'γραμματέας'
+            || value === 'σπουδαστής'
+        ),
         message: 'Ο τύπος ενός χρήστη μπορεί να είναι μόνο "καθηγητής", "γραμματέας" ή "σπουδαστής"'
     },
     /**

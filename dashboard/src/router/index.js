@@ -18,7 +18,16 @@ Vue.use(Router)
 let router = new Router({
   routes: [{
       path: '/',
-      name: 'Αρχική'
+      name: 'Αρχική',
+      redirect: () => {
+        if (!store.getters.isLoggedIn) return '/login'
+
+        let dictionary = {
+          'γραμματέας' : '/grammateia',
+          'καθηγητής' : '/teacherView'
+        }
+        return dictionary[store.getters.user.userType]
+      }
     },
     {
       path: '/login',

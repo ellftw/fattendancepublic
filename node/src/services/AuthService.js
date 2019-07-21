@@ -4,6 +4,16 @@ const User = require('../models/User')
 const secret = require('../config').secret
 let authService = new Object
 
+authService.getAllUsers = async () => {
+    let users = await User.find({}).select('-_id -password -__v')
+    return users
+}
+
+authService.getAllStudentUsers = async () => {
+    let students = await User.find({}).where('userType', 'σπουδαστής').select('-_id -password -__v')
+    return students
+}
+
 authService.login = async (email, password) => {
     let user = await User.findOne({email: email})
     if (user == undefined) throw new Error('Δεν υφίσταται χρήστης με αυτό το email')

@@ -2,7 +2,11 @@ const attendanceRouter = require('express').Router()
 const registerService = require('./../services/RegisterService')
 
 attendanceRouter.post('/register', async (request, response) => {
-    if (request.body === undefined || request.body.fingerprintID === undefined || request.body.arithmosMitroou === undefined) {
+    if (
+        request.body === undefined
+        || request.body.fingerprintID === undefined
+        || request.body.arithmosMitroou === undefined
+    ) {
         response.json({ success: false, error: "Malformed request" })
     }
     try {
