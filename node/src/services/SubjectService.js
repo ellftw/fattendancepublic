@@ -13,15 +13,21 @@ subjectService.createSubject = async (subjectToRegister) => {
 }
 
 subjectService.findSubjects = async (subjectCode) => {
-    let subject = await Subject.findOne({ subjectCode: subjectCode })
-    if (!subject) throw new Error (`Failed to find subject with subject code ${subjectCode}`)
+    let subject = await Subject.findOne({
+        subjectCode: subjectCode
+    })
+    if (!subject) throw new Error(`Failed to find subject with subject code ${subjectCode}`)
 }
 
 subjectService.deleteSubjects = async (subjectCode) => {
-    let subject = await Subject.findOneAndDelete({ subjectCode: subjectCode })
-    if (!subject) throw new Error (`Failed to find subject with subject code ${subjectCode}`)
+    let subject = await Subject.findOneAndDelete({
+        subjectCode: subjectCode
+    })
+    if (!subject) throw new Error(`Failed to find subject with subject code ${subjectCode}`)
 }
 
-
+subjectService.getAllSubjects = async () => {
+    let subject = await Subject.find()
+}
 
 module.exports = subjectService

@@ -16,6 +16,10 @@ authRouter.get('/:userType', async (request, response) => {
         switch(request.params.userType) {
             case 'spoudastis':
                 return response.status(200).json({success: true, allStudentUsers: (await authService.getAllStudentUsers()) })
+            case 'kathigitis':
+                return response.status(200).json({success: true, allStudentUsers: (await authService.getAllTeacherUsers()) })
+            case 'grammateas':
+                return response.status(200).json({success: true, allStudentUsers: (await authService.getAllSecretaryUsers()) })
             default:
                 return response.status(200).json({ success: true })
         }

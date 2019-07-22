@@ -1,8 +1,8 @@
-const Student =  require ("../models/Student")
+const Student = require("../models/Student")
 let StudentService = new Object
 
 StudentService.createStudent = async (data) => {
-    let student = new Student ({
+    let student = new Student({
         name: data.name,
         surname: data.surname,
         email: data.email,
@@ -12,24 +12,27 @@ StudentService.createStudent = async (data) => {
     await student.save()
 }
 // Not known format yet so not known argument to pass in function in order to work properly
-StudentService.findStudent = async () => {
-    let student = await Student.find({name: name , subjectCode: subjectCode})
-    if (!student) throw new Error (`Couldn't find this student`)
+// StudentService.findStudent = async () => {
+//     let student = await Student.find({name: name , subjectCode: subjectCode})
+//     if (!student) throw new Error (`Couldn't find this student`)
 
-    return student
-}
+//     return student
+// }
 
 StudentService.getAllStudents = async () => {
     let students = await Student.find({}).select('-_uid -__v')
-    if (!students) throw new Error ('Could not find any students')
+    if (!students) throw new Error('Could not find any students')
 
     return students
 }
 
 // same here
 StudentService.deleteStudent = async () => {
-    let student = await Student.findOneAndDelete({name: name, subjectCode: subjectCode})
-    if (!student) throw new Error (`Couldn't find this student`)
+    let student = await Student.findOneAndDelete({
+        name: name,
+        subjectCode: subjectCode
+    })
+    if (!student) throw new Error(`Couldn't find this student`)
 }
 
 module.exports = StudentService

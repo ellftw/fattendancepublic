@@ -7,7 +7,6 @@ import store from '../store'
 import MathimaView from '@/views/MathimaView'
 import GrammateiaView from '@/views/GrammateiaView'
 import TeacherView from '@/views/TeacherView'
-import SubjectListView from '@/views/SubjectListView'
 import LoginView from '@/views/LoginView'
 import InfoView from '@/views/InfoView'
 import SignUpView from '@/views/SignUpView'
@@ -23,8 +22,8 @@ let router = new Router({
         if (!store.getters.isLoggedIn) return '/login'
 
         let dictionary = {
-          'γραμματέας' : '/grammateia',
-          'καθηγητής' : '/teacherView'
+          'γραμματέας': '/grammateia',
+          'καθηγητής': '/teacherView'
         }
         return dictionary[store.getters.user.userType]
       }
@@ -55,7 +54,10 @@ let router = new Router({
       path: '/mathima',
       name: 'Μάθημα',
       component: MathimaView,
-      meta: { requiresAuth: true, userType: 'καθηγητής' }
+      meta: {
+        requiresAuth: true,
+        userType: 'καθηγητής'
+      }
     },
     {
       path: '/teacherView',
@@ -70,15 +72,6 @@ let router = new Router({
       path: '/createSubject',
       name: 'Δημιουργία νεου μαθήματος',
       component: createSubject,
-      meta: {
-        requiresAuth: true,
-        userType: 'καθηγητής'
-      }
-    },
-    {
-      path: '/subjectList',
-      name: 'Λίστα μαθημάτων',
-      component: SubjectListView,
       meta: {
         requiresAuth: true,
         userType: 'καθηγητής'

@@ -6,39 +6,30 @@
           <v-text-field
             v-model="name"
             :error-messages="nameErrors"
-            :counter="10"
             label="Name"
             required
             @input="$v.name.$touch()"
             @blur="$v.name.$touch()"
           ></v-text-field>
           <v-text-field
-            v-model="email"
+            v-model="SubjectCode"
             :error-messages="emailErrors"
-            label="E-mail"
+            label="Subject Code"
             required
             @input="$v.email.$touch()"
             @blur="$v.email.$touch()"
           ></v-text-field>
-          <v-select
-            v-model="select"
-            :items="items"
+          <v-text-field
+            v-model="NumberOfLessons"
             :error-messages="selectErrors"
-            label="Item"
+            label="Number Of Lessons"
             required
             @change="$v.select.$touch()"
             @blur="$v.select.$touch()"
-          ></v-select>
-          <v-checkbox
-            v-model="checkbox"
-            :error-messages="checkboxErrors"
-            label="Do you agree?"
-            required
-            @change="$v.checkbox.$touch()"
-            @blur="$v.checkbox.$touch()"
-          ></v-checkbox>
-          <v-btn round  @click="menu = false">Cancel</v-btn>
-            <v-btn round  @click="$refs.menu.save(dates)">OK</v-btn>
+          ></v-text-field>
+          <v-btn round href="/">Cancel</v-btn>
+          <!-- v-if submit true href teacherview -->
+          <v-btn round>OK</v-btn>
         </form>
       </v-flex>
     </v-layout>
@@ -54,16 +45,14 @@
           :return-value.sync="dates"
           min-width="290px"
         >
-            <v-combobox
-              v-model="dates"
-              multiple
-              chips
-              small-chips
-              label="Multiple picker in menu"
-              prepend-icon="event"
-            ></v-combobox>
-          <v-date-picker v-model="dates" multiple no-title>
-          </v-date-picker>
+          <v-combobox
+            v-model="dates"
+            multiple
+            chips
+            small-chips
+            label="Multiple picker in menu"
+            prepend-icon="event"
+          ></v-combobox>
         </v-menu>
       </v-flex>
     </v-layout>
@@ -75,7 +64,12 @@ export default {
   data: () => ({
     dates: ['2018-09-15", "2018-09-20'],
     menu: true
-  })
+  }),
+  methods: {
+    submit () {
+      // save in db subject and save teachingsubject in teacher
+    }
+  }
 }
 </script>
 <style>

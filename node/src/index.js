@@ -9,18 +9,22 @@ const teacherApi = require('./routes/TeacherRouter')
 const subjectApi = require('./routes/SubjectRouter')
 const studentApi = require('./routes/StudentRouter')
 
-mongoose.connect('mongodb://172.17.0.1:27017/test', { useNewUrlParser: true })
-.catch((error) => console.log(error))
+mongoose.connect('mongodb://172.17.0.1:27017/test', {
+        useNewUrlParser: true
+    })
+    .catch((error) => console.log(error))
 mongoose.set('useCreateIndex', true)
 
 let app = express()
 
 const util = require('./util/populateDatabase')
 
-// util.generateStudents()
+// util.generateTeachers()
 
 app.server = http.createServer(app)
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({
+    extended: false
+}))
 app.use(bodyParser.json())
 app.use(cors({}))
 app.use('/auth', authApi)
@@ -31,7 +35,9 @@ app.use('/student', studentApi)
 
 app.get('*', async (request, response) => {
     let message = `You are not supposed to be able to access this. This incident will be reported.`
-    return response.status(403).json({ error: message })
+    return response.status(403).json({
+        error: message
+    })
 })
 
-app.listen( 8080, () => console.log("Started server at 8080") )
+app.listen(8080, () => console.log("Started server at 8080"))
