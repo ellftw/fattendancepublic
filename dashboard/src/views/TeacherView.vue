@@ -21,43 +21,43 @@
   </v-container>
 </template>
 <script>
-import UserService from "@/services/UserService.js";
-import TeacherService from "@/services/TeacherService.js";
+// import UserService from '@/services/UserService.js'
+import TeacherService from '@/services/TeacherService.js'
 export default {
-  name: "TeacherView",
-  data() {
+  name: 'TeacherView',
+  data () {
     return {
       subjectsLoading: false,
       lecturesLoading: false,
       headers: [
         {
-          text: "Κωδικός Μαθήματος",
-          value: "subjectCode",
+          text: 'Κωδικός Μαθήματος',
+          value: 'subjectCode',
           sortable: true
         },
-        { text: "Όνομα Μαθήματος", value: "name", sortable: true },
-        { text: "Αριθμός Μαθημάτων", value: "NumberOfLessons", sortable: true },
+        { text: 'Όνομα Μαθήματος', value: 'name', sortable: true },
+        { text: 'Αριθμός Μαθημάτων', value: 'NumberOfLessons', sortable: true },
         {
-          text: "Αριθμός Εγγεγραμμένων",
-          value: "SignedStudents",
+          text: 'Αριθμός Εγγεγραμμένων',
+          value: 'SignedStudents',
           sortable: true
         }
       ]
-    };
+    }
   },
   methods: {
-    async getSubjectForTeacher() {
+    async getSubjectForTeacher () {
       try {
-        this.subjects = await TeacherService.getSubjectForTeacher();
+        this.subjects = await TeacherService.getSubjectForTeacher()
       } catch (error) {
-        window.alert(error);
+        window.alert(error)
       }
     }
   },
-  mounted() {
-    this.getSubjectForTeacher();
+  mounted () {
+    this.getSubjectForTeacher()
   }
-};
+}
 </script>
 
 <style scoped>

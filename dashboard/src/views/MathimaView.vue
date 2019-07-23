@@ -22,39 +22,39 @@
   </v-container>
 </template>
 <script>
-import UserService from "@/services/UserService.js";
+import UserService from '@/services/UserService.js'
 export default {
-  name: "MathimaView",
-  data() {
+  name: 'MathimaView',
+  data () {
     return {
       showStudents: true,
       students: [],
-      teacher: "Raptopoulos",
+      teacher: 'Raptopoulos',
       studentsLoading: false,
       headers: [
         {
-          text: "Arithmos Mitroou",
+          text: 'Arithmos Mitroou',
           sortable: true,
-          value: "arithmosMitroou"
+          value: 'arithmosMitroou'
         },
-        { text: "Onoma", value: "name" },
-        { text: "Epitheto", value: "surname" }
+        { text: 'Onoma', value: 'name' },
+        { text: 'Epitheto', value: 'surname' }
       ]
-    };
+    }
   },
   methods: {
-    async onClickListStudents() {
-      this.studentsLoading = true;
+    async onClickListStudents () {
+      this.studentsLoading = true
       try {
-        this.students = await UserService.getAllStudents();
-        console.log(this.students);
+        this.students = await UserService.getAllStudents()
+        console.log(this.students)
       } catch (error) {
-        alert(error);
+        alert(error)
       }
-      this.studentsLoading = false;
+      this.studentsLoading = false
     }
   }
-};
+}
 </script>
 
 <style scoped>

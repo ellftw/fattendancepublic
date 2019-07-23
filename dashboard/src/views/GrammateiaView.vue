@@ -17,6 +17,11 @@
           <td>{{ props.item.surname }}</td>
           <td class="text-xs-left">{{ props.item.name }}</td>
           <td class="text-xs-left">{{ props.item.arithmosMitroou }}</td>
+          <td style="padding:0 0 0 0 ">
+            <v-btn round small @click="deleteStudent(this.deleteStudent)">Διαγραφη</v-btn>
+            <v-btn round small>Μαθηματα</v-btn>
+            <v-btn round small>Βεβαιωση</v-btn>
+          </td>
           <!-- <td class="text-xs-left">{{ props.item.eksamino }}</td>
           <td class="text-xs-left">{{ props.item.perasmena }}</td>-->
         </template>
@@ -28,80 +33,58 @@
         >Your search for "{{ search }}" found no results.</v-alert>
       </v-data-table>
     </v-card>
-
-    <v-btn
-      round
-      :loading="loading"
-      :disabled="loading"
-      color="blue-grey"
-      class="white--text"
-      @click="loader = 'loading'"
-    >
-      Εκτύπωση Βεβαίωσης Σπουδών
-      <v-icon right dark>mdi-printer</v-icon>
-    </v-btn>
-    <v-btn
-      round
-      :loading="loading1"
-      :disabled="loading1"
-      color="blue-grey"
-      class="white--text elevation-$12"
-      @click="loader = 'loading1'"
-    >
-      Εμφάνισε Όλα Τα Μαθήματα
-      <v-icon right dark>mdi-book-variant</v-icon>
-    </v-btn>
   </v-flex>
 </template>
 
 <script>
-import StudentService from "@/services/StudentService";
+import StudentService from '@/services/StudentService'
 export default {
-  name: "grammateia",
-  data() {
+  name: 'grammateia',
+  data () {
     return {
       loader: null,
       loading: false,
       loading1: false,
-      search: "",
+      search: '',
       headers: [
         {
-          text: "Επίθετο",
-          align: "left",
+          text: 'Επίθετο',
+          align: 'left',
           sortable: true,
-          value: "surname"
+          value: 'surname'
         },
-        { text: "Όνομα", value: "name" },
-        { text: "Αριθμός Μητρώου", value: "arithmosMitroou" }
+        { text: 'Όνομα', value: 'name' },
+        { text: 'Αριθμός Μητρώου', value: 'arithmosMitroou' },
+        { text: 'Επιλογες', value: '', sortable: false }
         // { text: 'Εξάμηνο', value: 'eksamino' },
         // { text: 'Περασμένα Μαθήματα', value: 'perasmena' }
       ],
       students: []
     }
   },
-  watch: {
-    loader() {
-      const l = this.loader;
-      this[l] = !this[l];
-
-      setTimeout(() => (this[l] = false), 1000);
-
-      this.loader = null;
-    }
-  },
+  watch: {},
   mounted () {
     this.getAllStudents()
+    console.log(this.getAllStudents())
   },
   methods: {
-    async getAllStudents() {
+    async getAllStudents () {
       try {
         this.students = await StudentService.getAllStudents()
       } catch (error) {
         window.alert(error)
       }
+    },
+    async deleteStudent () {
+      try {
+        this.students = await StudentService.deleteStudent()
+      } catch (error) {
+        window.alert(error)
+      }
     }
   }
-};
+}
+
 </script>
 
 <style scoped>
