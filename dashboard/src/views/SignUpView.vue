@@ -98,7 +98,15 @@ export default {
       v => !!v || 'Password is required',
       v => (v && v >= 8) || 'Password must be at least 8 characters long'
     ],
-    checkbox: false
+    checkbox: false,
+
+      User: {
+        Name: '',
+        Surname: '',
+        Email: Name.substring(0, 4) + '.' + Surname.substring(0, 4) + '@tei.edu',
+        Password: '',
+        userType: ''
+      }
   }),
   watch: {
     menu (val) {

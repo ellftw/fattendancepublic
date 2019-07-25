@@ -3,7 +3,7 @@
     <v-layout row wrap>
       <v-flex xs12>
         <h1>Καλωσηρθες {{this.$store.getters.user.name}} {{this.$store.getters.user.surname}}</h1>
-        <v-data-table :headers="headers" :items="courses" class="elevation-8">
+        <v-data-table :headers="headers" :items="subjects" class="elevation-8">
           <template slot="items" slot-scope="props">
             <td>{{ props.item.subjectCode }}</td>
             <td>{{ props.item.name }}</td>
@@ -42,14 +42,7 @@ export default {
           value: 'SignedStudents',
           sortable: true
         }
-      ],
-      User: {
-        Name: '',
-        Surname: '',
-        Email: Name.substring(0, 4) + '.' + Surname.substring(0, 4) + '@tei.edu',
-        Password: '',
-        userType: ''
-      }
+      ]
     }
   },
   methods: {
