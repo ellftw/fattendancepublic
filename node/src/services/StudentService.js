@@ -26,9 +26,8 @@ StudentService.getAllStudents = async () => {
     return students
 }
 
-// same here
 StudentService.deleteStudent = async (arithmosMitroou) => {
-    let students = await Student.deleteOne({arithmosMitroou: arithmosMitroou})
+    let students = await Student.findOneAndDelete({arithmosMitroou: arithmosMitroou})
     if (!students) throw new Error(`Couldn't find this student`)
     return students
 }

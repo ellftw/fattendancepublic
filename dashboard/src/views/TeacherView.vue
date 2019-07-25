@@ -3,7 +3,7 @@
     <v-layout row wrap>
       <v-flex xs12>
         <h1>Καλωσηρθες {{this.$store.getters.user.name}} {{this.$store.getters.user.surname}}</h1>
-        <v-data-table :headers="headers" :items="subjects" class="elevation-8">
+        <v-data-table :headers="headers" :items="courses" class="elevation-8">
           <template slot="items" slot-scope="props">
             <td>{{ props.item.subjectCode }}</td>
             <td>{{ props.item.name }}</td>
@@ -15,7 +15,7 @@
     </v-layout>
     <v-layout row wrap>
       <v-flex xs6>
-        <v-btn round href="/#/createSubject">Create new subject</v-btn>
+        <v-btn round href="/#/createCourse">Create new course</v-btn>
       </v-flex>
     </v-layout>
   </v-container>
@@ -27,7 +27,7 @@ export default {
   name: 'TeacherView',
   data () {
     return {
-      subjectsLoading: false,
+      coursesLoading: false,
       lecturesLoading: false,
       headers: [
         {
@@ -42,20 +42,28 @@ export default {
           value: 'SignedStudents',
           sortable: true
         }
-      ]
+      ],
+      User: {
+        Name: '',
+        Surname: '',
+        Email: Name.substring(0, 4) + '.' + Surname.substring(0, 4) + '@tei.edu',
+        Password: '',
+        userType: ''
+      }
     }
   },
   methods: {
-    async getSubjectForTeacher () {
+    async getCourseForTeacher () {
       try {
-        this.subjects = await TeacherService.getSubjectForTeacher()
+        this.courses = await TeacherService.getCourseForTeacher()
       } catch (error) {
         window.alert(error)
       }
     }
   },
   mounted () {
-    this.getSubjectForTeacher()
+    this.getCourseForTeacher()
+    console.log(this.$store.getters.user)
   }
 }
 </script>

@@ -18,7 +18,7 @@
           <td class="text-xs-left">{{ props.item.name }}</td>
           <td class="text-xs-left">{{ props.item.arithmosMitroou }}</td>
           <td style="padding:0 0 0 0 ">
-            <v-btn round small @click="deleteStudent(this.deleteStudent)">Διαγραφη</v-btn>
+            <v-btn round small @click="deleteStudent()">Διαγραφη</v-btn>
             <v-btn round small>Μαθηματα</v-btn>
             <v-btn round small>Βεβαιωση</v-btn>
           </td>
@@ -60,11 +60,15 @@ export default {
         // { text: 'Περασμένα Μαθήματα', value: 'perasmena' }
       ],
       students: []
+
     }
   },
-  watch: {},
+  watch: {
+  
+  },
   mounted () {
     this.getAllStudents()
+    
     console.log(this.getAllStudents())
   },
   methods: {
@@ -75,16 +79,15 @@ export default {
         window.alert(error)
       }
     },
-    async deleteStudent () {
+    async deleteStudent (data) {
       try {
-        this.students = await StudentService.deleteStudent()
+        this.deletethestudent = await StudentService.deleteStudent(data)
       } catch (error) {
         window.alert(error)
       }
     }
   }
 }
-
 </script>
 
 <style scoped>

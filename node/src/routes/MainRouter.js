@@ -1,7 +1,7 @@
 const apiRouter = require('express').Router()
 const authRouter = require('./AuthRouter')
 const Student = require('../models/Student')
-const Subject = require('../models/Subject')
+const Course = require('../models/Course')
 const Teacher = require('../models/Teacher')
 
 apiRouter.use('/auth', authRouter)
@@ -15,14 +15,14 @@ apiRouter.get('/getAllStudents', async (req, res) => {
     })
 })
 
-apiRouter.get('/getSubjectsForTeacher/:teacherEmail', async (req, res) => {
+apiRouter.get('/getCoursesForTeacher/:teacherEmail', async (req, res) => {
     try {
         let teacher = await Teacher.findOne({
             email: req.params.teacherEmail
         })
         let kodikoiMathimaton = teacher.mathimata
         console.log(teacher)
-        let mathimata = await Subject.find({
+        let mathimata = await Course.find({
             kwdikosMathimatos: {
                 $in: kodikoiMathimaton
             }
@@ -38,13 +38,13 @@ apiRouter.get('/getSubjectsForTeacher/:teacherEmail', async (req, res) => {
         })
     }
 })
-apiRouter.get('/getLecturesForSubject/:subjectSynoloMathimaton', async (req, res) => {
+apiRouter.get('/getLecturesForCourse/:courseSynoloMathimaton', async (req, res) => {
     try {
-        let sunolo = await Subject.find({
-            synoloMathimaton: req.params.subjectSynoloMathimaton
+        let sunolo = await Course.find({
+            synoloMathimaton: req.params.courseSynoloMathimaton
         })
         let SMathimaton = sunolo.synoloMathimaton
-        console.log(subject)
+        console.log(course)
         res.status(200).json({
             SMathimaton: SMathimaton
         })

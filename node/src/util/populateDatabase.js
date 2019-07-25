@@ -449,11 +449,11 @@ module.exports = {
         name: teacherUsers[i].name,
         surname: teacherUsers[i].surname,
         email: teacherUsers[i].email,
-        teachingSubjects: []
+        teachingCourses: []
       })
   },
 
-  generateSubjects: async () => {
+  generateCourses: async () => {
 
   },
   generateSecretaries: async () => {

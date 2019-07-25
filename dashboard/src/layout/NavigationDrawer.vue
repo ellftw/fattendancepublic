@@ -77,7 +77,7 @@ export default {
         {
           icon: 'mdi-library-books',
           title: 'Λίστα Μαθημάτων',
-          route: '/subjectList'
+          route: '/courseList'
         },
         {
           icon: 'mdi-library-books',

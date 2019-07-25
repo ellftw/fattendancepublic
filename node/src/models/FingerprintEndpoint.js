@@ -31,7 +31,7 @@ const validations = {
 const fingerprintEndpoint = new Schema({
     deviceID: { required: true, type: String },
     usageType: { required: true, type: String},
-    currentSubject: { type: String },
+    currentCourse: { type: String },
     currentLesson: { type: String },
     location: { type: String }
 })

@@ -12,7 +12,7 @@ studentRouter.get('/', async (request, response) => {
 
 studentRouter.post('/deleteStudent', async (request, response) => {
     try {
-        let deleteStudent = await StudentService.deleteStudent()
+        let deleteStudent = await StudentService.deleteStudent(request.body)
         return response.status(200).json({ success: true, deleteStudent: deleteStudent})
     } catch (error) {
         return response.status(200).json({ success: false, error: `${error}`})

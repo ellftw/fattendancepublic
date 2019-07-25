@@ -7,29 +7,29 @@ teacherService.createTeacher = async (teacherToRegister) => {
         email: teacherToRegister.email,
         name: teacherToRegister.name,
         surname: teacherToRegister.surname,
-        teachingSubjects: []
+        teachingCoursess: []
     })
     await teacher.save()
 }
 
 
 
-teacherService.addSubjectToTeacher = async (email, subjectCode) => {
+teacherService.addCoursesToTeacher = async (email, subjectCode) => {
     let teacher = await Teacher.findOne({
         email: email
     })
 
     if (!teacher) throw new Error(`Failed to find teacher with email: ${email}`)
 
-    subjectAlreadyExists = (teacher.teachingSubjects.indexOf(subjectCode) > -1)
-    if (subjectAlreadyExists) throw new Error('Failed to add subject to teacher, subject is already assigned to teacher.')
+    courseAlreadyExists = (teacher.teachingcourses.indexOf(subjectCode) > -1)
+    if (courseAlreadyExists) throw new Error('Failed to add course to teacher, course is already assigned to teacher.')
 
-    teacher.teachingSubjects.push(subjectCode)
+    teacher.teachingCourses.push(subjectCode)
     await teacher.save()
 }
 
-teacherService.getSubjectForTeacher = async () => {
-    return await teacher.teachingSubjects
+teacherService.getCourseForTeacher = async () => {
+    
 }
 
 teacherService.findTeacherByEmail = async (email) => {

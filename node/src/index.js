@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
 
 const authApi = require('./routes/AuthRouter')
 const teacherApi = require('./routes/TeacherRouter')
-const subjectApi = require('./routes/SubjectRouter')
+const courseApi = require('./routes/CourseRouter')
 const studentApi = require('./routes/StudentRouter')
 
 mongoose.connect('mongodb://172.17.0.1:27017/test', {
@@ -30,7 +30,7 @@ app.use(cors({}))
 app.use('/auth', authApi)
 app.use('/register', authApi)
 app.use('/teacher', teacherApi)
-app.use('/subject', subjectApi)
+app.use('/course', courseApi)
 app.use('/student', studentApi)
 
 app.get('*', async (request, response) => {

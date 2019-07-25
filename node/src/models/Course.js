@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 
 const Lesson = require('./Lesson')
 
-const subjectSchema = new Schema({
+const CourseSchema = new Schema({
     name: {
         index: true,
         unique: true,
@@ -23,4 +23,4 @@ const subjectSchema = new Schema({
     // lessonList: { required: true, type: [Lesson.schema] }
 })
 
-module.exports = mongoose.model('Subject', subjectSchema)
+module.exports = mongoose.model('Course', CourseSchema)

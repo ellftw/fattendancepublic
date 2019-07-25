@@ -13,11 +13,30 @@
 
       <v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
 
+      <v-text-field
+      :type="'password'"
+      v-model="password"
+      :error-messages="passwordErrors"
+      label="Κωδικός"
+      required
+      @input="$v.password.$touch()"
+      @blur="$v.password.$touch()"
+    ></v-text-field>
+    <v-text-field
+      :type="'password'"
+      v-model="password"
+      :error-messages="passwordErrors"
+      label="Επαλήθευση Κωδικού"
+      required
+      @input="$v.password.$touch()"
+      @blur="$v.password.$touch()"
+    ></v-text-field>
+
       <v-select
         v-model="select"
         :items="items"
-        :rules="[v => !!v || 'Department is required']"
-        label="Department"
+        :rules="[v => !!v || 'Usertype is required']"
+        label="Usertype"
         required
       ></v-select>
       <v-menu
@@ -31,21 +50,6 @@
         full-width
         min-width="290px"
       >
-        <v-text-field
-          slot="activator"
-          v-model="date"
-          label="Birthday date"
-          prepend-icon="mdi-account"
-          readonly
-        ></v-text-field>
-        <v-date-picker
-          :rules="ageRules"
-          ref="picker"
-          v-model="date"
-          :max="new Date().toISOString().substr(0, 10)"
-          min="1970-01-01"
-          @change="save"
-        ></v-date-picker>
       </v-menu>
 
       <v-checkbox
@@ -80,17 +84,19 @@ export default {
     ],
     select: null,
     items: [
-      'Μηχανικών Πληροφορικής',
-      'Λογιστική',
-      'Διοίκηση Επιχειρήσεων',
-      'Φυσικού αερίου και πετρελαίου',
-      'Διαχείρηση Πληροφοριών',
-      'Ηλεκτρολόγων Μηχανικών'
+      'σπουδαστής',
+      'γραμματέας',
+      'καθηγητής'
     ],
     age: '',
     ageRules: [
       v => !!v || 'Age is required',
       v => (v && v > 16) || 'You should be over 16 years old'
+    ],
+
+    passwordRules: [
+      v => !!v || 'Password is required',
+      v => (v && v >= 8) || 'Password must be at least 8 characters long'
     ],
     checkbox: false
   }),
@@ -108,6 +114,14 @@ export default {
     },
     save (date) {
       this.$refs.menu.save(date)
+    },
+        async addNewUser () {
+      try {
+        this.user = await UserService.register
+      }
+      catch (error) {
+        window.alert(error)
+      }
     }
   }
 }

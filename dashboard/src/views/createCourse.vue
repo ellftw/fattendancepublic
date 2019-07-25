@@ -14,7 +14,7 @@
           <v-text-field
             v-model="SubjectCode"
             :error-messages="emailErrors"
-            label="Subject Code"
+            label="SubjectCode"
             required
             @input="$v.email.$touch()"
             @blur="$v.email.$touch()"
@@ -60,15 +60,15 @@
 </template>
 
 <script>
+import UserService from '@/services/UserService'
 export default {
   data: () => ({
     dates: ['2018-09-15", "2018-09-20'],
-    menu: true
+    menu: true,
+
   }),
   methods: {
-    submit () {
-      // save in db subject and save teachingsubject in teacher
-    }
+
   }
 }
 </script>

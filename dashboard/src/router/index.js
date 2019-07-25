@@ -10,7 +10,7 @@ import TeacherView from '@/views/TeacherView'
 import LoginView from '@/views/LoginView'
 import InfoView from '@/views/InfoView'
 import SignUpView from '@/views/SignUpView'
-import createSubject from '@/views/createSubject'
+import createCourse from '@/views/createCourse'
 
 Vue.use(Router)
 
@@ -69,9 +69,9 @@ let router = new Router({
       }
     },
     {
-      path: '/createSubject',
+      path: '/createCourse',
       name: 'Δημιουργία νεου μαθήματος',
-      component: createSubject,
+      component: createCourse,
       meta: {
         requiresAuth: true,
         userType: 'καθηγητής'
