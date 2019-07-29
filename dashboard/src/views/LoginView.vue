@@ -11,6 +11,7 @@
                 :error-messages="emailErrors"
                 label="E-mail"
                 required
+                @keyup.enter="login"
                 @input="$v.email.$touch()"
                 @blur="$v.email.$touch()"
               ></v-text-field>
@@ -20,6 +21,7 @@
                 :error-messages="passwordErrors"
                 label="Κωδικός"
                 required
+                @keyup.enter="login"
                 @input="$v.password.$touch()"
                 @blur="$v.password.$touch()"
               ></v-text-field>

@@ -27,9 +27,7 @@ StudentService.getAllStudents = async () => {
 }
 
 StudentService.deleteStudent = async (arithmosMitroou) => {
-    let students = await Student.findOneAndDelete({arithmosMitroou: arithmosMitroou})
-    if (!students) throw new Error(`Couldn't find this student`)
-    return students
+    return await Student.deleteOne({arithmosMitroou: arithmosMitroou})
 }
 
 module.exports = StudentService

@@ -16,11 +16,10 @@
         <template slot="items" slot-scope="props">
           <td>{{ props.item.surname }}</td>
           <td class="text-xs-left">{{ props.item.name }}</td>
-          <td class="text-xs-left">{{ props.item.arithmosMitroou }}</td>
+          <td class="text-xs-left" @click="test(props.item.arithmosMitroou);">{{ props.item.arithmosMitroou }}</td>
           <td style="padding:0 0 0 0 ">
-            <v-btn round small @click="deleteStudent()">Διαγραφη</v-btn>
+            <v-btn round small @click="deleteStudent(props.item.arithmosMitroou)">Διαγραφη</v-btn>
             <v-btn round small>Μαθηματα</v-btn>
-            <v-btn round small>Βεβαιωση</v-btn>
           </td>
           <!-- <td class="text-xs-left">{{ props.item.eksamino }}</td>
           <td class="text-xs-left">{{ props.item.perasmena }}</td>-->
@@ -69,7 +68,6 @@ export default {
   mounted () {
     this.getAllStudents()
     
-    console.log(this.getAllStudents())
   },
   methods: {
     async getAllStudents () {
@@ -78,14 +76,16 @@ export default {
       } catch (error) {
         window.alert(error)
       }
+      console.log(this.students)
     },
-    async deleteStudent (data) {
+    async deleteStudent () {
       try {
-        this.deletethestudent = await StudentService.deleteStudent(data)
+        let deletedStudent = await StudentService.deleteStudent()
+        console.log(deletedStudent)
       } catch (error) {
         window.alert(error)
       }
-    }
+    },
   }
 }
 </script>

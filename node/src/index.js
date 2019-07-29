@@ -31,7 +31,7 @@ app.use('/auth', authApi)
 app.use('/register', authApi)
 app.use('/teacher', teacherApi)
 app.use('/course', courseApi)
-app.use('/student', studentApi)
+app.use('/student/', studentApi)
 
 app.get('*', async (request, response) => {
     let message = `You are not supposed to be able to access this. This incident will be reported.`
