@@ -65,6 +65,7 @@
 </template>
 
 <script>
+import UserService from '@/services/UserService.js'
 export default {
   data: () => ({
     date: new Date().toISOString().substr(0, 10),
@@ -99,14 +100,13 @@ export default {
       v => (v && v >= 8) || 'Password must be at least 8 characters long'
     ],
     checkbox: false,
-
-      User: {
-        Name: '',
-        Surname: '',
-        Email: Name.substring(0, 4) + '.' + Surname.substring(0, 4) + '@tei.edu',
-        Password: '',
-        userType: ''
-      }
+    User: {
+      Name: '',
+      Surname: '',
+      Email: this.Name.substring(0, 4) + '.' + this.Surname.substring(0, 4) + '@tei.edu',
+      Password: '',
+      userType: ''
+    }
   }),
   watch: {
     menu (val) {
@@ -123,11 +123,10 @@ export default {
     save (date) {
       this.$refs.menu.save(date)
     },
-        async addNewUser () {
+    async addNewUser () {
       try {
         this.user = await UserService.register
-      }
-      catch (error) {
+      } catch (error) {
         window.alert(error)
       }
     }

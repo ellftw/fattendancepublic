@@ -62,12 +62,9 @@ export default {
 
     }
   },
-  watch: {
-  
-  },
+  watch: {},
   mounted () {
     this.getAllStudents()
-    
   },
   methods: {
     async getAllStudents () {
@@ -78,14 +75,16 @@ export default {
       }
       console.log(this.students)
     },
-    async deleteStudent () {
+    async deleteStudent (arithmosMitroou) {
       try {
-        let deletedStudent = await StudentService.deleteStudent()
-        console.log(deletedStudent)
+        let deletedStudent = await StudentService.deleteStudent(arithmosMitroou)
+        if (deletedStudent && deletedStudent.ok === 1) {
+          this.students = this.students.filter((sd) => sd.arithmosMitroou !== arithmosMitroou)
+        }
       } catch (error) {
         window.alert(error)
       }
-    },
+    }
   }
 }
 </script>

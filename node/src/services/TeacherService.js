@@ -1,4 +1,5 @@
 const Teacher = require('../models/Teacher')
+const Course = require('../models/Course')
 
 let teacherService = new Object
 
@@ -14,22 +15,28 @@ teacherService.createTeacher = async (teacherToRegister) => {
 
 
 
-teacherService.addCoursesToTeacher = async (email, subjectCode) => {
+teacherService.addCourseToTeacher = async (email, courseCode) => {
     let teacher = await Teacher.findOne({
         email: email
     })
 
     if (!teacher) throw new Error(`Failed to find teacher with email: ${email}`)
 
-    courseAlreadyExists = (teacher.teachingcourses.indexOf(subjectCode) > -1)
+    courseAlreadyExists = (teacher.teachingCourses.indexOf(courseCode) > -1)
     if (courseAlreadyExists) throw new Error('Failed to add course to teacher, course is already assigned to teacher.')
 
-    teacher.teachingCourses.push(subjectCode)
+    teacher.teachingCourses.push(courseCode)
     await teacher.save()
 }
 
-teacherService.getCourseForTeacher = async () => {
-    
+teacherService.getCoursesForTeacher = async (email) => {
+    let teacher = await Teacher.findOne({email: email})
+    if (!teacher) throw new Error (`Failed to find teacher with email: ${email}`)
+    console.log(teacher.teachingCourses)
+    const courses = await Course.find({
+        'courseCode': {$in:teacher.teachingCourses}
+    })
+    return courses
 }
 
 teacherService.findTeacherByEmail = async (email) => {

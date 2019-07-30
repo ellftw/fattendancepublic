@@ -9,4 +9,13 @@ courseRouter.post('/createCourse', async(request, response) => {
         response.status(200).json({ success: false, error: `${error}` })
     }
 })
+
+courseRouter.get('/', async(request, response) => {
+    try {
+        const courses = await CourseService.getAllCourses()
+        response.status(200).json({success: true, courses: courses})
+    } catch(error) {
+        response.status(200).json({ success: false, error: `${error}` })
+    }
+})
 module.exports = courseRouter 

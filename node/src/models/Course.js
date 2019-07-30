@@ -10,7 +10,7 @@ const CourseSchema = new Schema({
         required: true,
         type: String
     },
-    subjectCode: {
+    courseCode: {
         index: true,
         unique: true,
         required: true,
@@ -20,7 +20,7 @@ const CourseSchema = new Schema({
         required: true,
         type: Number
     },
-    // lessonList: { required: true, type: [Lesson.schema] }
+    lessonList: { required: false, type: [Lesson.schema] }
 })
 
 module.exports = mongoose.model('Course', CourseSchema)

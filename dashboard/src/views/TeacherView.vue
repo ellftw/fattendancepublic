@@ -2,12 +2,12 @@
   <v-container align-center grid-list-md>
     <v-layout row wrap>
       <v-flex xs12>
-        <h1>Καλωσηρθες {{this.$store.getters.user.name}} {{this.$store.getters.user.surname}}</h1>
-        <v-data-table :headers="headers" :items="subjects" class="elevation-8">
+        <h1 @click="test($store.getters.user)">Καλωσηρθες {{this.$store.getters.user.name}} {{this.$store.getters.user.surname}}</h1>
+        <v-data-table :headers="headers" :items="courses" class="elevation-8">
           <template slot="items" slot-scope="props">
-            <td>{{ props.item.subjectCode }}</td>
+            <td>{{ props.item.courseCode }}</td>
             <td>{{ props.item.name }}</td>
-            <td>{{ props.item.NumberOfLessons }}</td>
+            <td>{{ props.item.numberOfLessons }}</td>
             <td>{{ props.item.SignedStudents }}</td>
           </template>
         </v-data-table>
@@ -32,31 +32,36 @@ export default {
       headers: [
         {
           text: 'Κωδικός Μαθήματος',
-          value: 'subjectCode',
+          value: 'courseCode',
           sortable: true
         },
         { text: 'Όνομα Μαθήματος', value: 'name', sortable: true },
-        { text: 'Αριθμός Μαθημάτων', value: 'NumberOfLessons', sortable: true },
+        { text: 'Αριθμός Μαθημάτων', value: 'numberOfLessons', sortable: true },
         {
           text: 'Αριθμός Εγγεγραμμένων',
           value: 'SignedStudents',
           sortable: true
         }
-      ]
+      ],
+      courses: []
     }
   },
   methods: {
-    async getCourseForTeacher () {
+    async getCoursesForTeacher (email) {
       try {
-        this.courses = await TeacherService.getCourseForTeacher()
+        const response = await TeacherService.getCoursesForTeacher(this.$store.getters.user.email)
+        console.log(response)
+        this.courses = response.courseList
       } catch (error) {
         window.alert(error)
       }
+    },
+    test (a) {
+      console.log(a)
     }
   },
   mounted () {
-    this.getCourseForTeacher()
-    console.log(this.$store.getters.user)
+    this.getCoursesForTeacher(this.$store.getters.user.email)
   }
 }
 </script>

@@ -13,7 +13,7 @@ StudentService.createStudent = async (data) => {
 }
 // Not known format yet so not known argument to pass in function in order to work properly
 // StudentService.findStudent = async () => {
-//     let student = await Student.find({name: name , subjectCode: subjectCode})
+//     let student = await Student.find({name: name , courseCode: courseCode})
 //     if (!student) throw new Error (`Couldn't find this student`)
 
 //     return student

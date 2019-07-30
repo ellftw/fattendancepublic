@@ -6,7 +6,7 @@ const StudentService = {
     return response.data.allStudents
   },
   deleteStudent: async function (arithmosMitroou) {
-    let response = await axios.post('http://0.0.0.0:8080/student/delete', {arithmosMitroou: arithmosMitroou})
+    let response = await axios.delete('http://0.0.0.0:8080/student/', {data: {arithmosMitroou}})
     return response.data.deleteStudent
   }
 }
