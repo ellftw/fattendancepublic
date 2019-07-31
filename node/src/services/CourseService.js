@@ -7,7 +7,6 @@ courseService.createCourse = async (courseToRegister) => {
         name: courseToRegister.name,
         courseCode: courseToRegister.courseCode,
         numberOfLessons: courseToRegister.numberOfLessons,
-        lessonList: courseToRegister.lessonList
     })
     await course.save()
 }

@@ -4,32 +4,21 @@
       <v-flex xs6 offset-xs3>
         <form>
           <v-text-field
-            v-model="name"
-            :error-messages="nameErrors"
+            v-model="Course.name"
             label="Name"
             required
-            @input="$v.name.$touch()"
-            @blur="$v.name.$touch()"
           ></v-text-field>
           <v-text-field
-            v-model="CourseCode"
-            :error-messages="emailErrors"
+            v-model="Course.courseCode"
             label="CourseCode"
             required
-            @input="$v.email.$touch()"
-            @blur="$v.email.$touch()"
           ></v-text-field>
           <v-text-field
-            v-model="NumberOfLessons"
-            :error-messages="selectErrors"
+            v-model="Course.numberOfLessons"
             label="Number Of Lessons"
-            required
-            @change="$v.select.$touch()"
-            @blur="$v.select.$touch()"
           ></v-text-field>
-          <v-btn round @click="createCourseForTeacher()">Cancel</v-btn>
-          <!-- v-if submit true href teacherview -->
-          <v-btn round>OK</v-btn>
+          <v-btn round>Cancel</v-btn>
+          <v-btn round @click="createCourse()">OK</v-btn>
         </form>
       </v-flex>
     </v-layout>
@@ -38,6 +27,7 @@
 
 <script>
 import TeacherService from '@/services/TeacherService'
+import CourseService from '@/services/CourseService'
 export default {
   data () {
     return {
@@ -49,9 +39,9 @@ export default {
     }
   },
   methods: {
-    async createCourseForTeacher (course) {
+    async createCourse (course) {
       try {
-        await TeacherService.createCourseForTeacher(this.Course)
+        await CourseService.createCourse(this.Course)
       } catch (error) {
         window.alert(error)
       }
