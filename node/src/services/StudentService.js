@@ -7,7 +7,8 @@ StudentService.createStudent = async (data) => {
         surname: data.surname,
         email: data.email,
         arithmosMitroou: data.arithmosMitroou,
-        fingerprintID: data.fingerprintID
+        fingerprintID: data.fingerprintID,
+        semester: data.semester
     })
     await student.save()
 }
@@ -28,6 +29,28 @@ StudentService.getAllStudents = async () => {
 
 StudentService.deleteStudent = async (arithmosMitroou) => {
     return await Student.deleteOne({arithmosMitroou: arithmosMitroou})
+}
+
+StudentService.addCourseToStudent = async (arithmosMitroou, courseCode) => {
+    let student = await Student.findOne({
+        arithmosMitroou: arithmosMitroou
+    })
+    if (!student) throw new Error (`Failed to find student with code: ${arithmosMitroou}`)
+    courseAlreadyExists = (student.studentCourses.indexOf(courseCode) > -1)
+    if (courseAlreadyExists) throw new Error('Failed to add course to student, course is already assigned to student.')
+    student.studentCourses.push(courseCode)
+    await student.save()
+}
+
+StudentService.getAllStudentCourses = async (arithmosMitroou) => {
+    let student = await Student.findOne({
+        arithmosMitroou: arithmosMitroou
+    })
+    if (!student) throw new Error (`Failed to find student with code: ${arithmosMitroou}`)
+    const courses = await Course.find({
+        'courseCode': {$in:student.studentCourses}
+    })
+    return courses
 }
 
 module.exports = StudentService

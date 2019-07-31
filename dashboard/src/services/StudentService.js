@@ -8,6 +8,10 @@ const StudentService = {
   deleteStudent: async function (arithmosMitroou) {
     let response = await axios.delete('http://0.0.0.0:8080/student/', {data: {arithmosMitroou}})
     return response.data.deleteStudent
+  },
+  getAllStudentCourses: async function (arithmosMitroou) {
+    let response = await axios.get(`http://0.0.0.0:8080/student/getCourses/${arithmosMitroou}`)
+    return response.data
   }
 }
 export default StudentService

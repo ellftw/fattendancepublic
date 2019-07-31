@@ -1,5 +1,7 @@
 const studentRouter = require('express').Router()
 const StudentService = require('../services/StudentService')
+const CourseService = require('../services/CourseService')
+
 
 
 
@@ -23,6 +25,25 @@ studentRouter.delete('/', async (request, response) => {
         return response.status(200).json({ success: true, deleteStudent: deleteStudent})
     } catch (error) {
         return response.status(200).json({ success: false, error: `${error}`})
+    }
+})
+
+studentRouter.post('/addCourse', async (request, response) => {
+    try {
+        let course = await StudentService.addCourseToStudent(
+            request.body.arithmosMitroou, request.body.courseCode)
+            response.status(200).json({ success: true, course: course})
+        } catch(error) {
+            response.status(200).json({success: false, error: `${error}`})
+        }
+})
+
+studentRouter.get('/getCourses/:arithmosMitroou', async (request, response) => {
+    try {
+        let courseList = await StudentService.getAllStudentCourses(request.params.arithmosMitroou)
+        response.status(200).json({ success: true, courseList: courseList })
+    } catch(error) {
+        response.status(200).json({ success: false, error: `${error}` })
     }
 })
 

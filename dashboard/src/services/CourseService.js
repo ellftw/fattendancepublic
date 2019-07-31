@@ -1,9 +1,9 @@
 import axios from 'axios'
 
 const CourseService = {
-  getCoursesForTeacher: async function (teacher) {
-    let response = await axios.get(`http://0.0.0.0:8080/teacher/getCoursesForTeacher/${teacher.email}`)
-    return response.data.mathimata
+  getAllCourses: async function () {
+    let response = await axios.get(`http://0.0.0.0:8080/courses/`)
+    return response.data.getAllCourses
   }
 }
 export default CourseService

@@ -437,7 +437,8 @@ module.exports = {
         surname: studentUsers[i].surname,
         email: studentUsers[i].email,
         arithmosMitroou: arithmoiMitroou[i],
-        fingerprintID: fingerprintIds[i]
+        fingerprintID: fingerprintIds[i],
+        semester: 1
       })
     console.log(studentUsers.length)
   },

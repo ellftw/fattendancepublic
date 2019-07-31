@@ -22,7 +22,8 @@ const studentSchema = new Schema({
     email: { required: true, type: String },
     arithmosMitroou: { index: true, unique: true, required: true, type: Number },
     fingerprintID: { required: false, type: String},
-    studentCourses: {required: false, type: Array}
+    studentCourses: {required: false, type: Array},
+    semester: { required: true, type: Number}
 })
 
 module.exports = mongoose.model('Student', studentSchema)

@@ -11,14 +11,6 @@
         </v-data-table>
       </v-flex>
     </v-layout>
-    <v-layout row wrap>
-      <v-flex xs6>
-        <v-btn round @click="onClickListStudents()">List Students</v-btn>
-      </v-flex>
-      <v-flex xs6>
-        <v-btn round @click="showStudents = !showStudents">Toggle Students</v-btn>
-      </v-flex>
-    </v-layout>
   </v-container>
 </template>
 <script>

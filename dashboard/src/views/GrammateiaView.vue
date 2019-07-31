@@ -16,13 +16,12 @@
         <template slot="items" slot-scope="props">
           <td>{{ props.item.surname }}</td>
           <td class="text-xs-left">{{ props.item.name }}</td>
-          <td class="text-xs-left" @click="test(props.item.arithmosMitroou);">{{ props.item.arithmosMitroou }}</td>
+          <td class="text-xs-left">{{ props.item.arithmosMitroou }}</td>
+          <td class="text-xs-left">{{ props.item.semester }}</td>
           <td style="padding:0 0 0 0 ">
             <v-btn round small @click="deleteStudent(props.item.arithmosMitroou)">Διαγραφη</v-btn>
             <v-btn round small>Μαθηματα</v-btn>
           </td>
-          <!-- <td class="text-xs-left">{{ props.item.eksamino }}</td>
-          <td class="text-xs-left">{{ props.item.perasmena }}</td>-->
         </template>
         <v-alert
           slot="no-results"
@@ -54,8 +53,8 @@ export default {
         },
         { text: 'Όνομα', value: 'name' },
         { text: 'Αριθμός Μητρώου', value: 'arithmosMitroou' },
+        { text: 'Εξάμηνο', value: 'semester' },
         { text: 'Επιλογες', value: '', sortable: false }
-        // { text: 'Εξάμηνο', value: 'eksamino' },
         // { text: 'Περασμένα Μαθήματα', value: 'perasmena' }
       ],
       students: []
