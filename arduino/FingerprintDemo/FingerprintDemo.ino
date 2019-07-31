@@ -2,6 +2,7 @@
 #include <U8g2lib.h>
 #include <Wire.h>
 
+
 #include "FingerprintReader.h"
 
 
@@ -138,4 +139,3 @@ void updateUI(char* message) {
   u8g2.drawStr(10,10, message);
   u8g2.sendBuffer();
 }
-

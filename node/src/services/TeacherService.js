@@ -19,7 +19,7 @@ teacherService.addCourseToTeacher = async (email, courseCode) => {
     let teacher = await Teacher.findOne({
         email: email
     })
-
+    console.log(email)
     if (!teacher) throw new Error(`Failed to find teacher with email: ${email}`)
 
     courseAlreadyExists = (teacher.teachingCourses.indexOf(courseCode) > -1)
