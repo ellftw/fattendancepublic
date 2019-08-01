@@ -10,7 +10,9 @@ import TeacherView from '@/views/TeacherView'
 import LoginView from '@/views/LoginView'
 import InfoView from '@/views/InfoView'
 import SignUpView from '@/views/SignUpView'
-import createCourse from '@/views/createCourse'
+import CreateCourse from '@/views/CreateCourse'
+import Announcements from '@/views/Announcements'
+import StudentView from '@/views/StudentView'
 
 Vue.use(Router)
 
@@ -23,7 +25,8 @@ let router = new Router({
 
         let dictionary = {
           'γραμματέας': '/grammateia',
-          'καθηγητής': '/teacherView'
+          'καθηγητής': '/teacherView',
+          'σπουδαστής': '/mathitis'
         }
         return dictionary[store.getters.user.userType]
       }
@@ -46,8 +49,15 @@ let router = new Router({
       name: 'Γραμματεία',
       component: GrammateiaView,
       meta: {
-        requiresAuth: true,
-        userType: 'γραμματέας'
+        requiresUnAuth: true,
+      }
+    },
+    {
+      path: '/announcements',
+      name: 'Ανακοινώσεις',
+      component: Announcements,
+      meta: {
+        requiresAuth: false,
       }
     },
     {
@@ -57,6 +67,15 @@ let router = new Router({
       meta: {
         requiresAuth: true,
         userType: 'καθηγητής'
+      }
+    },
+    {
+      path: '/mathitis',
+      name: 'Αρχική',
+      component: StudentView,
+      meta: {
+        requiresAuth: true,
+        userType: 'σπουδαστής'
       }
     },
     {
@@ -71,7 +90,7 @@ let router = new Router({
     {
       path: '/createCourse',
       name: 'Δημιουργία νεου μαθήματος',
-      component: createCourse,
+      component: CreateCourse,
       meta: {
         requiresAuth: true,
         userType: 'καθηγητής'

@@ -17,6 +17,10 @@ const CourseSchema = new Schema({
     numberOfLessons: {
         required: true,
         type: Number
+    },
+    exam: {
+        required: false,
+        type: Array
     }
 })
 

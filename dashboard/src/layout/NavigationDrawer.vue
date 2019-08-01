@@ -118,7 +118,13 @@ export default {
           icon: 'mdi-settings',
           title: 'Ρυθμίσεις',
           route: '/settings'
+        },
+        {
+          icon: 'mdi-chat-alert',
+          title: 'Ανακοινώσεις',
+          route: '/announcements'
         }
+
       ]
     }
   },
