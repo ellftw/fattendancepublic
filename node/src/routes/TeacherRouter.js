@@ -20,12 +20,15 @@ teacherRouter.post('/createCourse', async (request, response) => {
     }
 })
 
-teacherRouter.get('/byEmail/:email', async (request, response) => {
+teacherRouter.get('/', async (request, response) => {
+
+    console.log("Get teachers")
     try {
-        let teacher = await TeacherService.findTeacherByEmail(request.params.email)
-        response.status(200).json({ success: true, teacher: teacher })
-    } catch(error) {
-        response.status(200).json({ success: false, error: `${error}` })
+        let allTeachers = await TeacherService.getAllTeachers()
+        console.log(allTeachers)
+        return response.status(200).json({ success: true, allTeachers: allTeachers})
+    } catch (error) {
+        return response.status(200).json({ success: false, error: `${error}`})
     }
 })
 

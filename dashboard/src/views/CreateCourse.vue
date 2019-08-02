@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-layout xs10 offset-xs1>
+    <v-layout xs10 offset-xs1 pt-3>
       <v-flex xs6 offset-xs3>
         <form>
           <v-text-field

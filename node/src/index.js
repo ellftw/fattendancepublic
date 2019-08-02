@@ -21,7 +21,7 @@ let app = express()
 
 const util = require('./util/populateDatabase')
 
-// util.generateStudents()
+// util.generateTeachers()
 
 app.server = http.createServer(app)
 app.use(bodyParser.urlencoded({

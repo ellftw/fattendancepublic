@@ -1,5 +1,5 @@
 <template>
-  <v-flex xs8 offset-xs2>
+  <v-flex xs8 offset-xs2 pt-3>
     <v-card>
       <v-card-title>
         Πίνακας σπουδαστών γραμματείας
@@ -69,6 +69,7 @@ export default {
     async getAllStudents () {
       try {
         this.students = await StudentService.getAllStudents()
+        console.log(this.students)
       } catch (error) {
         window.alert(error)
       }

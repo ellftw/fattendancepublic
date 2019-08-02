@@ -39,12 +39,10 @@ teacherService.getCoursesForTeacher = async (email) => {
     return courses
 }
 
-teacherService.findTeacherByEmail = async (email) => {
-    let teacher = await Teacher.findOne({
-        email: email
-    })
-    if (!teacher) throw new Error(`Failed to find teacher with email: ${email}`)
-    return teacher
+teacherService.getAllTeachers = async () => {
+    let teachers = await Teacher.find({}).select('-_uid -__v')
+    if (!teachers) throw new Error('Could not find any teachers')
+    return teachers
 }
 
 module.exports = teacherService

@@ -13,6 +13,7 @@ import SignUpView from '@/views/SignUpView'
 import CreateCourse from '@/views/CreateCourse'
 import Announcements from '@/views/Announcements'
 import StudentView from '@/views/StudentView'
+import GreammateiaTeachers from '@/views/GrammateiaTeachersView'
 
 Vue.use(Router)
 
@@ -49,7 +50,17 @@ let router = new Router({
       name: 'Γραμματεία',
       component: GrammateiaView,
       meta: {
-        requiresUnAuth: true,
+        requiresAuth: true,
+        userType: 'γραμματέας'
+      }
+    },
+    {
+      path: '/grammateiateachers',
+      name: 'Καθηγητές του τμήματος',
+      component: GreammateiaTeachers,
+      meta: {
+        requiresAuth: true,
+        userType: 'γραμματέας'
       }
     },
     {
