@@ -11,7 +11,7 @@ const CourseService = {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     })
-    return response.data
+    return response.data.course
   }
 }
 export default CourseService
