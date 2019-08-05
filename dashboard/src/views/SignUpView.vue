@@ -1,135 +1,96 @@
 <template>
-  <v-flex xs6 offset-xs3 pb-5 mb-5>
-    <v-form ref="form" v-model="valid" lazy-validation>
-      <v-text-field
-        v-model="firstname"
-        :counter="30"
-        :rules="nameRules"
-        label="First Name"
-        required
-      ></v-text-field>
+  <v-form>
+    <v-container>
+      <v-layout row wrap>
 
-      <v-text-field v-model="lastname" :counter="30" :rules="nameRules" label="Last Name" required></v-text-field>
+        <v-flex xs6 offset-xs3>
+          <v-text-field
+          v-model="newUser.email"
+          label="E-mail"
+          placeholder="something@tei.edu"
+          ></v-text-field>
+          <v-text-field
+            v-model="newUser.password"
+            :append-icon="show1 ? 'visibility' : 'visibility_off'"
+            :rules="[rules.required, rules.min]"
+            :type="show1 ? 'text' : 'password'"
+            name="input-10-1"
+            label="Password"
+            hint="At least 8 characters"
+            counter
+            @click:append="show1 = !show1"
+          ></v-text-field>
+          <v-text-field
+            :append-icon="show4 ? 'visibility' : 'visibility_off'"
+            :rules="[rules.required, rules.emailMatch]"
+            :type="show4 ? 'text' : 'password'"
+            name="input-10-2"
+            label="Repeat Password"
+            hint="At least 8 characters"
+            error
+            @click:append="show4 = !show4"
+          ></v-text-field>
+          <v-text-field
+          v-model="newUser.name"
+          label="Name"
+          placeholder="John"
+          ></v-text-field>
+          <v-text-field
+          v-model="newUser.surname"
+          label="Surname"
+          placeholder="Doe"
+          ></v-text-field>
+          <v-select
+              v-model="newUser.userType"
+              :items="userType"
+              :rules="rules.animal"
+              label="User Type"
+              required
+            ></v-select>
+            <v-btn round @click="createNewUser(newUser)">Submit User</v-btn>
+        </v-flex>
 
-      <v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
-
-      <v-text-field
-      :type="'password'"
-      v-model="password"
-      :error-messages="passwordErrors"
-      label="Κωδικός"
-      required
-      @input="$v.password.$touch()"
-      @blur="$v.password.$touch()"
-    ></v-text-field>
-    <v-text-field
-      :type="'password'"
-      v-model="password"
-      :error-messages="passwordErrors"
-      label="Επαλήθευση Κωδικού"
-      required
-      @input="$v.password.$touch()"
-      @blur="$v.password.$touch()"
-    ></v-text-field>
-
-      <v-select
-        v-model="select"
-        :items="items"
-        :rules="[v => !!v || 'Usertype is required']"
-        label="Usertype"
-        required
-      ></v-select>
-      <v-menu
-        ref="menu"
-        :close-on-content-click="false"
-        v-model="menu"
-        :nudge-right="40"
-        lazy
-        transition="scale-transition"
-        offset-y
-        full-width
-        min-width="290px"
-      >
-      </v-menu>
-
-      <v-checkbox
-        v-model="checkbox"
-        :rules="[v => !!v || 'You must agree to continue!']"
-        label="Do you agree?"
-        required
-      ></v-checkbox>
-
-      <v-btn round :disabled="!valid" color="success" @click="validate">Validate</v-btn>
-    </v-form>
-  </v-flex>
+      </v-layout>
+    </v-container>
+  </v-form>
 </template>
 
 <script>
-import UserService from '@/services/UserService.js'
-export default {
-  data: () => ({
-    date: new Date().toISOString().substr(0, 10),
-    menu: false,
-    modal: false,
-    valid: false,
-    firstname: '',
-    lastname: '',
-    nameRules: [
-      v => !!v || 'Name is required',
-      v => (v && v.length <= 30) || 'Name must be less than 30 characters'
-    ],
-    email: '',
-    emailRules: [
-      v => !!v || 'E-mail is required',
-      v => /.+@.+/.test(v) || 'E-mail must be valid'
-    ],
-    select: null,
-    items: [
-      'σπουδαστής',
-      'γραμματέας',
-      'καθηγητής'
-    ],
-    age: '',
-    ageRules: [
-      v => !!v || 'Age is required',
-      v => (v && v > 16) || 'You should be over 16 years old'
-    ],
-
-    passwordRules: [
-      v => !!v || 'Password is required',
-      v => (v && v >= 8) || 'Password must be at least 8 characters long'
-    ],
-    checkbox: false,
-    User: {
-      Name: '',
-      Surname: '',
-      Email: this.Name.substring(0, 4) + '.' + this.Surname.substring(0, 4) + '@tei.edu',
-      Password: '',
-      userType: ''
-    }
-  }),
-  watch: {
-    menu (val) {
-      val && this.$nextTick(() => (this.$refs.picker.activePicker = 'YEAR'))
-    }
-  },
-
-  methods: {
-    validate () {
-      if (this.$refs.form.validate()) {
-        console.log('validated')
+import UserService from '@/services/UserService'
+  export default {
+    data () {
+      return {
+        show1: false,
+        show4: false,
+        rules: {
+          required: value => !!value || 'Required.',
+          min: v => v.length >= 8 || 'Min 8 characters',
+          emailMatch: () => ('The email and password you entered don\'t match')
+        },
+        userType:[
+          'σπουδαστής', 'καθηγητής', 'γραμματέας'
+        ],
+        newUser: {
+          email: '',
+          password: '',
+          name: '',
+          surname: '',
+          userType: ''
+        }
       }
     },
-    save (date) {
-      this.$refs.menu.save(date)
-    },
-    async addNewUser () {
-      try {
-        this.user = await UserService.register
-      } catch (error) {
-        window.alert(error)
+    methods: {
+      async createNewUser () {
+        let nu = {
+          email: this.newUser.email,
+          password: this.newUser.password,
+          name: this.newUser.name,
+          surname: this.newUser.surname,
+          userType: this.newUser.userType
+        }
+        console.log(nu)
+        await UserService.register(nu)
       }
     }
   }
-}
 </script>

@@ -9,15 +9,15 @@ const UserService = {
     let data = response.data.responseObject
     return { token: data.token, email: data.email, name: data.name, surname: data.surname, userType: data.userType }
   },
-  register: async function (name, surname, email, password, usertype) {
-    let requestBody = {
-      name: name,
-      surname: surname,
-      email: email,
-      password: password,
-      usertype: usertype
-    }
-    let response = await axios.post('http://0.0.0.0:8080/auth/register', requestBody)
+  register: async function (newuser) {
+    let response = await axios.post('http://0.0.0.0:8080/auth/register', {
+      email: newuser.email,
+      password: newuser.password,
+      name: newuser.name,
+      surname: newuser.surname,
+      userType: newuser.userType
+    })
+    console.log(response.data)
     if (!response.data.success) throw new Error(response.data.error)
     let data = response.data.responseObject
     return {

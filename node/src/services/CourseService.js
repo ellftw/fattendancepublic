@@ -1,4 +1,5 @@
 const Course = require('../models/Course')
+const Student = require('../models/Student')
 
 let courseService = new Object
 
@@ -7,6 +8,7 @@ courseService.createCourse = async (courseToRegister) => {
         name: courseToRegister.name,
         courseCode: courseToRegister.courseCode,
         numberOfLessons: courseToRegister.numberOfLessons,
+        exam: courseToRegister.exam
     })
     await course.save()
 }
@@ -30,5 +32,7 @@ courseService.getAllCourses = async () => {
     if (!courses) throw new Error (`Couldn't find any courses`)
     return courses
 }
+
+
 
 module.exports = courseService

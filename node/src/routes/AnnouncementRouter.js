@@ -3,7 +3,7 @@ const AnnouncementService = require('../services/AnnouncementService')
 
 announcementRouter.get('/', async(request, response) => {
     try {
-       const announcements = await AnnouncementService.getAllAnnouncements()
+       let announcements = await AnnouncementService.getAllAnnouncements()
         response.status(200).json({ success:true, announcements: announcements })
     } catch(error) {
         response.status(200).json({ success: false, error: `${error}` })

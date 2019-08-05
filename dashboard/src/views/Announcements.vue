@@ -1,9 +1,9 @@
 <template>
   <v-layout v-if="isLoggedIn && userType === 'γραμματέας'">
     <v-flex xs8 offset-xs2>
-      <v-text-field label="Τίτλος Ανακοίνωσης" solo class="pt-3 mt-3"></v-text-field>
-      <v-textarea class="pt-2 mt-2" outline name="input-7-4" label="Ανακοίνωση"></v-textarea>
-      <v-btn round>Ανάρτηση</v-btn>
+      <v-text-field v-model="createAnnouncement.title" label="Τίτλος Ανακοίνωσης" solo class="pt-3 mt-3"></v-text-field>
+      <v-textarea v-model="createAnnouncement.content" class="pt-2 mt-2" outline name="input-7-4" label="Ανακοίνωση"></v-textarea>
+      <v-btn @click="createAnAnnouncement(createAnnouncement)" round>Ανάρτηση</v-btn>
     </v-flex>
   </v-layout>
   <v-layout v-else>
@@ -16,11 +16,11 @@
                 <v-card-title primary-title>
                   <div>
                     <div class="headline pb-3">{{ann.title}}</div>
-                    <span>{{ann.content.substring(0,150)+ '...'}}</span>
+                    <div class="content"><span>{{ann.content.substring(0,150)+ '...'}}</span></div>
                   </div>
                 </v-card-title>
                 <v-card-actions>
-                  <v-btn flat dark>See full post</v-btn>
+                  <v-btn @click="ann.content" flat dark>See full post</v-btn>
                 </v-card-actions>
               </v-card>
             </v-flex>
@@ -32,52 +32,19 @@
 </template>
 
 <script>
+import AnnouncementService from '@/services/AnnouncementService'
 export default {
   data () {
     return {
-      announcements: [
-        {
-          title: 'Ανακοινωση',
-          content:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-        },
-        {
-          title: 'Ανακοινωση',
-          content:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-        },
-        {
-          title: 'Ανακοινωση',
-          content:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-        },
-        {
-          title: 'Ανακοινωση',
-          content:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-        },
-        {
-          title: 'Ανακοινωση',
-          content:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-        },
-        {
-          title: 'Ανακοινωση',
-          content:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-        },
-        {
-          title: 'Ανακοινωση',
-          content:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-        },
-        {
-          title: 'Ανακοινωση',
-          content:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-        }
-      ]
+     announcements: [],
+     createAnnouncement: {
+       title: '',
+       content: ''
+      }
     }
+  },
+  mounted () {
+    this.getAllAnnouncements()
   },
   computed: {
     isLoggedIn: function () {
@@ -86,9 +53,29 @@ export default {
     userType: function () {
       return this.$store.getters.user.userType
     }
+  },
+  methods: {
+    async getAllAnnouncements () {
+      try {
+        this.announcements = await AnnouncementService.getAllAnnouncement()
+      } catch(error) {
+        window.alert(error)
+      }
+    },
+    async createAnAnnouncement () {
+      let ann = {
+        title: this.createAnnouncement.title,
+        content: this.createAnnouncement.content
+      }
+      console.log(ann)
+      await AnnouncementService.createAnnouncement(ann)
+    }
   }
 }
 </script>
 
 <style>
+.content {
+  word-break: break-word;
+}
 </style>
