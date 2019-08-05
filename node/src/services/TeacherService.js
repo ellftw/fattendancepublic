@@ -8,7 +8,7 @@ teacherService.createTeacher = async (teacherToRegister) => {
         email: teacherToRegister.email,
         name: teacherToRegister.name,
         surname: teacherToRegister.surname,
-        teachingCoursess: []
+        teachingCourses: []
     })
     await teacher.save()
 }

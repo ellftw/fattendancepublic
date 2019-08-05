@@ -34,6 +34,17 @@
       </v-list-tile>
     </v-list>
 
+    <v-list v-if="isLoggedIn && userType === 'σπουδαστής'">
+      <v-list-tile :to="item.route" value="true" v-for="(item, i) in studentItems" :key="i">
+        <v-list-tile-action >
+          <v-icon v-html="item.icon"></v-icon>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <v-list-tile-title v-text="item.title"></v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+    </v-list>
+
     <v-divider/>
 
     <v-list>
@@ -78,6 +89,11 @@ export default {
           icon: 'mdi-library-books',
           title: 'Λίστα Μαθημάτων',
           route: '/courseList'
+        },      
+        {
+          icon: 'mdi-library-books',
+          title: 'Βάλε μάθημα',
+          route: '/addCourse'
         },
         {
           icon: 'mdi-library-books',
@@ -106,6 +122,13 @@ export default {
           icon: 'mdi-login',
           title: 'Είσοδος',
           route: '/login'
+        }
+      ],
+      studentItems:[
+        {
+          icon: 'mdi-library-books',
+          title: 'Εγγραφή σε μάθημα καθηγητή',
+          route: '/addCourse'
         }
       ],
       additionalItems: [

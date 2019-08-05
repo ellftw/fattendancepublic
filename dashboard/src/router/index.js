@@ -14,6 +14,7 @@ import CreateCourse from '@/views/CreateCourse'
 import Announcements from '@/views/Announcements'
 import StudentView from '@/views/StudentView'
 import GreammateiaTeachers from '@/views/GrammateiaTeachersView'
+import AddCourseToUser  from '@/views/AddCourseToUser'
 
 Vue.use(Router)
 
@@ -75,6 +76,15 @@ let router = new Router({
       path: '/mathima',
       name: 'Μάθημα',
       component: MathimaView,
+      meta: {
+        requiresAuth: true,
+        userType: 'καθηγητής'
+      }
+    },
+    {
+      path: '/addCourse',
+      name: 'Όλα τα μαθήματα',
+      component: AddCourseToUser,
       meta: {
         requiresAuth: true,
         userType: 'καθηγητής'
