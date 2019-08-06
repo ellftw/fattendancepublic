@@ -31,11 +31,11 @@ StudentService.deleteStudent = async (arithmosMitroou) => {
     return await Student.deleteOne({arithmosMitroou: arithmosMitroou})
 }
 
-StudentService.addCourseToStudent = async (arithmosMitroou, courseCode) => {
+StudentService.addCourseToStudent = async (email, courseCode) => {
     let student = await Student.findOne({
-        arithmosMitroou: arithmosMitroou
+        email: email
     })
-    if (!student) throw new Error (`Failed to find student with code: ${arithmosMitroou}`)
+    if (!student) throw new Error (`Failed to find student with code: ${email}`)
     courseAlreadyExists = (student.studentCourses.indexOf(courseCode) > -1)
     if (courseAlreadyExists) throw new Error('Failed to add course to student, course is already assigned to student.')
     student.studentCourses.push(courseCode)

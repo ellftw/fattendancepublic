@@ -57,40 +57,53 @@
 
 <script>
 import UserService from '@/services/UserService'
-  export default {
-    data () {
-      return {
-        show1: false,
-        show4: false,
-        rules: {
-          required: value => !!value || 'Required.',
-          min: v => v.length >= 8 || 'Min 8 characters',
-          emailMatch: () => ('The email and password you entered don\'t match')
-        },
-        userType:[
-          'σπουδαστής', 'καθηγητής', 'γραμματέας'
-        ],
-        newUser: {
-          email: '',
-          password: '',
-          name: '',
-          surname: '',
-          userType: ''
-        }
+import TeacherService from '@/services/TeacherService'
+// import StudentService from '@/services/StudentService'
+export default {
+  data () {
+    return {
+      show1: false,
+      show4: false,
+      rules: {
+        required: value => !!value || 'Required.',
+        min: v => v.length >= 8 || 'Min 8 characters',
+        emailMatch: () => ('The email and password you entered don\'t match')
+      },
+      userType: [
+        'σπουδαστής', 'καθηγητής', 'γραμματέας'
+      ],
+      newUser: {
+        email: '',
+        password: '',
+        name: '',
+        surname: '',
+        userType: ''
       }
-    },
-    methods: {
-      async createNewUser () {
-        let nu = {
-          email: this.newUser.email,
-          password: this.newUser.password,
-          name: this.newUser.name,
-          surname: this.newUser.surname,
-          userType: this.newUser.userType
+    }
+  },
+  methods: {
+    async createNewUser () {
+      let nu = {
+        email: this.newUser.email,
+        password: this.newUser.password,
+        name: this.newUser.name,
+        surname: this.newUser.surname,
+        userType: this.newUser.userType
+      }
+      console.log(nu)
+      let nuser = await UserService.register(nu)
+      if (nuser) {
+        if (nuser.userType === 'καθηγητής') {
+          let usr = {
+            email: nuser.email,
+            name: nuser.name,
+            surname: nuser.surname,
+            teachingCourses: []
+          }
+          await TeacherService.createNewTeacher(usr)
         }
-        console.log(nu)
-        await UserService.register(nu)
       }
     }
   }
+}
 </script>

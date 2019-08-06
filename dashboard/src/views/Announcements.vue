@@ -36,10 +36,10 @@ import AnnouncementService from '@/services/AnnouncementService'
 export default {
   data () {
     return {
-     announcements: [],
-     createAnnouncement: {
-       title: '',
-       content: ''
+      announcements: [],
+      createAnnouncement: {
+        title: '',
+        content: ''
       }
     }
   },
@@ -58,7 +58,7 @@ export default {
     async getAllAnnouncements () {
       try {
         this.announcements = await AnnouncementService.getAllAnnouncement()
-      } catch(error) {
+      } catch (error) {
         window.alert(error)
       }
     },

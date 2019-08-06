@@ -9,7 +9,7 @@
             <td>{{ props.item.name }}</td>
             <td>{{ props.item.numberOfLessons }}</td>
             <td>{{ props.item.SignedStudents }}</td>
-            <td><v-btn round @click="addCourseToTeacher(props.item.courseCode)">Add Course</v-btn></td>
+            <td><v-btn round @click="addCourseToUser(props.item.courseCode)">Add Course</v-btn></td>
           </template>
         </v-data-table>
       </v-flex>
@@ -17,7 +17,7 @@
   </v-container>
 </template>
 <script>
-// import UserService from '@/services/UserService.js'
+import StudentService from '@/services/StudentService.js'
 import TeacherService from '@/services/TeacherService.js'
 import CourseService from '@/services/CourseService.js'
 export default {
@@ -39,7 +39,7 @@ export default {
           value: 'SignedStudents',
           sortable: true
         },
-                {
+        {
           text: 'Επιλογή',
           value: '',
           sortable: false
@@ -57,13 +57,25 @@ export default {
         window.alert(error)
       }
     },
-    async addCourseToTeacher (courseCode) {
-        const mail = this.$store.getters.user.email
-        let theeCourse = {
-            email: mail,
-            courseCode: courseCode
+    async addCourseToUser (courseCode) {
+      const mail = this.$store.getters.user.email
+      let theeCourse = {
+        email: mail,
+        courseCode: courseCode
+      }
+      if (this.$store.getters.user.userType === 'καθηγητής') {
+        let courseToAdd = await TeacherService.addCourseToTeacher(theeCourse)
+        if (courseToAdd && courseToAdd.ok === 1) {
+          this.courses = this.courses.filter((c) => c.courseCode !== courseCode)
+          console.log(this.courses)
         }
-        await TeacherService.addCourseToTeacher(theeCourse)
+      } else {
+        let courseToAdd = await StudentService.addCourseToStudent(theeCourse)
+        if (courseToAdd && courseToAdd.ok === 1) {
+          this.courses = this.courses.filter((c) => c.courseCode !== courseCode)
+          console.log(this.courses)
+        }
+      }
     }
   },
   mounted () {

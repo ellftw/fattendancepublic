@@ -15,7 +15,6 @@
 ]
 
 φοιτητη[
-    εγγραφη σε μαθημα καθηγητη (ιδιο vue με καθηγητη wip για αυριο)
     εμφανιση παρουσιων στα μαθηματα του (getallattendances) (front resolved)
     βαζει παρουσια  (post attendance)
     εμφανιση βαθμολογιας (getfinalexam) (front resolved)

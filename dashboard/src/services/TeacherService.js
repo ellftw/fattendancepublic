@@ -15,6 +15,15 @@ const TeacherService = {
   getAllTeachers: async function () {
     let response = await axios.get(`http://0.0.0.0:8080/teacher/`)
     return response.data.allTeachers
+  },
+  createNewTeacher: async function (teacher) {
+    let response = await axios.post(`http://0.0.0.0:8080/teacher/create`, {
+      email: teacher.email,
+      name: teacher.name,
+      surname: teacher.surname,
+      teachingCourses: teacher.teachingCourses
+    })
+    return response.data
   }
 }
 

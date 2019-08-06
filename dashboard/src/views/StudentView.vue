@@ -36,69 +36,65 @@
 </template>
 
 <script>
-  export default {
-    data: () => ({
-      rowsPerPageItems: [4, 8, 12],
-      pagination: {
-        rowsPerPage: 4
+export default {
+  data: () => ({
+    rowsPerPageItems: [4, 8, 12],
+    pagination: {
+      rowsPerPage: 4
+    },
+    items: [
+      {
+        name: 'Μαθημα',
+        attends: 9,
+        examRating: 6.0
       },
-      items: [
-        {
-          name: 'Μαθημα',
-          attends: 9,
-          examRating: 6.0,
-        },
-        {
-          name: 'Μαθημα',
-          attends: 7,
-          examRating: 9.0,
-        },
-        {
-          name: 'Μαθημα',
-          attends: 2,
-          examRating: 16.0,
-        },
-        {
-          name: 'Μαθημα',
-          attends: 5,
-          examRating: 3.7,
+      {
+        name: 'Μαθημα',
+        attends: 7,
+        examRating: 9.0
+      },
+      {
+        name: 'Μαθημα',
+        attends: 2,
+        examRating: 16.0
+      },
+      {
+        name: 'Μαθημα',
+        attends: 5,
+        examRating: 3.7
+      },
+      {
+        name: 'Μαθημα',
+        attends: 6,
+        examRating: 16.0
+      },
+      {
+        name: 'Μαθημα',
+        attends: 5,
+        examRating: 0.0
+      },
+      {
+        name: 'Μαθημα',
+        attends: 2,
+        examRating: 0.2
+      },
+      {
+        name: 'Μαθημα',
+        attends: 8,
+        examRating: 3.2
+      },
+      {
+        name: 'Μαθημα',
+        attends: 2,
+        examRating: 25.0
+      },
+      {
+        name: 'Μαθημα',
+        attends: 8,
+        examRating: 26.0
+      }
+    ]
+  })
 
-        },
-        {
-          name: 'Μαθημα',
-          attends: 6,
-          examRating: 16.0,
-
-        },
-        {
-          name: 'Μαθημα',
-          attends: 5,
-          examRating: 0.0,
-
-        },
-        {
-          name: 'Μαθημα',
-          attends: 2,
-          examRating: 0.2,
-        },
-        {
-          name: 'Μαθημα',
-          attends: 8,
-          examRating: 3.2,
-
-        },
-        {
-          name: 'Μαθημα',
-          attends: 2,
-          examRating: 25.0,
-        },
-        {
-          name: 'Μαθημα',
-          attends: 8,
-          examRating: 26.0,
-        }
-      ]
-    }),
-  
-  }
+}
 </script>

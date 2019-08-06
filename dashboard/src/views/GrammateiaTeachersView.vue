@@ -67,7 +67,7 @@ export default {
       } catch (error) {
         window.alert(error)
       }
-    },
+    }
     // async deleteStudent (arithmosMitroou) {
     //   try {
     //     let deletedStudent = await StudentService.deleteStudent(arithmosMitroou)

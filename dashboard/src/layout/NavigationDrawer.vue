@@ -89,7 +89,7 @@ export default {
           icon: 'mdi-library-books',
           title: 'Λίστα Μαθημάτων',
           route: '/courseList'
-        },      
+        },
         {
           icon: 'mdi-library-books',
           title: 'Βάλε μάθημα',
@@ -124,7 +124,7 @@ export default {
           route: '/login'
         }
       ],
-      studentItems:[
+      studentItems: [
         {
           icon: 'mdi-library-books',
           title: 'Εγγραφή σε μάθημα καθηγητή',

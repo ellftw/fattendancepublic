@@ -31,7 +31,7 @@ studentRouter.delete('/', async (request, response) => {
 studentRouter.post('/addCourse', async (request, response) => {
     try {
         let course = await StudentService.addCourseToStudent(
-            request.body.arithmosMitroou, request.body.courseCode)
+            request.body.email, request.body.courseCode)
             response.status(200).json({ success: true, course: course})
         } catch(error) {
             response.status(200).json({success: false, error: `${error}`})

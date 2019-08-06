@@ -87,7 +87,7 @@ let router = new Router({
       component: AddCourseToUser,
       meta: {
         requiresAuth: true,
-        userType: 'καθηγητής'
+        userType: 'καθηγητής | σπουδαστής'
       }
     },
     {
@@ -135,7 +135,8 @@ let router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (store.getters.isLoggedIn && to.matched.some(record => record.meta.userType === store.getters.user.userType)) {
+    
+    if (store.getters.isLoggedIn && to.matched.some(record => record.meta.userType.includes(store.getters.user.userType))) {
       next()
     } else {
       next('/')
