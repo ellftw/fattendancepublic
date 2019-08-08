@@ -27,6 +27,10 @@ const UserService = {
       password: data.password,
       userType: data.userType
     }
+  },
+  getAllUsers: async function () {
+    let response = await axios.get(`http://0.0.0.0:8080/auth/`)
+    return response.data.allUsers
   }
 }
 export default UserService

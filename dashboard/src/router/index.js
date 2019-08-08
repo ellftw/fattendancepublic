@@ -15,6 +15,7 @@ import Announcements from '@/views/Announcements'
 import StudentView from '@/views/StudentView'
 import GreammateiaTeachers from '@/views/GrammateiaTeachersView'
 import AddCourseToUser  from '@/views/AddCourseToUser'
+import AppropriateUserModel  from '@/views/AppropriateUserModel'
 
 Vue.use(Router)
 
@@ -121,6 +122,15 @@ let router = new Router({
       path: '/register',
       name: 'Εγγραφή',
       component: SignUpView,
+      meta: {
+        requiresAuth: true,
+        userType: 'γραμματέας'
+      }
+    },
+    {
+      path: '/model',
+      name: 'Εγγραφή',
+      component: AppropriateUserModel,
       meta: {
         requiresAuth: true,
         userType: 'γραμματέας'

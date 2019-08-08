@@ -22,7 +22,7 @@ let app = express()
 const util = require('./util/populateDatabase')
 
 // util.generateTeachers()
-
+// util.clearCourses()
 app.server = http.createServer(app)
 app.use(bodyParser.urlencoded({
     extended: false

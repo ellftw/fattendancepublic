@@ -18,7 +18,7 @@
             label="Number Of Lessons"
           ></v-text-field>
           <v-btn round>Cancel</v-btn>
-          <v-btn round @click="createCourse()">OK</v-btn>
+          <v-btn round @click="createCourse(Course)">OK</v-btn>
         </form>
       </v-flex>
     </v-layout>
@@ -39,9 +39,15 @@ export default {
     }
   },
   methods: {
-    async createCourse (course) {
+    async createCourse () {
       try {
-        await CourseService.createCourse(this.Course)
+        let newCourse = {
+          name: this.Course.name,
+          courseCode: this.Course.courseCode,
+          numberOfLessons: this.Course.numberOfLessons,
+        }
+        let response = await CourseService.createCourse(newCourse)
+        console.log(response)
       } catch (error) {
         window.alert(error)
       }

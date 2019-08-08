@@ -20,8 +20,9 @@
 import StudentService from '@/services/StudentService.js'
 import TeacherService from '@/services/TeacherService.js'
 import CourseService from '@/services/CourseService.js'
+import UserService from '@/services/UserService.js'
 export default {
-  name: 'All courses',
+  name: 'AllCourses',
   data () {
     return {
       coursesLoading: false,
@@ -45,14 +46,37 @@ export default {
           sortable: false
         }
       ],
-      courses: []
+      courses: [],
+      currentUser: []
     }
   },
   methods: {
     async getAllCourses () {
       try {
         const response = await CourseService.getAllCourses()
-        this.courses = response.courses
+        const allteachers = await TeacherService.getAllTeachers()
+        const allstudents = await StudentService.getAllStudents()
+        for (let k = 0; k < allteachers.length; k++) {
+          if (this.$store.getters.user.name === allteachers[k].name) {
+            this.currentUser[0] = allteachers[k]
+          } 
+        }
+        for (let j = 0; j < allstudents.length; j++) {
+          if (this.$store.getters.user.name === allstudents[j].name) {
+            this.currentUser[0] = allstudents[j]
+          }
+        }
+        for (let i = 0; i < response.courses.length; i++) {
+          if (this.$store.getters.user.userType === 'καθηγητής' && this.currentUser[0].teachingCourses.indexOf(response.courses[i].courseCode) === -1) {
+            this.courses.push(response.courses[i])
+          } else if (this.$store.getters.user.userType === 'σπουδαστής' && this.currentUser[0].studentCourses.indexOf(response.courses[i].courseCode) === -1) {
+            this.courses.push(response.courses[i])
+          }
+        }
+        console.log(this.$store.getters.user.name)
+        console.log(response.courses[0].courseCode)
+        console.log(this.currentUser[0])
+        console.log(this.courses[0])
       } catch (error) {
         window.alert(error)
       }

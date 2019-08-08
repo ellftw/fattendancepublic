@@ -12,6 +12,9 @@ courseService.createCourse = async (courseToRegister) => {
     })
     await course.save()
 }
+courseService.clearCourses = async () => {
+    return await Course.collection.drop({})
+}
 
 courseService.findCourses = async (courseCode) => {
     let course = await Course.findOne({

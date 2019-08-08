@@ -40,8 +40,8 @@ studentRouter.post('/addCourse', async (request, response) => {
 
 studentRouter.get('/getCourses/:arithmosMitroou', async (request, response) => {
     try {
-        let courseList = await StudentService.getAllStudentCourses(request.params.arithmosMitroou)
-        response.status(200).json({ success: true, courseList: courseList })
+        let studentCourses = await StudentService.getAllStudentCourses(request.params.arithmosMitroou)
+        response.status(200).json({ success: true, studentCourses: studentCourses })
     } catch(error) {
         response.status(200).json({ success: false, error: `${error}` })
     }

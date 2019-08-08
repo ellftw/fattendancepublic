@@ -2,8 +2,12 @@ const User = require('../models/User')
 const AuthService = require('../services/AuthService')
 const StudentService = require('../services/StudentService')
 const TeacherService = require('../services/TeacherService')
+const CourseService = require('../services/CourseService')
 
 module.exports = {
+  clearCourses: async () => {
+    await CourseService.clearCourses()
+  },
   generateUsers: async () => {
 
     const emailEnding = '@tei.edu'

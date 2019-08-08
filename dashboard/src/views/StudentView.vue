@@ -1,7 +1,7 @@
 <template>
   <v-container fluid grid-list-md>
     <v-data-iterator
-      :items="items"
+      :items="courses.courses"
       :rows-per-page-items="rowsPerPageItems"
       :pagination.sync="pagination"
       content-tag="v-layout"
@@ -21,11 +21,11 @@
             <v-list dense>
               <v-list-tile>
                 <v-list-tile-content>Παρουσίες:</v-list-tile-content>
-                <v-list-tile-content class="align-end">{{ props.item.attends }}</v-list-tile-content>
+                <v-list-tile-content class="align-end">{{ '-' }}</v-list-tile-content>
               </v-list-tile>
               <v-list-tile>
                 <v-list-tile-content>Βαθμολογία:</v-list-tile-content>
-                <v-list-tile-content class="align-end">{{ props.item.examRating }}</v-list-tile-content>
+                <v-list-tile-content class="align-end">{{ '-' }}</v-list-tile-content>
               </v-list-tile>
             </v-list>
           </v-card>
@@ -36,65 +36,44 @@
 </template>
 
 <script>
+import StudentService from '@/services/StudentService'
+import CourseService from '@/services/CourseService'
 export default {
   data: () => ({
     rowsPerPageItems: [4, 8, 12],
     pagination: {
       rowsPerPage: 4
     },
-    items: [
-      {
-        name: 'Μαθημα',
-        attends: 9,
-        examRating: 6.0
-      },
-      {
-        name: 'Μαθημα',
-        attends: 7,
-        examRating: 9.0
-      },
-      {
-        name: 'Μαθημα',
-        attends: 2,
-        examRating: 16.0
-      },
-      {
-        name: 'Μαθημα',
-        attends: 5,
-        examRating: 3.7
-      },
-      {
-        name: 'Μαθημα',
-        attends: 6,
-        examRating: 16.0
-      },
-      {
-        name: 'Μαθημα',
-        attends: 5,
-        examRating: 0.0
-      },
-      {
-        name: 'Μαθημα',
-        attends: 2,
-        examRating: 0.2
-      },
-      {
-        name: 'Μαθημα',
-        attends: 8,
-        examRating: 3.2
-      },
-      {
-        name: 'Μαθημα',
-        attends: 2,
-        examRating: 25.0
-      },
-      {
-        name: 'Μαθημα',
-        attends: 8,
-        examRating: 26.0
-      }
-    ]
-  })
+    student: [],
+    courses: []
 
+  }),
+  mounted () {
+    this.getCurrentStudent()
+    this.getAllCourses()
+  },
+  methods: {
+    async getCurrentStudent () {
+      let all = await StudentService.getAllStudents()
+      for (let i = 0; i < all.length; i++) {
+        if (all[i].name === this.$store.getters.user.name) {
+          this.student[0] = all[i]
+          console.log(this.student[0])
+          return this.student[0]
+        }
+      }
+    },
+    async getAllCourses () {
+      let allcourses = await CourseService.getAllCourses()
+      for (let i = 0; i < allcourses.length; i++) {
+      if (this.student[0].studentCourses.indexOf(allcourses.courses[i].courseCode) >= 0) {
+      this.courses.push(allcourses.courses[i])
+      }
+      }
+      console.log(this.courses.length)
+      console.log(allcourses.courses[0].courseCode)
+      console.log(this.student[0].studentCourses)
+    }
+  }
 }
 </script>

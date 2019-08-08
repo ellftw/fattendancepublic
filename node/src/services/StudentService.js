@@ -42,15 +42,5 @@ StudentService.addCourseToStudent = async (email, courseCode) => {
     await student.save()
 }
 
-StudentService.getAllStudentCourses = async (arithmosMitroou) => {
-    let student = await Student.findOne({
-        arithmosMitroou: arithmosMitroou
-    })
-    if (!student) throw new Error (`Failed to find student with code: ${arithmosMitroou}`)
-    const courses = await Course.find({
-        'courseCode': {$in:student.studentCourses}
-    })
-    return courses
-}
 
 module.exports = StudentService

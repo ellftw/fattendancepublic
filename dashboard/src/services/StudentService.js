@@ -18,7 +18,6 @@ const StudentService = {
       email: course.email,
       courseCode: course.courseCode
     })
-    console.log(response.data)
     return response.data.course
   }
 }
