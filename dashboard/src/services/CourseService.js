@@ -9,7 +9,8 @@ const CourseService = {
     let response = await axios.post(`http://0.0.0.0:8080/course/createCourse`, {
       name: course.name,
       courseCode: course.courseCode,
-      numberOfLessons: course.numberOfLessons
+      numberOfLessons: course.numberOfLessons,
+      semester: course.semester
     })
     return response.data
   }

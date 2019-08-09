@@ -100,7 +100,16 @@ export default {
             surname: nuser.surname,
             teachingCourses: []
           }
-          await TeacherService.createNewTeacher(usr)
+          let response = await TeacherService.createNewTeacher(usr)
+          if (response.success == true) {
+            this.newuser = {
+              email: '',
+              password: '',
+              name: '',
+              surname: '',
+              userType: ''
+            }
+          }
         }
       }
     }

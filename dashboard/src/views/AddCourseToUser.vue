@@ -69,7 +69,8 @@ export default {
         for (let i = 0; i < response.courses.length; i++) {
           if (this.$store.getters.user.userType === 'καθηγητής' && this.currentUser[0].teachingCourses.indexOf(response.courses[i].courseCode) === -1) {
             this.courses.push(response.courses[i])
-          } else if (this.$store.getters.user.userType === 'σπουδαστής' && this.currentUser[0].studentCourses.indexOf(response.courses[i].courseCode) === -1) {
+          } else if (this.$store.getters.user.userType === 'σπουδαστής') {
+            if (this.currentUser[0].studentCourses.indexOf(response.courses[i].courseCode) === -1 && this.currentUser[0].semester >= response.courses[i].semester)
             this.courses.push(response.courses[i])
           }
         }

@@ -2,7 +2,7 @@
   <v-container>
     <v-layout xs10 offset-xs1 pt-3>
       <v-flex xs6 offset-xs3>
-        <form>
+        <v-form class="form">
           <v-text-field
             v-model="Course.name"
             label="Name"
@@ -17,9 +17,13 @@
             v-model="Course.numberOfLessons"
             label="Number Of Lessons"
           ></v-text-field>
+          <v-text-field
+            v-model="Course.semester"
+            label="Semester"
+          ></v-text-field>
           <v-btn round>Cancel</v-btn>
           <v-btn round @click="createCourse(Course)">OK</v-btn>
-        </form>
+        </v-form>
       </v-flex>
     </v-layout>
   </v-container>
@@ -34,7 +38,8 @@ export default {
       Course: {
         name: '',
         courseCode: '',
-        numberOfLessons: ''
+        numberOfLessons: '',
+        semester: ''
       }
     }
   },
@@ -45,9 +50,18 @@ export default {
           name: this.Course.name,
           courseCode: this.Course.courseCode,
           numberOfLessons: this.Course.numberOfLessons,
+          semester: this.Course.semester
         }
         let response = await CourseService.createCourse(newCourse)
-        console.log(response)
+        if (response.success == true) {
+          window.alert('Course successfully registered')
+          this.Course = {
+          name: '',
+          courseCode: '',
+          numberOfLessons: '',
+          semester: ''
+        } 
+        }
       } catch (error) {
         window.alert(error)
       }

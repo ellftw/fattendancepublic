@@ -8,7 +8,8 @@ courseService.createCourse = async (courseToRegister) => {
         name: courseToRegister.name,
         courseCode: courseToRegister.courseCode,
         numberOfLessons: courseToRegister.numberOfLessons,
-        exam: courseToRegister.exam
+        exam: courseToRegister.exam,
+        semester: courseToRegister.semester
     })
     await course.save()
 }
