@@ -31,6 +31,36 @@
         >Your search for "{{ search }}" found no results.</v-alert>
       </v-data-table>
     </v-card>
+                 <!-- <v-dialog
+              v-model="dialog"
+              max-width="290"
+            >
+              <v-card>
+                <v-card-title class="headline">Διαγραφη Σπουδαστη</v-card-title>
+                <v-card-text>
+                Με την επιβεβαιωση της διαδικασιας αυτης η διαγραφη του
+                 {{props.item.surname + ' ' + props.item.name}}
+                ειναι μη ανατρεψιμη. Ειστε σιγουρος για τη κινηση αυτη;
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="green darken-1"
+                    flat="flat"
+                    @click="dialog = false"
+                  >
+                    Disagree
+                  </v-btn>
+                  <v-btn
+                    color="green darken-1"
+                    flat="flat"
+                    @click="deleteStudent(props.item.arithmosMitroou)"
+                  >
+                    Agree
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog> -->
   </v-flex>
 </template>
 
@@ -40,6 +70,7 @@ export default {
   name: 'grammateia',
   data () {
     return {
+      dialog: false,
       loader: null,
       loading: false,
       loading1: false,

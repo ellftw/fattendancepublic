@@ -40,50 +40,31 @@ export default {
         {text: 'Τύπος Χρήστη', value: 'userType', sortable: true}
       ],
       users: [],
-      teachers: [],
-      students: [],
-      allUsers: [],
       expand: false
     }
   },
   methods: {
-    async getAllUsers () {
+    async getNonModeledUsers () {
       try {
-        this.allUsers = await UserService.getAllUsers()
-        for (let i = 0; i = this.allUsers.length; i++)
-        console.log(this.allUsers[i].name)
+        let allUsers = await UserService.getAllUsers()
+        let teachers = await TeacherService.getAllTeachers()
+        let students = await StudentService.getAllStudents()
+        let users = []
+        let j = 0
+        let k = 0 
+        console.log(allUsers[0].name)
+        console.log(teachers[0].name)
+        console.log(students[0].name)
+       
+        console.log(users)
       } catch (error) {
         window.alert(error)
-      }
-    },
-    async getAllTeachers () {
-      try {
-        this.teachers = await TeacherService.getAllTeachers()
-        console.log(this.teachers)
-      } catch (error) {
-        window.alert(error)
-      }
-    },
-    async getAllStudents () {
-      try {
-        this.students = await StudentService.getAllStudents()
-        console.log(this.students.name)
-      } catch (error) {
-        window.alert(error)
-      }
-    },
-    async filterNonModeledUsers (users, teachers, students) {
-      try {
-      } catch (error) {
-        window.alert(error)
+        console.log(error)
       }
     }
   },
   mounted () {
-    this.getAllUsers()
-    this.getAllTeachers()
-    this.getAllStudents()
-    this.filterNonModeledUsers()
+    this.getNonModeledUsers()
   }
 }
 </script>

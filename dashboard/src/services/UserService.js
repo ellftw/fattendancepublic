@@ -19,14 +19,7 @@ const UserService = {
     })
     console.log(response.data)
     if (!response.data.success) throw new Error(response.data.error)
-    let data = response.data.responseObject
-    return {
-      name: data.name,
-      surname: data.surname,
-      email: data.email,
-      password: data.password,
-      userType: data.userType
-    }
+    return response.data
   },
   getAllUsers: async function () {
     let response = await axios.get(`http://0.0.0.0:8080/auth/`)

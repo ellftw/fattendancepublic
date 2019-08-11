@@ -2,7 +2,14 @@ const studentRouter = require('express').Router()
 const StudentService = require('../services/StudentService')
 const CourseService = require('../services/CourseService')
 
-
+studentRouter.post('/create', async (request, response) => {
+    try {
+        await StudentService.createStudent(request.body)
+        return response.status(200).json({success:true})
+    } catch (error) {
+        return response.status(200).json({success:false, error: `${error}`})
+    }
+})
 
 
 studentRouter.get('/', async (request, response) => {

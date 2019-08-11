@@ -17,12 +17,11 @@
             name="input-10-1"
             label="Password"
             hint="At least 8 characters"
-            counter
+            
             @click:append="show1 = !show1"
           ></v-text-field>
           <v-text-field
             :append-icon="show4 ? 'visibility' : 'visibility_off'"
-            :rules="[rules.required, rules.emailMatch]"
             :type="show4 ? 'text' : 'password'"
             name="input-10-2"
             label="Repeat Password"
@@ -47,9 +46,24 @@
               label="User Type"
               required
             ></v-select>
-            <v-btn round @click="createNewUser(newUser)">Submit User</v-btn>
+             <v-layout row justify-start>
+              <v-dialog v-model="dialog" persistent max-width="290">
+                <template v-slot:activator="{ on }">
+                  <v-btn round dark v-on="on">Δημιουργια</v-btn>
+                </template>
+                <v-card>
+                  <v-card-title class="headline">Δημιουργια νεου μαθηματος</v-card-title>
+                  <v-card-text>Ειστε σιγουροι οτι τα στοιχεια του μαθηματος ειναι σωστα και οτι θελετε να δημιουργησετε αυτο το μαθημα;          
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="pink darken-1" flat @click="dialog = false">Disagree</v-btn>
+                    <v-btn color="pink darken-1" flat @click="createNewUser(newUser)">Agree</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-layout>
         </v-flex>
-
       </v-layout>
     </v-container>
   </v-form>
@@ -64,6 +78,7 @@ export default {
     return {
       show1: false,
       show4: false,
+      dialog: false,
       rules: {
         required: value => !!value || 'Required.',
         min: v => v.length >= 8 || 'Min 8 characters',
@@ -90,27 +105,16 @@ export default {
         surname: this.newUser.surname,
         userType: this.newUser.userType
       }
-      console.log(nu)
-      let nuser = await UserService.register(nu)
-      if (nuser) {
-        if (nuser.userType === 'καθηγητής') {
-          let usr = {
-            email: nuser.email,
-            name: nuser.name,
-            surname: nuser.surname,
-            teachingCourses: []
+      let response = await UserService.register(nu)
+        if (response.success == true) {
+          this.newUser = {
+            email: '',
+            password: '',
+            name: '',
+            surname: '',
+            userType: ''
           }
-          let response = await TeacherService.createNewTeacher(usr)
-          if (response.success == true) {
-            this.newuser = {
-              email: '',
-              password: '',
-              name: '',
-              surname: '',
-              userType: ''
-            }
-          }
-        }
+          this.dialog = false
       }
     }
   }

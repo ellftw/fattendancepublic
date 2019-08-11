@@ -21,8 +21,23 @@
             v-model="Course.semester"
             label="Semester"
           ></v-text-field>
-          <v-btn round>Cancel</v-btn>
-          <v-btn round @click="createCourse(Course)">OK</v-btn>
+            <v-layout row justify-start>
+              <v-dialog v-model="dialog" persistent max-width="290">
+                <template v-slot:activator="{ on }">
+                  <v-btn round dark v-on="on">Δημιουργια</v-btn>
+                </template>
+                <v-card>
+                  <v-card-title class="headline">Δημιουργια νεου μαθηματος</v-card-title>
+                  <v-card-text>Ειστε σιγουροι οτι τα στοιχεια του μαθηματος ειναι σωστα και οτι θελετε να δημιουργησετε αυτο το μαθημα;          
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="pink darken-1" flat @click="dialog = false">Disagree</v-btn>
+                    <v-btn color="pink darken-1" flat @click="createCourse(Course)">Agree</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-layout>
         </v-form>
       </v-flex>
     </v-layout>
@@ -40,7 +55,8 @@ export default {
         courseCode: '',
         numberOfLessons: '',
         semester: ''
-      }
+      },
+      dialog: false
     }
   },
   methods: {
@@ -61,6 +77,7 @@ export default {
           numberOfLessons: '',
           semester: ''
         } 
+        this.dialog = false
         }
       } catch (error) {
         window.alert(error)
