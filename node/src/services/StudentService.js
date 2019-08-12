@@ -21,7 +21,7 @@ StudentService.createStudent = async (data) => {
 // }
 
 StudentService.getAllStudents = async () => {
-    let students = await Student.find({}).select('-_uid -__v')
+    let students = await Student.find({}).select('-_uid -__v').sort({arithmosMitroou:-1})
     if (!students) throw new Error('Could not find any students')
 
     return students

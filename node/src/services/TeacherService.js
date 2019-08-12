@@ -45,4 +45,8 @@ teacherService.getAllTeachers = async () => {
     return teachers
 }
 
+teacherService.deleteTeacher = async (email) => {
+    return await Teacher.deleteOne({email: email})
+}
+
 module.exports = teacherService

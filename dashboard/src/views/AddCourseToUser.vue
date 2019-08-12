@@ -74,9 +74,8 @@ export default {
             this.courses.push(response.courses[i])
           }
         }
-        console.log(this.$store.getters.user.name)
-        console.log(response.courses[0].courseCode)
-        console.log(this.currentUser[0])
+        console.log(this.$store.getters.user.userType)
+        console.log(this.currentUser[0].teachingCourses)
         console.log(this.courses[0])
       } catch (error) {
         window.alert(error)

@@ -51,4 +51,16 @@ teacherRouter.post('/addCourseToTeacher', async (request, response) => {
     }
 })
 
+teacherRouter.delete('/', async (request, response) => {
+    console.log(`Delete request ${request.body.arithmosMitroou}`)
+
+    console.log(request.body)
+    try {
+        let deleteTeacher = await TeacherService.deleteTeacher(request.body.email)
+        return response.status(200).json({ success: true, deleteTeacher: deleteTeacher})
+    } catch (error) {
+        return response.status(200).json({ success: false, error: `${error}`})
+    }
+})
+
 module.exports = teacherRouter
