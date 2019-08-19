@@ -89,13 +89,16 @@ export default {
       }
       if (this.$store.getters.user.userType === 'καθηγητής') {
         let courseToAdd = await TeacherService.addCourseToTeacher(theeCourse)
-        if (courseToAdd && courseToAdd.ok === 1) {
+        if (courseToAdd && courseToAdd.success == true) {
+          console.log(courseToAdd)
+          console.log(courseToAdd.success)
           this.courses = this.courses.filter((c) => c.courseCode !== courseCode)
           console.log(this.courses)
         }
       } else {
         let courseToAdd = await StudentService.addCourseToStudent(theeCourse)
-        if (courseToAdd && courseToAdd.ok === 1) {
+        console.log(courseToAdd)
+        if (courseToAdd && courseToAdd.success == true) {
           this.courses = this.courses.filter((c) => c.courseCode !== courseCode)
           console.log(this.courses)
         }

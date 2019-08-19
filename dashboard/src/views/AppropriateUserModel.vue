@@ -35,7 +35,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" flat @click="dialog1 = false">Close</v-btn>
-          <v-btn color="blue darken-1" flat @click="dialog1 = false">Save</v-btn>
+          <v-btn color="blue darken-1" flat @click="createTeacher(teacher)">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -93,7 +93,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" flat @click="dialog2 = false">Close</v-btn>
-          <v-btn color="blue darken-1" flat @click="dialog2 = false">Save</v-btn>
+          <v-btn color="blue darken-1" flat @click="createStudent(student)">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -104,6 +104,7 @@
 
 <script>
 import StudentService from '@/services/StudentService'
+import TeacherService from '@/services/TeacherService'
 export default {
   data () {
     return {
@@ -118,6 +119,7 @@ export default {
       student: {
         name: '',
         surname: '',
+        email: '',
         semester: 1,
         studentCourses: [],
         fingerprintID: '',
@@ -136,6 +138,50 @@ export default {
         this.allstudents = await StudentService.getAllStudents()
         this.student.arithmosMitroou = this.allstudents[0].arithmosMitroou + 1
       } catch (error) {
+        window.alert(error)
+      }
+    },
+    async createTeacher () {
+      try {
+        let nt = {
+          name: this.teacher.name,
+          surname: this.teacher.surname,
+          email: this.teacher.email,
+          teachingCourses: this.teacher.teachingCourses,
+        }
+        let response = await TeacherService.createNewTeacher(nt)
+        if (response.success === true) {
+          window.alert('successfully registered')
+          this.dialog1 = false
+          this.teacher = {
+            name: '',
+            surname: '',
+            email: '',
+            teachingCourses: []
+          }
+        }
+      } catch (error) {
+        window.alert(error)
+      }
+    },
+    async createStudent () {
+      try {
+        let ns = {
+          name: this.student.name,
+          surname: this.student.surname,
+          email: this.student.email,
+          semester: this.student.semester,
+          studentCourses: this.student.studentCourses,
+          fingerprintID: this.student.fingerprintID,
+          arithmosMitroou: this.student.arithmosMitroou
+        }
+        let response = await StudentService.createNewStudent(ns)
+        if (response.success == true) {
+          console.log(response)
+          window.alert("successfully registered")
+          this.dialog2 = false
+        }
+      } catch(error) {
         window.alert(error)
       }
     }

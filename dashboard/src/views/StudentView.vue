@@ -67,15 +67,14 @@ export default {
       }
     },
     async getAllCourses () {
+      let newcourses = []
       let allcourses = await CourseService.getAllCourses()
       for (let i = 0; i < allcourses.courses.length; i++) {
-      if (allcourses.courses[i].courseCode.indexOf(this.student[0].studentCourses) !== -1) {
+        for (let j = 0; j < this.student[0].studentCourses.length; j++)
+      if (allcourses.courses[i].courseCode.indexOf(this.student[0].studentCourses[j]) !== -1) {
         this.courses.push(allcourses.courses[i])
         }
       }
-      console.log(this.courses)
-      console.log(allcourses.courses[0])
-      console.log(this.student[0].studentCourses)
     }
   }
 }

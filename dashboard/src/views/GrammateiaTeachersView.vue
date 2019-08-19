@@ -90,7 +90,7 @@ export default {
     async deleteTeacher (email) {
       try {
         let deletedTeacher = await TeacherService.deleteTeacher(email)
-        if (deletedTeacher && deletedTeacher.ok === 1) {
+        if (deletedTeacher && deletedTeacher.success == true) {
           this.teachers = this.teachers.filter((sd) => sd.email !== email)
         } this.dialog = false
       } catch (error) {

@@ -106,7 +106,18 @@ export default {
           icon: 'mdi-account-plus',
           title: 'Εγγραφή',
           route: '/register'
-        }],
+        },
+        {
+          icon: 'mdi-table-large',
+          title: 'Πίνακας Καθηγητών',
+          route: '/grammateiaTeachers' 
+        },
+        {
+          icon: 'mdi-account-arrow-left',
+          title: 'Μοντελοποίηση χρηστών',
+          route: '/model'
+        },
+        ],
       unAuthorizedItems: [
         {
           icon: 'mdi-home',

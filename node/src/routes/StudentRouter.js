@@ -5,6 +5,7 @@ const CourseService = require('../services/CourseService')
 studentRouter.post('/create', async (request, response) => {
     try {
         await StudentService.createStudent(request.body)
+        console.log(request.body)
         return response.status(200).json({success:true})
     } catch (error) {
         return response.status(200).json({success:false, error: `${error}`})

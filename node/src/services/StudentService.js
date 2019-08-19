@@ -8,7 +8,8 @@ StudentService.createStudent = async (data) => {
         email: data.email,
         arithmosMitroou: data.arithmosMitroou,
         fingerprintID: data.fingerprintID,
-        semester: data.semester
+        semester: data.semester,
+        studentCourses: data.studentCourses
     })
     await student.save()
 }
