@@ -5,7 +5,7 @@ const secret = require('../config').secret
 let authService = new Object
 
 authService.getAllUsers = async () => {
-    let users = await User.find({}).select('-_id -password -__v')
+    let users = await User.find({}).select('-_id -password -__v').pretty()
     return users
 }
 
