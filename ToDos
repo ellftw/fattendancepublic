@@ -1,36 +1,14 @@
--- Insert and delete content from db via dashboard
--- Proper models for each usertype
-
-περασμενο μαθημα
 καθηγητης[
-    ανοιγει παρουσιολογιο (getallstudentsattendances)
-    και αν το παρουσιολογιο πληρει προυποθεσεις βαθμολογει (getrequiredattendances)
-    επιλογη τελικης σε περιπτωση που κοπηκε απο βαθμο (addfinalexam)
-    (ανεβασμα υλικου μαθηματος) (προεραιτικο)
+    βαζει παρουσια  (post attendance)
 ]
 
 γραμματεια[
-    εγγραφη ολων των χρηστων (sets usertype must implement creating user based on usertype)
-    εκκινηση νεου εξαμηνου (αυξηση εξαμηνου κατα 1 και επανεκκινηση μαθηματων) (semesterreset)
+    repeat password να δουλευει
 ]
 
-φοιτητη[
-    εμφανιση παρουσιων στα μαθηματα του (getallattendances) (front resolved)
-    βαζει παρουσια  (post attendance)
-    εμφανιση βαθμολογιας (getfinalexam) (front resolved)
+αρδουινο[
+    ολοκληρο
 ]
 
-μαθημα[
-    βαθμολογιες οπου
-    καθηγητης: εισαγει (addexamrating)
-    μαθητης: βλεπει (getexamrating)
-]
 
-παρουσιολογιο//
-
-done[
-    παρουσιολογιο
-]
-
-confirm for delete
-γραμματεια να βλεπει ανακοινωσεις
+??βαθμολογια

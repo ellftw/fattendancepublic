@@ -20,7 +20,7 @@ mongoose.set('useCreateIndex', true)
 let app = express()
 
 const util = require('./util/populateDatabase')
-
+// util.generateStudents()
 // util.generateTeachers()
 // util.clearCourses()
 app.server = http.createServer(app)

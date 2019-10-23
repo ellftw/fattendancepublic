@@ -17,7 +17,6 @@
             name="input-10-1"
             label="Password"
             hint="At least 8 characters"
-            
             @click:append="show1 = !show1"
           ></v-text-field>
           <v-text-field
@@ -53,7 +52,7 @@
                 </template>
                 <v-card>
                   <v-card-title class="headline">Δημιουργια νεου μαθηματος</v-card-title>
-                  <v-card-text>Ειστε σιγουροι οτι τα στοιχεια του μαθηματος ειναι σωστα και οτι θελετε να δημιουργησετε αυτο το μαθημα;          
+                  <v-card-text>Ειστε σιγουροι οτι τα στοιχεια του μαθηματος ειναι σωστα και οτι θελετε να δημιουργησετε αυτο το μαθημα;
                   </v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
@@ -71,7 +70,7 @@
 
 <script>
 import UserService from '@/services/UserService'
-import TeacherService from '@/services/TeacherService'
+// import TeacherService from '@/services/TeacherService'
 // import StudentService from '@/services/StudentService'
 export default {
   data () {
@@ -106,15 +105,15 @@ export default {
         userType: this.newUser.userType
       }
       let response = await UserService.register(nu)
-        if (response.success == true) {
-          this.newUser = {
-            email: '',
-            password: '',
-            name: '',
-            surname: '',
-            userType: ''
-          }
-          this.dialog = false
+      if (response.success === true) {
+        this.newUser = {
+          email: '',
+          password: '',
+          name: '',
+          surname: '',
+          userType: ''
+        }
+        this.dialog = false
       }
     }
   }

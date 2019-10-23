@@ -54,4 +54,13 @@ studentRouter.get('/getCourses/:arithmosMitroou', async (request, response) => {
     }
 })
 
+studentRouter.post('/postAttend', async (request, response) => {
+    try {
+        let attend = await StudentService.postAttend(request.body.arithmosMitroou, request.body.course, request.body.attends)
+        response.status(200).json({ success: true, attend: attend })
+    } catch (error) {
+        response.status(200).json({ success: false, error: `${error}` })
+    }
+})
+
 module.exports = studentRouter

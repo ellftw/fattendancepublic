@@ -1,4 +1,5 @@
 <template>
+<!-- eslint-disable -->
   <v-container fluid grid-list-md>
     <v-data-iterator
       :items="courses"
@@ -15,17 +16,13 @@
           md4
           lg3
         >
-          <v-card>
+          <v-card >
             <v-card-title><h4>{{ props.item.name }}<br>{{props.item.courseCode }}</h4></v-card-title>
             <v-divider></v-divider>
-            <v-list dense>
+            <v-list dense >
               <v-list-tile>
                 <v-list-tile-content>Παρουσίες:</v-list-tile-content>
-                <v-list-tile-content class="align-end">{{ '-' }}</v-list-tile-content>
-              </v-list-tile>
-              <v-list-tile>
-                <v-list-tile-content>Βαθμολογία:</v-list-tile-content>
-                <v-list-tile-content class="align-end">{{ '-' }}</v-list-tile-content>
+                <v-list-tile-content class="align-end">{{props.item.attends}}</v-list-tile-content>
               </v-list-tile>
               <v-list-tile>
                 <v-list-tile-content>Εξάμηνο:</v-list-tile-content>
@@ -49,7 +46,8 @@ export default {
       rowsPerPage: 4
     },
     student: [],
-    courses: []
+    courses: [],
+    attends: []
 
   }),
   mounted () {
@@ -69,14 +67,39 @@ export default {
     async getAllCourses () {
       let allcourses = await CourseService.getAllCourses()
       for (let i = 0; i < allcourses.courses.length; i++) {
-      if (allcourses.courses[i].courseCode.indexOf(this.student[0].studentCourses) !== -1) {
-        this.courses.push(allcourses.courses[i])
+        if (this.student[0].studentCourses.indexOf(allcourses.courses[i].courseCode) > -1) {
+          this.courses.push({
+            name: allcourses.courses[i].name,
+            courseCode: allcourses.courses[i].courseCode,
+            semester: allcourses.courses[i].semester,
+            attends:''})
         }
       }
+      console.log(this.courses.length)
+      for(let j=0; j<this.courses.length; j++) {
+         for (let i=0; i<this.student[0].attendance.length; i++) {
+            if (this.courses[j].courseCode === this.student[0].attendance[i].course) {
+            this.courses[j].attends = this.student[0].attendance[i].attends
+            console.log(this.courses[j].courseCode)
+            // console.log(this.attends[i])
+            console.log(this.student[0].attendance[i].course)
+          }
+        }
+      }
+     
       console.log(this.courses)
-      console.log(allcourses.courses[0])
+      console.log(allcourses.courses)
       console.log(this.student[0].studentCourses)
-    }
+      // console.log(this.attends)
+
+    },
+    async getAttends (cc) {
+      for (let i=0; i<this.student[0].attendance.length; i++) {
+        if (cc.indexOf(this.student[0].attendance[i].course) !== -1) {
+          this.attends.push(this.student[0].attendance[i].attends)
+        }
+      }
+    },
   }
 }
 </script>

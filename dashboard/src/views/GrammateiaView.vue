@@ -20,7 +20,6 @@
           <td class="text-xs-left">{{ props.item.semester }}</td>
           <td style="padding:0 0 0 0 ">
             <v-btn round small @click="deleteStudent(props.item.arithmosMitroou)">Διαγραφη</v-btn>
-            <v-btn round small>Μαθηματα</v-btn>
           </td>
         </template>
         <v-alert
@@ -31,41 +30,13 @@
         >Your search for "{{ search }}" found no results.</v-alert>
       </v-data-table>
     </v-card>
-                 <!-- <v-dialog
-              v-model="dialog"
-              max-width="290"
-            >
-              <v-card>
-                <v-card-title class="headline">Διαγραφη Σπουδαστη</v-card-title>
-                <v-card-text>
-                Με την επιβεβαιωση της διαδικασιας αυτης η διαγραφη του
-                 {{props.item.surname + ' ' + props.item.name}}
-                ειναι μη ανατρεψιμη. Ειστε σιγουρος για τη κινηση αυτη;
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    color="green darken-1"
-                    flat="flat"
-                    @click="dialog = false"
-                  >
-                    Disagree
-                  </v-btn>
-                  <v-btn
-                    color="green darken-1"
-                    flat="flat"
-                    @click="deleteStudent(props.item.arithmosMitroou)"
-                  >
-                    Agree
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog> -->
+            <v-btn round @click="semesterBegin()">Εκκινηση νεου εξαμηνου</v-btn>
   </v-flex>
 </template>
 
 <script>
 import StudentService from '@/services/StudentService'
+import UserService from '@/services/UserService'
 export default {
   name: 'grammateia',
   data () {
@@ -108,13 +79,14 @@ export default {
     },
     async deleteStudent (arithmosMitroou) {
       try {
-        let deletedStudent = await StudentService.deleteStudent(arithmosMitroou)
-        if (deletedStudent && deletedStudent.ok === 1) {
-          this.students = this.students.filter((sd) => sd.arithmosMitroou !== arithmosMitroou)
-        }
+        await StudentService.deleteStudent(arithmosMitroou)
       } catch (error) {
         window.alert(error)
       }
+    },
+    async semesterBegin () {
+      let semester = await UserService.semesterBegin()
+      console.log(semester)
     }
   }
 }

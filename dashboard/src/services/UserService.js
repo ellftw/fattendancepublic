@@ -24,6 +24,10 @@ const UserService = {
   getAllUsers: async function () {
     let response = await axios.get(`http://0.0.0.0:8080/auth/`)
     return response.data.allUsers
+  },
+  semesterBegin: async function () {
+    let response = await axios.post(`http://0.0.0.0:8080/auth/semesterbegin`)
+    return response
   }
 }
 export default UserService

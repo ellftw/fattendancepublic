@@ -12,13 +12,6 @@ StudentService.createStudent = async (data) => {
     })
     await student.save()
 }
-// Not known format yet so not known argument to pass in function in order to work properly
-// StudentService.findStudent = async () => {
-//     let student = await Student.find({name: name , courseCode: courseCode})
-//     if (!student) throw new Error (`Couldn't find this student`)
-
-//     return student
-// }
 
 StudentService.getAllStudents = async () => {
     let students = await Student.find({}).select('-_uid -__v')
@@ -39,8 +32,23 @@ StudentService.addCourseToStudent = async (email, courseCode) => {
     courseAlreadyExists = (student.studentCourses.indexOf(courseCode) > -1)
     if (courseAlreadyExists) throw new Error('Failed to add course to student, course is already assigned to student.')
     student.studentCourses.push(courseCode)
+    student.attendance.push({course: courseCode, attends: 0})
     await student.save()
 }
 
+StudentService.postAttend = async (arithmosMitroou, course, attends) => {
+    let student = await Student.findOne({
+        arithmosMitroou: arithmosMitroou
+    })
+    for (let i = 0; i<student.attendance.length; i++) {
+        if (student.attendance[i].course === course) {
+            student.attendance.splice(i, 1, attends)
+            student.attendance.splice(i, 0, {course: course, attends: attends})
+            break
+        }
+    }
+    await student.save()
+    console.log(student)
+}
 
 module.exports = StudentService

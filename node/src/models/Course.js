@@ -18,10 +18,6 @@ const CourseSchema = new Schema({
         required: true,
         type: Number
     },
-    exam: {
-        required: false,
-        type: Array
-    },
     semester: {
         required: true,
         type: Number

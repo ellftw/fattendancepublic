@@ -2,8 +2,9 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const User = require('../models/User')
 const secret = require('../config').secret
-let authService = new Object
+const Student = require("../models/Student")
 
+let authService = new Object
 authService.getAllUsers = async () => {
     let users = await User.find({}).select('-_id -password -__v')
     return users
@@ -61,5 +62,16 @@ authService.register = async (userToRegister) => {
         })
     await user.save()
 }
+authService.semesterBegin = async () => {
+    let newSemester = []
+    let student = await Student.find({})
+    for (let i = 0; i < student.length; i++) {
+       newSemester.push(student[i].semester + 1)
+    }
+    for (let j = 0; j < student.length; j++) {
+    student = await Student.updateMany({}, {semester: newSemester[j]})
+    }
+}
+
 
 module.exports = authService

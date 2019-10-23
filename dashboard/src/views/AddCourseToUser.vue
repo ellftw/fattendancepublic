@@ -9,7 +9,9 @@
             <td>{{ props.item.name }}</td>
             <td>{{ props.item.numberOfLessons }}</td>
             <td>{{ props.item.SignedStudents }}</td>
-            <td><v-btn round @click="addCourseToUser(props.item.courseCode)">Add Course</v-btn></td>
+            <td>
+              <v-btn round @click="addCourseToUser(props.item.courseCode)">Add Course</v-btn>
+            </td>
           </template>
         </v-data-table>
       </v-flex>
@@ -20,7 +22,6 @@
 import StudentService from '@/services/StudentService.js'
 import TeacherService from '@/services/TeacherService.js'
 import CourseService from '@/services/CourseService.js'
-import UserService from '@/services/UserService.js'
 export default {
   name: 'AllCourses',
   data () {
@@ -59,7 +60,7 @@ export default {
         for (let k = 0; k < allteachers.length; k++) {
           if (this.$store.getters.user.name === allteachers[k].name) {
             this.currentUser[0] = allteachers[k]
-          } 
+          }
         }
         for (let j = 0; j < allstudents.length; j++) {
           if (this.$store.getters.user.name === allstudents[j].name) {
@@ -67,17 +68,40 @@ export default {
           }
         }
         for (let i = 0; i < response.courses.length; i++) {
-          if (this.$store.getters.user.userType === 'καθηγητής' && this.currentUser[0].teachingCourses.indexOf(response.courses[i].courseCode) === -1) {
+          if (
+            this.$store.getters.user.userType === 'καθηγητής' &&
+            this.currentUser[0].teachingCourses.indexOf(
+              response.courses[i].courseCode
+            ) === -1
+          ) {
             this.courses.push(response.courses[i])
-          } else if (this.$store.getters.user.userType === 'σπουδαστής') {
-            if (this.currentUser[0].studentCourses.indexOf(response.courses[i].courseCode) === -1 && this.currentUser[0].semester >= response.courses[i].semester)
+          }
+          if (
+            this.$store.getters.user.userType === 'σπουδαστής' &&
+            this.currentUser[0].studentCourses.indexOf(
+              response.courses[i].courseCode
+            ) === -1
+          ) {
             this.courses.push(response.courses[i])
           }
         }
-        console.log(this.$store.getters.user.name)
-        console.log(response.courses[0].courseCode)
-        console.log(this.currentUser[0])
-        console.log(this.courses[0])
+
+        console.log(this.$store.getters.user.userType)
+        console.log(response.courses)
+        console.log(this.currentUser[0].studentCourses.length)
+        if (
+          this.courses.length === 0 &&
+          this.$store.getters.user.userType === 'καθηγητής'
+        ) {
+          this.courses = response.courses
+        }
+        if (
+          this.currentUser[0].studentCourses.length === 0 &&
+          this.$store.getters.user.userType === 'σπουδαστής'
+        ) {
+          this.courses = response.courses
+          console.log(this.courses)
+        }
       } catch (error) {
         window.alert(error)
       }
@@ -90,16 +114,20 @@ export default {
       }
       if (this.$store.getters.user.userType === 'καθηγητής') {
         let courseToAdd = await TeacherService.addCourseToTeacher(theeCourse)
-        if (courseToAdd && courseToAdd.ok === 1) {
-          this.courses = this.courses.filter((c) => c.courseCode !== courseCode)
-          console.log(this.courses)
-        }
+        // if (courseToAdd && courseToAdd.ok === 1) {
+        //   this.courses = this.courses.filter((c) => c.courseCode !== courseCode)
+        //   console.log(this.courses)
+        // }
+        console.log(courseToAdd)
       } else {
         let courseToAdd = await StudentService.addCourseToStudent(theeCourse)
         if (courseToAdd && courseToAdd.ok === 1) {
-          this.courses = this.courses.filter((c) => c.courseCode !== courseCode)
+          this.courses = this.courses.filter(c => c.courseCode !== courseCode)
           console.log(this.courses)
         }
+        console.log(this.courses)
+        console.log(StudentService.addCourseToStudent(theeCourse))
+        console.log(theeCourse)
       }
     }
   },

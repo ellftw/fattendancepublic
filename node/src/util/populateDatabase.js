@@ -457,14 +457,7 @@ module.exports = {
         teachingCourses: []
       })
   },
-
-  generateCourses: async () => {
-
-  },
-  generateSecretaries: async () => {
-
-  },
-  generateAttendances: async () => {
-
-  },
+  addSemesterToStudents: async () => {
+    return await StudentService.addSemesterToStudents()
+  }
 }

@@ -47,4 +47,13 @@ authRouter.post('/register', async (request, response) => {
     }
 })
 
+authRouter.post('/semesterbegin', async (request, response) => {
+    try {
+        await authService.semesterBegin()
+        return response.status(200).json({ success: true})
+    } catch(error) {
+        return response.status(200).json({ success: false, error: `${error}` })
+    }
+})
+
 module.exports = authRouter

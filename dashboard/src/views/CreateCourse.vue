@@ -28,7 +28,7 @@
                 </template>
                 <v-card>
                   <v-card-title class="headline">Δημιουργια νεου μαθηματος</v-card-title>
-                  <v-card-text>Ειστε σιγουροι οτι τα στοιχεια του μαθηματος ειναι σωστα και οτι θελετε να δημιουργησετε αυτο το μαθημα;          
+                  <v-card-text>Ειστε σιγουροι οτι τα στοιχεια του μαθηματος ειναι σωστα και οτι θελετε να δημιουργησετε αυτο το μαθημα;
                   </v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
@@ -69,15 +69,15 @@ export default {
           semester: this.Course.semester
         }
         let response = await CourseService.createCourse(newCourse)
-        if (response.success == true) {
+        if (response.success === true) {
           window.alert('Course successfully registered')
           this.Course = {
-          name: '',
-          courseCode: '',
-          numberOfLessons: '',
-          semester: ''
-        } 
-        this.dialog = false
+            name: '',
+            courseCode: '',
+            numberOfLessons: '',
+            semester: ''
+          }
+          this.dialog = false
         }
       } catch (error) {
         window.alert(error)

@@ -45,10 +45,6 @@ export default {
         {
           title: 'Αποσύνδεση',
           action: this.logout
-        },
-        {
-          title: 'Ρυθμίσεις Λογαριασμού',
-          action: this.goToAccountSettings
         }
       ]
     }
@@ -61,8 +57,6 @@ export default {
       this.$store.commit('unsetUser')
       this.$store.commit('unsetToken')
       this.$router.push('/login')
-    },
-    goToAccountSettings () {
     }
   }
 }

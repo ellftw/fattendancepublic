@@ -137,11 +137,7 @@ export default {
           title: 'Πληροφορίες',
           route: '/info'
         },
-        {
-          icon: 'mdi-settings',
-          title: 'Ρυθμίσεις',
-          route: '/settings'
-        },
+
         {
           icon: 'mdi-chat-alert',
           title: 'Ανακοινώσεις',

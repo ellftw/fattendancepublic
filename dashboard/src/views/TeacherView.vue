@@ -8,7 +8,7 @@
             <td>{{ props.item.courseCode }}</td>
             <td>{{ props.item.name }}</td>
             <td>{{ props.item.numberOfLessons }}</td>
-            <td>{{ props.item.SignedStudents }}</td>
+            <td>{{ signedStudents }}</td>
           </template>
         </v-data-table>
       </v-flex>
@@ -21,7 +21,7 @@
   </v-container>
 </template>
 <script>
-// import UserService from '@/services/UserService.js'
+import StudentService from '@/services/StudentService.js'
 import TeacherService from '@/services/TeacherService.js'
 export default {
   name: 'TeacherView',
@@ -43,7 +43,8 @@ export default {
           sortable: true
         }
       ],
-      courses: []
+      courses: [],
+      signedStudents: []
     }
   },
   methods: {
@@ -56,12 +57,29 @@ export default {
         window.alert(error)
       }
     },
-    test (a) {
-      console.log(a)
+    // async getSignedStudents () {
+    //   let courses = await TeacherService.getCoursesForTeacher(this.$store.getters.user.email)
+    //   console.log(courses)
+    //   for (let i=0; i=allStudents.length; i++) {
+    //     for (let j=0; j=courses.length; j++) {
+    //       this.signedStudents[j] = 0
+    //       if (allStudents[i].studentCourses.includes(courses[j]))
+    //       this.signedStudents[j] = this.signedStudents[j]++
+    //     }
+    //   }
+    // },
+    async getAllStudentCourses () {
+      try {
+        let allStudents = await StudentService.getAllStudents()
+        console.log(allStudents[26].studentCourses)
+      } catch (error) {
+        console.log(error)
+      }
     }
   },
   mounted () {
     this.getCoursesForTeacher(this.$store.getters.user.email)
+    this.getAllStudentCourses()
   }
 }
 </script>
