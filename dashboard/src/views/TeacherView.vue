@@ -9,6 +9,7 @@
             <td>{{ props.item.name }}</td>
             <td>{{ props.item.numberOfLessons }}</td>
             <td>{{ props.item.subscribed }}</td>
+            <td>{{ props.item.semester }}</td>
           </template>
         </v-data-table>
       </v-flex>
@@ -41,7 +42,8 @@ export default {
           text: 'Αριθμός Εγγεγραμμένων',
           value: 'subscribed',
           sortable: true
-        }
+        },
+        { text: 'Εξάμηνο', value: 'semester', sortable: true}
       ],
       courses: [],
       attends: []
