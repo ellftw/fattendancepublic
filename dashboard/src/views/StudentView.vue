@@ -63,6 +63,7 @@ export default {
       }
     },
     async getAllCourses () {
+      let newcourses = []
       let allcourses = await CourseService.getAllCourses()
       for (let i = 0; i < allcourses.courses.length; i++) {
         if (this.student[0].studentCourses.indexOf(allcourses.courses[i].courseCode) > -1) {

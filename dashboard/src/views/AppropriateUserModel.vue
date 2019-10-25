@@ -87,8 +87,8 @@
     <v-btn round @click="getNonModeledStudents()">list Students</v-btn>
   </div>
 </template>
+
 <script>
-import UserService from '@/services/UserService'
 import StudentService from '@/services/StudentService'
 import TeacherService from '@/services/TeacherService'
 export default {
@@ -124,6 +124,10 @@ export default {
       }
     }
   },
+  beforeMount () {
+    this.getStudentNumber()
+  },
+
   methods: {
     async getAllUsers () {
       try {
@@ -131,7 +135,6 @@ export default {
         console.log(this.users)
       } catch (error) {
         window.alert(error)
-        console.log(error)
       }
     },
     async getAllTeachers () {
@@ -227,8 +230,10 @@ export default {
     this.getAllStudents()
     this.getStudentNumber()
   }
+
 }
 </script>
 
 <style>
+
 </style>

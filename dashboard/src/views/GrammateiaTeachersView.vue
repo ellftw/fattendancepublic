@@ -40,6 +40,7 @@ export default {
   name: 'Teachers',
   data () {
     return {
+      dialog: false,
       loader: null,
       loading: false,
       loading1: false,
