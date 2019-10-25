@@ -137,13 +137,13 @@ export default {
       if (this.$store.getters.user.userType === 'καθηγητής') {
         let courseToAdd = await TeacherService.addCourseToTeacher(theeCourse)
         if (courseToAdd.success === true) {
-          // location.reload(true)
+          location.reload(true)
         }
       } else {
         let courseToAdd = await StudentService.addCourseToStudent(theeCourse)
         console.log(courseToAdd)
         if (courseToAdd.success === true) {
-          // location.reload(true)
+          location.reload(true)
         }
         console.log(this.courses)
         console.log(this.currentUser)
