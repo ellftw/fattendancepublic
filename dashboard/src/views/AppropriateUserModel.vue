@@ -91,7 +91,6 @@
 import UserService from '@/services/UserService'
 import StudentService from '@/services/StudentService'
 import TeacherService from '@/services/TeacherService'
-import StudentViewVue from './StudentView.vue'
 export default {
   data () {
     return {
@@ -181,13 +180,12 @@ export default {
         }
       }
     },
-    async getStudentNumber() {
-      let sn = 0
+    async getStudentNumber () {
       let am = []
       let as = await StudentService.getAllStudents()
       for (let i = 0; i < as.length; i++) {
         am.push(as[i].arithmosMitroou)
-        am.sort(function(a, b){return b - a})
+        am.sort(function (a, b) { return b - a })
       }
       this.newStudent.arithmosMitroou = am[0] + 1
     },
@@ -196,7 +194,7 @@ export default {
         name: name,
         surname: surname,
         email: email,
-        studentCourses:[],
+        studentCourses: [],
         semester: semester,
         attendance: [],
         fingerprintID: this.newStudent.fingerprintID,

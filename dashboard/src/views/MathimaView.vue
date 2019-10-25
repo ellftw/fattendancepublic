@@ -40,7 +40,7 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-btn round @click="getStudentsToAttend(selectedCourse)">Λιστα μαθητων</v-btn>
+        <v-btn round v-if="selectedCourse" @click="getStudentsToAttend(selectedCourse)">Λιστα μαθητων</v-btn>
       </v-flex>
     </v-layout>
   </v-container>
@@ -50,7 +50,7 @@ import TeacherService from '@/services/TeacherService.js'
 import StudentService from '@/services/StudentService.js'
 export default {
   name: 'MathimaView',
-  data() {
+  data () {
     return {
       dialog: false,
       dialog1: false,
@@ -69,14 +69,14 @@ export default {
         { text: 'Επίθετο', sortable: true, value: 'surname' },
         { text: 'Παρουσίες', sortable: true, value: 'attends' }
       ]
-    };
+    }
   },
   methods: {
     async getCoursesForTeacher () {
       try {
         this.courses = await TeacherService.getCoursesForTeacher(
           this.$store.getters.user.email
-        );
+        )
         console.log(this.courses)
       } catch (error) {
         console.log(error)
@@ -91,7 +91,7 @@ export default {
       }
     },
     async getStudentsToAttend (selectedCourse) {
-      let as = await StudentService.getAllStudents();
+      let as = await StudentService.getAllStudents()
       for (let i = 0; i < as.length; i++) {
         for (let j = 0; j < as[i].attendance.length; j++) {
           if (selectedCourse.indexOf(as[i].attendance[j].course) !== -1) {
@@ -118,7 +118,7 @@ export default {
       await StudentService.postAttend(arithmosMitroou, course, attends)
     }
   },
-  mounted() {
+  mounted () {
     this.getAllStudents()
   }
 }

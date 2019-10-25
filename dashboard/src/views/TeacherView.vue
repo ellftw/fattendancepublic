@@ -8,7 +8,7 @@
             <td>{{ props.item.courseCode }}</td>
             <td>{{ props.item.name }}</td>
             <td>{{ props.item.numberOfLessons }}</td>
-            <td>{{ signedStudents }}</td>
+            <td>{{ props.item.subscribed }}</td>
           </template>
         </v-data-table>
       </v-flex>
@@ -39,47 +39,54 @@ export default {
         { text: 'Αριθμός Μαθημάτων', value: 'numberOfLessons', sortable: true },
         {
           text: 'Αριθμός Εγγεγραμμένων',
-          value: 'SignedStudents',
+          value: 'subscribed',
           sortable: true
         }
       ],
       courses: [],
-      signedStudents: []
+      attends: []
     }
   },
   methods: {
     async getCoursesForTeacher (email) {
       try {
         const response = await TeacherService.getCoursesForTeacher(this.$store.getters.user.email)
+        for (let i = 0; i < response.courseList.length; i++) {
+          this.courses.push({
+            courseCode: response.courseList[i].courseCode,
+            name: response.courseList[i].name,
+            numberOfLessons: response.courseList[i].numberOfLessons,
+            semester: response.courseList[i].semester,
+            subscribed: 0
+          })
+        }
+        const allstudents = await StudentService.getAllStudents()
+        for (let i = 0; i < allstudents.length; i++) {
+          for (let j = 0; j < allstudents[i].attendance.length; j++) {
+            this.attends.push({
+              course: allstudents[i].attendance[j].course,
+              attends: allstudents[i].attendance[j].attends
+            })
+          }
+        }
+        for (let i = 0; i < this.courses.length; i++) {
+          for (let j = 0; j < this.attends.length; j++) {
+            if (this.courses[i].courseCode.indexOf(this.attends[j].course) !== -1) {
+              this.courses[i].subscribed = this.courses[i].subscribed + 1
+            }
+          }
+        }
+
+
         console.log(response)
-        this.courses = response.courseList
+        console.log(this.courses)
       } catch (error) {
         window.alert(error)
-      }
-    },
-    // async getSignedStudents () {
-    //   let courses = await TeacherService.getCoursesForTeacher(this.$store.getters.user.email)
-    //   console.log(courses)
-    //   for (let i=0; i=allStudents.length; i++) {
-    //     for (let j=0; j=courses.length; j++) {
-    //       this.signedStudents[j] = 0
-    //       if (allStudents[i].studentCourses.includes(courses[j]))
-    //       this.signedStudents[j] = this.signedStudents[j]++
-    //     }
-    //   }
-    // },
-    async getAllStudentCourses () {
-      try {
-        let allStudents = await StudentService.getAllStudents()
-        console.log(allStudents[26].studentCourses)
-      } catch (error) {
-        console.log(error)
       }
     }
   },
   mounted () {
     this.getCoursesForTeacher(this.$store.getters.user.email)
-    this.getAllStudentCourses()
   }
 }
 </script>

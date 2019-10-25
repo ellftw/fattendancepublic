@@ -46,9 +46,7 @@ export default {
       rowsPerPage: 4
     },
     student: [],
-    courses: [],
-    attends: []
-
+    courses: []
   }),
   mounted () {
     this.getCurrentStudent()
@@ -72,13 +70,13 @@ export default {
             name: allcourses.courses[i].name,
             courseCode: allcourses.courses[i].courseCode,
             semester: allcourses.courses[i].semester,
-            attends:''})
+            attends: ''})
         }
       }
       console.log(this.courses.length)
-      for(let j=0; j<this.courses.length; j++) {
-         for (let i=0; i<this.student[0].attendance.length; i++) {
-            if (this.courses[j].courseCode === this.student[0].attendance[i].course) {
+      for (let j = 0; j < this.courses.length; j++) {
+        for (let i = 0; i < this.student[0].attendance.length; i++) {
+          if (this.courses[j].courseCode === this.student[0].attendance[i].course) {
             this.courses[j].attends = this.student[0].attendance[i].attends
             console.log(this.courses[j].courseCode)
             // console.log(this.attends[i])
@@ -86,20 +84,11 @@ export default {
           }
         }
       }
-     
       console.log(this.courses)
       console.log(allcourses.courses)
       console.log(this.student[0].studentCourses)
       // console.log(this.attends)
-
-    },
-    async getAttends (cc) {
-      for (let i=0; i<this.student[0].attendance.length; i++) {
-        if (cc.indexOf(this.student[0].attendance[i].course) !== -1) {
-          this.attends.push(this.student[0].attendance[i].attends)
-        }
-      }
-    },
+    }
   }
 }
 </script>

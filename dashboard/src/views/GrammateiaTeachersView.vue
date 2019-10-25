@@ -18,6 +18,9 @@
           <td>{{ props.item.surname}}</td>
           <td class="text-xs-left">{{ props.item.name }}</td>
           <td class="text-xs-left">{{ props.item.teachingCourses }}</td>
+          <td class="text-xs-left">
+            <v-btn round small @click="deleteTeacher(props.item.email)">Διαγραφη</v-btn>
+          </td>
         </template>
         <v-alert
           slot="no-results"
@@ -49,7 +52,8 @@ export default {
           value: 'surname'
         },
         { text: 'Όνομα', value: 'name' },
-        { text: 'Διδάσκοντα Μαθήματα', value: 'teachingCourses' }
+        { text: 'Διδάσκοντα Μαθήματα', value: 'teachingCourses' },
+        { text: 'Επιλογές', value: '' }
       ],
       teachers: []
 
@@ -67,17 +71,17 @@ export default {
       } catch (error) {
         window.alert(error)
       }
+    },
+    async deleteTeacher (email) {
+      try {
+        let response = await TeacherService.deleteTeacher(email)
+        if (response.deletedCount === 1) {
+          location.reload(true)
+        }
+      } catch (error) {
+        window.alert(error)
+      }
     }
-    // async deleteStudent (arithmosMitroou) {
-    //   try {
-    //     let deletedStudent = await StudentService.deleteStudent(arithmosMitroou)
-    //     if (deletedStudent && deletedStudent.ok === 1) {
-    //       this.students = this.students.filter((sd) => sd.arithmosMitroou !== arithmosMitroou)
-    //     }
-    //   } catch (error) {
-    //     window.alert(error)
-    //   }
-    // }
   }
 }
 </script>

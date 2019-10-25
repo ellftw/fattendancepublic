@@ -79,7 +79,10 @@ export default {
     },
     async deleteStudent (arithmosMitroou) {
       try {
-        await StudentService.deleteStudent(arithmosMitroou)
+        let response = await StudentService.deleteStudent(arithmosMitroou)
+        if (response.deletedCount === 1) {
+          location.reload(true)
+        }
       } catch (error) {
         window.alert(error)
       }

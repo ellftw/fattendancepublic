@@ -20,15 +20,6 @@
             @click:append="show1 = !show1"
           ></v-text-field>
           <v-text-field
-            :append-icon="show4 ? 'visibility' : 'visibility_off'"
-            :type="show4 ? 'text' : 'password'"
-            name="input-10-2"
-            label="Repeat Password"
-            hint="At least 8 characters"
-            error
-            @click:append="show4 = !show4"
-          ></v-text-field>
-          <v-text-field
           v-model="newUser.name"
           label="Name"
           placeholder="John"

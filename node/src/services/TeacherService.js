@@ -35,7 +35,7 @@ teacherService.getCoursesForTeacher = async (email) => {
     console.log(teacher.teachingCourses)
     const courses = await Course.find({
         'courseCode': {$in:teacher.teachingCourses}
-    })
+    }).select('-_id -__v')
     return courses
 }
 
@@ -43,6 +43,10 @@ teacherService.getAllTeachers = async () => {
     let teachers = await Teacher.find({}).select('-_uid -__v')
     if (!teachers) throw new Error('Could not find any teachers')
     return teachers
+}
+
+teacherService.deleteTeacher = async (email) => {
+    return await Teacher.deleteOne({email: email})
 }
 
 module.exports = teacherService

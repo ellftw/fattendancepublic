@@ -22,7 +22,7 @@
             label="Semester"
           ></v-text-field>
             <v-layout row justify-start>
-              <v-dialog v-model="dialog" persistent max-width="290">
+              <v-dialog v-model="dialog" persistent>
                 <template v-slot:activator="{ on }">
                   <v-btn round dark v-on="on">Δημιουργια</v-btn>
                 </template>

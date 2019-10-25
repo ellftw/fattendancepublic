@@ -24,6 +24,10 @@ const TeacherService = {
       teachingCourses: teacher.teachingCourses
     })
     return response.data
+  },
+  deleteTeacher: async function (email) {
+    let response = await axios.delete('http://0.0.0.0:8080/teacher/', {data: {email}})
+    return response.data.deleteTeacher
   }
 }
 

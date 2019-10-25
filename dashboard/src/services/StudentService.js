@@ -19,11 +19,18 @@ const StudentService = {
       courseCode: course.courseCode
     })
     console.log(response)
-    return response.data.course
+    return response.data
   },
   createStudent: async function (student) {
     let response = await axios.post(`http://0.0.0.0:8080/student/create`, {
-      
+      name: student.name,
+      surname: student.surname,
+      email: student.email,
+      studentCourses: student.studentCourses,
+      semester: student.semester,
+      attendance: student.attendance,
+      fingerprintID: student.fingerprintID,
+      arithmosMitroou: student.arithmosMitroou
     })
     return response.data
   },

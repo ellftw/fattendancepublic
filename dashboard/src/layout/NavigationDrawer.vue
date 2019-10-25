@@ -86,18 +86,13 @@ export default {
       fixed: false,
       teacherItems: [
         {
-          icon: 'mdi-library-books',
-          title: 'Λίστα Μαθημάτων',
-          route: '/courseList'
-        },
-        {
-          icon: 'mdi-library-books',
-          title: 'Βάλε μάθημα',
+          icon: 'mdi-pencil-box',
+          title: 'Εγγραφή σε μάθημα',
           route: '/addCourse'
         },
         {
           icon: 'mdi-library-books',
-          title: 'Λίστα Μαθητών Μαθήματος',
+          title: 'Παρουσία',
           route: '/mathima'
         }
       ],
@@ -106,6 +101,16 @@ export default {
           icon: 'mdi-account-plus',
           title: 'Εγγραφή',
           route: '/register'
+        },
+        {
+          icon: 'mdi-account-key',
+          title: 'Μοντελοποίηση χρήστη',
+          route: '/model'
+        },
+        {
+          icon: 'mdi-account-network',
+          title: 'Καθηγητές Τμήματος',
+          route: '/grammateiaTeachers'
         }],
       unAuthorizedItems: [
         {
@@ -133,7 +138,12 @@ export default {
       ],
       additionalItems: [
         {
-          icon: 'mdi-information',
+          icon: 'mdi-home',
+          title: 'Αρχική',
+          route: '/'
+        },
+        {
+          icon: 'mdi-newspaper',
           title: 'Πληροφορίες',
           route: '/info'
         },
