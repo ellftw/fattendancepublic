@@ -3,7 +3,13 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+                "/home/alex/Arduino/libraries/U8g2/src",
+                "/home/alex/Arduino/libraries/Adafruit_Fingerprint_Sensor_Library",
+                "/home/alex/Arduino/libraries/Arduino_Low_Power",
+                "/home/alex/Arduino/libraries/Adafruit_Fingerprint_Sensor_Library",
+                "/home/alex/Arduino/libraries/Adafruit_Fingerprint_Sensor_Library",
+                "/home/alex/Arduino/libraries/WiFiEsp/src",
+                "/home/alex/Arduino/libraries/"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

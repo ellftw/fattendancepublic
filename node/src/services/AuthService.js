@@ -7,6 +7,7 @@ const Student = require("../models/Student")
 let authService = new Object
 authService.getAllUsers = async () => {
     let users = await User.find({}).select('-_id -password -__v')
+    console.log(users)
     return users
 }
 
