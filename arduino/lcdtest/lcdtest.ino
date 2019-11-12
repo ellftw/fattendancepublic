@@ -3,9 +3,6 @@
 #include <U8g2lib.h>
 #include <Wire.h>
 #include "WiFiEsp.h"
-#include <HttpClient.h>
-
-
 
 #define wifiSerial Serial2
 
@@ -14,10 +11,11 @@ char pass[] = "de sto lew";  // your network password
 int status = WL_IDLE_STATUS; // the Wifi radio's status
 
 char server[] = "192.168.1.8";
+unsigned long lastConnectionTime = 0;         // last time you connected to the server, in milliseconds
+const unsigned long postingInterval = 10000L; // delay between updates, in milliseconds
 
 // Initialize the Ethernet client object
 WiFiEspClient client;
-HttpClient http;
 
 #define mySerial Serial1
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
@@ -37,307 +35,56 @@ uint8_t readnumber(void)
   return num;
 }
 
-uint8_t getFingerprintEnroll()
+void httpRequest()
 {
-  int p = -1;
-  u8g2.clearBuffer();
-  u8g2.drawStr(10, 10, "Waiting for valid");
-  u8g2.drawStr(10, 30, "finger to enroll as #");
-  u8g2.sendBuffer();
-  Serial.print("Waiting for valid finger to enroll as #");
-  Serial.println(id);
-  while (p != FINGERPRINT_OK)
-  {
-    p = finger.getImage();
-    switch (p)
-    {
-    case FINGERPRINT_OK:
-      Serial.println("Image taken");
-      u8g2.clearBuffer();
-      u8g2.drawStr(10, 10, "Image taken");
-      u8g2.sendBuffer();
-      delay(1500);
-      break;
-    case FINGERPRINT_NOFINGER:
-      Serial.println(".");
-      break;
-    case FINGERPRINT_PACKETRECIEVEERR:
-      Serial.println("Communication error");
-      u8g2.clearBuffer();
-      u8g2.drawStr(10, 10, "Communication error");
-      u8g2.sendBuffer();
-      delay(1500);
-      break;
-    case FINGERPRINT_IMAGEFAIL:
-      Serial.println("Imaging error");
-      u8g2.clearBuffer();
-      u8g2.drawStr(10, 10, "Imaging error");
-      u8g2.sendBuffer();
-      delay(1500);
-      break;
-    default:
-      Serial.println("Unknown error");
-      u8g2.clearBuffer();
-      u8g2.drawStr(10, 10, "Unknown error");
-      u8g2.sendBuffer();
-      delay(1500);
-      break;
-    }
-  }
-  delay(1500);
-  // OK success!
-  p = finger.image2Tz(1);
-  switch (p)
-  {
-  case FINGERPRINT_OK:
-    Serial.println("Image converted");
-    u8g2.clearBuffer();
-    u8g2.drawStr(10, 10, "Image converted");
-    u8g2.sendBuffer();
-    delay(1500);
-    break;
-  case FINGERPRINT_IMAGEMESS:
-    Serial.println("Image too messy");
-    u8g2.clearBuffer();
-    u8g2.drawStr(10, 10, "Image too messy");
-    u8g2.sendBuffer();
-    delay(1500);
-    return p;
-  case FINGERPRINT_PACKETRECIEVEERR:
-    Serial.println("Communication error");
-    u8g2.clearBuffer();
-    u8g2.drawStr(10, 10, "Communication error");
-    u8g2.sendBuffer();
-    delay(1500);
-    return p;
-  case FINGERPRINT_FEATUREFAIL:
-    Serial.println("Could not find fingerprint features");
-    u8g2.clearBuffer();
-    u8g2.drawStr(10, 10, "Could not find");
-    u8g2.drawStr(10, 30, "fingerprint features");
-    u8g2.sendBuffer();
-    delay(1500);
-    return p;
-  case FINGERPRINT_INVALIDIMAGE:
-    Serial.println("Could not find fingerprint features");
-    u8g2.clearBuffer();
-    u8g2.drawStr(10, 10, "Could not find");
-    u8g2.drawStr(10, 30, "fingerprint features");
-    u8g2.sendBuffer();
-    delay(1500);
-    return p;
-  default:
-    Serial.println("Unknown error");
-    u8g2.clearBuffer();
-    u8g2.drawStr(10, 10, "Unknown error");
-    u8g2.sendBuffer();
-    delay(1500);
-    return p;
-  }
+  Serial.println();
 
-  Serial.println("Remove finger");
-  u8g2.clearBuffer();
-  u8g2.drawStr(10, 10, "Remove finger");
-  u8g2.sendBuffer();
-  delay(1500);
-  p = 0;
-  while (p != FINGERPRINT_NOFINGER)
-  {
-    p = finger.getImage();
-  }
-  Serial.print("ID ");
-  Serial.println(id);
-  p = -1;
-  Serial.println("Place same finger again");
-  u8g2.clearBuffer();
-  u8g2.drawStr(0, 10, "Place same finger ");
-  u8g2.drawStr(0, 30, "again");
-  u8g2.sendBuffer();
-  delay(1500);
-  while (p != FINGERPRINT_OK)
-  {
-    p = finger.getImage();
-    switch (p)
-    {
-    case FINGERPRINT_OK:
-      Serial.println("Image taken");
-      u8g2.clearBuffer();
-      u8g2.drawStr(10, 10, "Image taken");
-      u8g2.sendBuffer();
-      delay(1500);
-      break;
-    case FINGERPRINT_NOFINGER:
-      Serial.print(".");
-      break;
-    case FINGERPRINT_PACKETRECIEVEERR:
-      Serial.println("Communication error");
-      u8g2.clearBuffer();
-      u8g2.drawStr(10, 10, "Communication error");
-      u8g2.sendBuffer();
-      delay(1500);
-      break;
-    case FINGERPRINT_IMAGEFAIL:
-      Serial.println("Imaging error");
-      u8g2.clearBuffer();
-      u8g2.drawStr(10, 10, "Imaging error");
-      u8g2.sendBuffer();
-      delay(1500);
-      break;
-    default:
-      Serial.println("Unknown error");
-      u8g2.clearBuffer();
-      u8g2.drawStr(10, 10, "Unknown error");
-      u8g2.sendBuffer();
-      delay(1500);
-      break;
-    }
-  }
-  delay(1500);
-  // OK success!
-  p = finger.image2Tz(2);
-  switch (p)
-  {
-  case FINGERPRINT_OK:
-    Serial.println("Image converted");
-    u8g2.clearBuffer();
-    u8g2.drawStr(0, 10, "Image converted");
-    u8g2.sendBuffer();
-    delay(1500);
-    break;
-  case FINGERPRINT_IMAGEMESS:
-    Serial.println("Image too messy");
-    u8g2.clearBuffer();
-    u8g2.drawStr(0, 10, "Image too messy");
-    u8g2.sendBuffer();
-    delay(1500);
-    return p;
-  case FINGERPRINT_PACKETRECIEVEERR:
-    Serial.println("Communication error");
-    u8g2.clearBuffer();
-    u8g2.drawStr(10, 10, "Communication error");
-    u8g2.sendBuffer();
-    delay(1500);
-    return p;
-  case FINGERPRINT_FEATUREFAIL:
-    Serial.println("Could not find fingerprint features");
-    u8g2.clearBuffer();
-    u8g2.drawStr(10, 10, "Could not find");
-    u8g2.drawStr(10, 30, "fingerprint features");
-    u8g2.sendBuffer();
-    delay(1500);
-    return p;
-  case FINGERPRINT_INVALIDIMAGE:
-    Serial.println("Could not find fingerprint features");
-    u8g2.clearBuffer();
-    u8g2.drawStr(10, 10, "Could not find");
-    u8g2.drawStr(10, 30, "fingerprint features");
-    u8g2.sendBuffer();
-    delay(1500);
-    return p;
-  default:
-    Serial.println("Unknown error");
-    u8g2.clearBuffer();
-    u8g2.drawStr(10, 10, "Unknown error");
-    u8g2.sendBuffer();
-    delay(1500);
-    return p;
-  }
+  // close any connection before send a new request
+  // this will free the socket on the WiFi shield
+  client.stop();
 
-  // OK converted!
-  Serial.print("Creating model for #");
-  Serial.println(id);
-  u8g2.clearBuffer();
-  u8g2.drawStr(0, 10, "Creating model for #");
-  u8g2.sendBuffer();
-  delay(1500);
-  p = finger.createModel();
-  if (p == FINGERPRINT_OK)
+  // if there's a successful connection
+  if (client.connect(server, 8080))
   {
-    u8g2.clearBuffer();
-    u8g2.drawStr(0, 10, "Prints matched");
-    u8g2.sendBuffer();
-    Serial.println("Prints matched!");
-    delay(1500);
-  }
-  else if (p == FINGERPRINT_PACKETRECIEVEERR)
-  {
-    Serial.println("Communication error");
-    u8g2.clearBuffer();
-    u8g2.drawStr(10, 10, "Communication error");
-    u8g2.sendBuffer();
-    delay(1500);
-    return p;
-  }
-  else if (p == FINGERPRINT_ENROLLMISMATCH)
-  {
-    Serial.println("Fingerprints did not match");
-    u8g2.clearBuffer();
-    u8g2.drawStr(0, 10, "Fingerprints did not");
-    u8g2.drawStr(0, 30, "match");
-    u8g2.sendBuffer();
-    delay(1500);
-    return p;
+    Serial.println("Connecting...");
+
+    // send the HTTP PUT request
+    client.println(F("GET /teacher HTTP/1.1"));
+    client.println(F("Host: arduino.cc"));
+    client.println("Connection: close");
+    client.println();
+
+    // note the time that the connection was made
+    lastConnectionTime = millis();
   }
   else
   {
-    Serial.println("Unknown error");
-    u8g2.clearBuffer();
-    u8g2.drawStr(10, 10, "Unknown error");
-    u8g2.sendBuffer();
-    delay(1500);
-    return p;
+    // if you couldn't make a connection
+    Serial.println("Connection failed");
   }
+}
 
-  Serial.print("ID ");
-  Serial.println(id);
-  p = finger.storeModel(id);
-  if (p == FINGERPRINT_OK)
-  {
-    Serial.println("Stored!");
-    u8g2.clearBuffer();
-    u8g2.drawStr(0, 10, "Stored!");
-    u8g2.sendBuffer();
-    delay(1500);
-    return p;
-  }
-  else if (p == FINGERPRINT_PACKETRECIEVEERR)
-  {
-    Serial.println("Communication error");
-    u8g2.clearBuffer();
-    u8g2.drawStr(10, 10, "Communication error");
-    u8g2.sendBuffer();
-    delay(3500);
-    return p;
-  }
-  else if (p == FINGERPRINT_BADLOCATION)
-  {
-    Serial.println("Could not store in that location");
-    u8g2.clearBuffer();
-    u8g2.drawStr(10, 10, "Could not store");
-    u8g2.drawStr(10, 30, "in that location");
-    u8g2.sendBuffer();
-    delay(3500);
-    return p;
-  }
-  else if (p == FINGERPRINT_FLASHERR)
-  {
-    Serial.println("Error writing to flash");
-    u8g2.clearBuffer();
-    u8g2.drawStr(10, 10, "Error writing to");
-    u8g2.drawStr(10, 30, "flash");
-    u8g2.sendBuffer();
-    delay(3500);
-    return p;
-  }
-  else
-  {
-    Serial.println("Unknown error");
-    u8g2.clearBuffer();
-    u8g2.drawStr(10, 10, "Unknown error");
-    u8g2.sendBuffer();
-    delay(3500);
-    return p;
-  }
+int getFingerprintIDez()
+{
+  uint8_t p = finger.getImage();
+  if (p != FINGERPRINT_OK)
+    return -1;
+
+  p = finger.image2Tz();
+  if (p != FINGERPRINT_OK)
+    return -1;
+
+  p = finger.fingerFastSearch();
+  if (p != FINGERPRINT_OK)
+    return -1;
+
+  // found a match!
+  Serial.print("Found ID #");
+  Serial.print(finger.fingerID);
+  Serial.print(" with confidence of ");
+  Serial.println(finger.confidence);
+  Serial.print(finger.fingerID);
+  return finger.fingerID;
 }
 
 uint8_t deleteFingerprint(uint8_t id)
@@ -395,23 +142,21 @@ void printWifiStatus()
   Serial.print("SSID: ");
   Serial.println(WiFi.SSID());
   u8g2.clearBuffer();
-  u8g2.drawStr(10, 5, "SSID:");
-  u8g2.setCursor(10, 20);
+  u8g2.drawStr(10, 10, "SSID:");
+  u8g2.setCursor(0, 25);
   u8g2.print(WiFi.SSID());
   u8g2.sendBuffer();
-        delay(1500);
-
+  delay(1500);
 
   // print your WiFi shield's IP address
   IPAddress ip = WiFi.localIP();
   Serial.print("IP Address: ");
   Serial.println(ip);
-  u8g2.drawStr(10, 35, "IP:");
-  u8g2.setCursor(10, 60);
+  u8g2.drawStr(10, 40, "IP:");
+  u8g2.setCursor(0, 55);
   u8g2.print(ip);
   u8g2.sendBuffer();
-        delay(1500);
-
+  delay(1500);
 
   // print the received signal strength
   long rssi = WiFi.RSSI();
@@ -423,7 +168,7 @@ void printWifiStatus()
 void setup()
 {
   u8g2.begin();
-  Serial.begin(9600);
+  Serial.begin(230400);
   Serial2.begin(115200);
   WiFi.init(&Serial2);
   if (WiFi.status() == WL_NO_SHIELD)
@@ -434,7 +179,7 @@ void setup()
     u8g2.drawStr(0, 10, "WiFi shield not");
     u8g2.drawStr(0, 30, "present!");
     u8g2.sendBuffer();
-          delay(1500);
+    delay(1500);
 
     // don't continue
   }
@@ -446,10 +191,10 @@ void setup()
     u8g2.setFont(u8g2_font_ncenB08_tr);
     u8g2.drawStr(0, 10, "Attempting to");
     u8g2.drawStr(0, 30, "connect to network");
-    u8g2.setCursor(10,50);
+    u8g2.setCursor(10, 50);
     u8g2.print(ssid);
     u8g2.sendBuffer();
-              delay(1500);
+    delay(1500);
 
     // Connect to WPA/WPA2 network
     status = WiFi.begin(ssid, pass);
@@ -462,8 +207,7 @@ void setup()
   u8g2.drawStr(0, 10, "You're connected");
   u8g2.drawStr(0, 30, "to the network");
   u8g2.sendBuffer();
-            delay(1500);
-
+  delay(1500);
 
   printWifiStatus();
 
@@ -474,64 +218,60 @@ void setup()
   u8g2.drawStr(0, 10, "Starting connection");
   u8g2.drawStr(0, 30, "to server...");
   u8g2.sendBuffer();
-            delay(1500);
+  delay(1500);
+  httpRequest();
 
-  // if you get a connection, report back via serial
-  if (client.connect(server, 80))
+  while (!Serial)
+    ; // For Yun/Leo/Micro/Zero/...
+  delay(100);
+  Serial.println("\n\nAdafruit Fingerprint sensor enrollment");
+
+  // set the data rate for the sensor serial port
+  finger.begin(57600);
+
+  if (finger.verifyPassword())
   {
-    Serial.println("Connected to server");
+    Serial.println("Found fingerprint sensor!");
     u8g2.clearBuffer();
     u8g2.setFont(u8g2_font_ncenB08_tr);
-    u8g2.drawStr(0, 10, "Connected to");
-    u8g2.drawStr(0, 30, "server.");
+    u8g2.drawStr(0, 10, "Found fingerprint");
+    u8g2.drawStr(0, 30, "sensor!");
     u8g2.sendBuffer();
-              delay(1500);
-
-    // Make a HTTP request
-    client.println("GET /auth HTTP/1.1");
-    client.println("Host: 192.168.1.8");
-    client.println("Connection: close");
-    client.println();
   }
-
-while (!Serial)
-  ; // For Yun/Leo/Micro/Zero/...
-delay(100);
-Serial.println("\n\nAdafruit Fingerprint sensor enrollment");
-
-// set the data rate for the sensor serial port
-finger.begin(57600);
-
-if (finger.verifyPassword())
-{
-  Serial.println("Found fingerprint sensor!");
-  u8g2.clearBuffer();
-  u8g2.setFont(u8g2_font_ncenB08_tr);
-  u8g2.drawStr(0, 10, "Found fingerprint");
-  u8g2.drawStr(0, 30, "sensor!");
-  u8g2.sendBuffer();
-}
-else
-{
-  Serial.println("Did not find fingerprint sensor!");
-  u8g2.clearBuffer();
-  u8g2.drawStr(0, 10, "Did not find ");
-  u8g2.drawStr(0, 30, "fingerprint sensor!");
-  u8g2.sendBuffer();
-
-  while (1)
+  else
   {
-    delay(1);
+    Serial.println("Did not find fingerprint sensor!");
+    u8g2.clearBuffer();
+    u8g2.drawStr(0, 10, "Did not find ");
+    u8g2.drawStr(0, 30, "fingerprint sensor!");
+    u8g2.sendBuffer();
+
+    while (1)
+    {
+      delay(1);
+    }
   }
-}
 }
 
 void loop()
+
 {
-  Serial.println("Please choose 1 for enroll 2 for delete");
+  finger.getTemplateCount();
+  Serial.print("Sensor contains ");
+  Serial.print(finger.templateCount);
+  Serial.println(" templates");
+  u8g2.clearBuffer();
+  u8g2.drawStr(0, 10, "Sensor contains ");
+  u8g2.print(finger.templateCount);
+  u8g2.drawStr(0, 30, " templates");
+  u8g2.sendBuffer();
+  delay(1500);
+  Serial.println("Please choose 1 for enroll 2 for delete 3 for HTTP request 4 for finger validation");
   u8g2.clearBuffer();
   u8g2.drawStr(0, 10, "Please choose 1 for");
-  u8g2.drawStr(0, 30, "enroll 2 for delete");
+  u8g2.drawStr(0, 25, "enroll 2 for delete");
+  u8g2.drawStr(0, 40, "3 for HTTP Request");
+  u8g2.drawStr(0, 55, "4 for validation");
   u8g2.sendBuffer();
   uint8_t mode = readnumber();
   if (mode == 1)
@@ -549,6 +289,7 @@ void loop()
     }
     u8g2.clearBuffer();
     u8g2.drawStr(10, 10, "Enrolling ID #");
+    u8g2.print(id);
     u8g2.sendBuffer();
     Serial.print("Enrolling ID #");
     Serial.println(id);
@@ -559,12 +300,14 @@ void loop()
       u8g2.clearBuffer();
       u8g2.drawStr(10, 10, "Waiting for valid");
       u8g2.drawStr(10, 30, "finger to enroll as #");
+      u8g2.print(id);
       u8g2.sendBuffer();
       Serial.print("Waiting for valid finger to enroll as #");
       Serial.println(id);
       while (p != FINGERPRINT_OK)
       {
         p = finger.getImage();
+        Serial.println(p);
         switch (p)
         {
         case FINGERPRINT_OK:
@@ -603,6 +346,7 @@ void loop()
       delay(1500);
       // OK success!
       p = finger.image2Tz(1);
+      Serial.println(p);
       switch (p)
       {
       case FINGERPRINT_OK:
@@ -618,6 +362,7 @@ void loop()
         u8g2.drawStr(10, 10, "Image too messy");
         u8g2.sendBuffer();
         delay(1500);
+        Serial.println(p);
         return p;
       case FINGERPRINT_PACKETRECIEVEERR:
         Serial.println("Communication error");
@@ -625,6 +370,7 @@ void loop()
         u8g2.drawStr(10, 10, "Communication error");
         u8g2.sendBuffer();
         delay(1500);
+        Serial.println(p);
         return p;
       case FINGERPRINT_FEATUREFAIL:
         Serial.println("Could not find fingerprint features");
@@ -632,6 +378,7 @@ void loop()
         u8g2.drawStr(10, 10, "Could not find");
         u8g2.drawStr(10, 30, "fingerprint features");
         u8g2.sendBuffer();
+        Serial.println(p);
         delay(1500);
         return p;
       case FINGERPRINT_INVALIDIMAGE:
@@ -640,6 +387,7 @@ void loop()
         u8g2.drawStr(10, 10, "Could not find");
         u8g2.drawStr(10, 30, "fingerprint features");
         u8g2.sendBuffer();
+        Serial.println(p);
         delay(1500);
         return p;
       default:
@@ -648,6 +396,7 @@ void loop()
         u8g2.drawStr(10, 10, "Unknown error");
         u8g2.sendBuffer();
         delay(1500);
+        Serial.println(p);
         return p;
       }
 
@@ -660,6 +409,7 @@ void loop()
       while (p != FINGERPRINT_NOFINGER)
       {
         p = finger.getImage();
+        Serial.println(p);
       }
       Serial.print("ID ");
       Serial.println(id);
@@ -673,6 +423,7 @@ void loop()
       while (p != FINGERPRINT_OK)
       {
         p = finger.getImage();
+        Serial.println(p);
         switch (p)
         {
         case FINGERPRINT_OK:
@@ -711,6 +462,7 @@ void loop()
       delay(1500);
       // OK success!
       p = finger.image2Tz(2);
+      Serial.println(p);
       switch (p)
       {
       case FINGERPRINT_OK:
@@ -726,6 +478,7 @@ void loop()
         u8g2.drawStr(0, 10, "Image too messy");
         u8g2.sendBuffer();
         delay(1500);
+        Serial.println(p);
         return p;
       case FINGERPRINT_PACKETRECIEVEERR:
         Serial.println("Communication error");
@@ -733,6 +486,7 @@ void loop()
         u8g2.drawStr(10, 10, "Communication error");
         u8g2.sendBuffer();
         delay(1500);
+        Serial.println(p);
         return p;
       case FINGERPRINT_FEATUREFAIL:
         Serial.println("Could not find fingerprint features");
@@ -741,6 +495,7 @@ void loop()
         u8g2.drawStr(10, 30, "fingerprint features");
         u8g2.sendBuffer();
         delay(1500);
+        Serial.println(p);
         return p;
       case FINGERPRINT_INVALIDIMAGE:
         Serial.println("Could not find fingerprint features");
@@ -749,6 +504,7 @@ void loop()
         u8g2.drawStr(10, 30, "fingerprint features");
         u8g2.sendBuffer();
         delay(1500);
+        Serial.println(p);
         return p;
       default:
         Serial.println("Unknown error");
@@ -756,6 +512,7 @@ void loop()
         u8g2.drawStr(10, 10, "Unknown error");
         u8g2.sendBuffer();
         delay(1500);
+        Serial.println(p);
         return p;
       }
 
@@ -767,6 +524,7 @@ void loop()
       u8g2.sendBuffer();
       delay(1500);
       p = finger.createModel();
+      Serial.println(p);
       if (p == FINGERPRINT_OK)
       {
         u8g2.clearBuffer();
@@ -782,6 +540,7 @@ void loop()
         u8g2.drawStr(10, 10, "Communication error");
         u8g2.sendBuffer();
         delay(1500);
+        Serial.println(p);
         return p;
       }
       else if (p == FINGERPRINT_ENROLLMISMATCH)
@@ -792,6 +551,7 @@ void loop()
         u8g2.drawStr(0, 30, "match");
         u8g2.sendBuffer();
         delay(1500);
+        Serial.println(p);
         return p;
       }
       else
@@ -801,6 +561,7 @@ void loop()
         u8g2.drawStr(10, 10, "Unknown error");
         u8g2.sendBuffer();
         delay(1500);
+        Serial.println(p);
         return p;
       }
 
@@ -814,6 +575,7 @@ void loop()
         u8g2.drawStr(0, 10, "Stored!");
         u8g2.sendBuffer();
         delay(1500);
+        Serial.println(p);
         return p;
       }
       else if (p == FINGERPRINT_PACKETRECIEVEERR)
@@ -823,6 +585,7 @@ void loop()
         u8g2.drawStr(10, 10, "Communication error");
         u8g2.sendBuffer();
         delay(3500);
+        Serial.println(p);
         return p;
       }
       else if (p == FINGERPRINT_BADLOCATION)
@@ -833,6 +596,7 @@ void loop()
         u8g2.drawStr(10, 30, "in that location");
         u8g2.sendBuffer();
         delay(3500);
+        Serial.println(p);
         return p;
       }
       else if (p == FINGERPRINT_FLASHERR)
@@ -843,6 +607,7 @@ void loop()
         u8g2.drawStr(10, 30, "flash");
         u8g2.sendBuffer();
         delay(3500);
+        Serial.println(p);
         return p;
       }
       else
@@ -852,6 +617,7 @@ void loop()
         u8g2.drawStr(10, 10, "Unknown error");
         u8g2.sendBuffer();
         delay(3500);
+        Serial.println(p);
         return p;
       }
       mode = 0;
@@ -869,10 +635,60 @@ void loop()
     Serial.print("Deleting ID #");
     u8g2.clearBuffer();
     u8g2.drawStr(0, 10, "Deleting ID #");
+    u8g2.print(id);
     u8g2.sendBuffer();
     Serial.println(id);
 
     deleteFingerprint(id);
+  }
+  else if (mode == 3)
+  {
+    while (mode == 3)
+    {
+      // if there's incoming data from the net connection send it out the serial port
+      // this is for debugging purposes only
+      while (client.available())
+      {
+        char c = client.read();
+        Serial.write(c);
+      }
+
+      // if 10 seconds have passed since your last connection,
+      // then connect again and send data
+      if (millis() - lastConnectionTime > postingInterval)
+      {
+        Serial.println();
+
+        // close any connection before send a new request
+        // this will free the socket on the WiFi shield
+        client.stop();
+
+        // if there's a successful connection
+        if (client.connect(server, 8080))
+        {
+          Serial.println("Connecting...");
+
+          // send the HTTP PUT request
+          client.println(F("GET /teacher HTTP/1.1"));
+          client.println(F("Host: arduino.cc"));
+          client.println("Connection: close");
+          client.println();
+
+          // note the time that the connection was made
+          lastConnectionTime = millis();
+        }
+        else
+        {
+          // if you couldn't make a connection
+          Serial.println("Connection failed");
+        }
+      }
+    }
+  }
+  else if (mode == 4)
+  {
+    while (mode == 4)
+      getFingerprintIDez();
   }
   else if (mode == 0)
   {
