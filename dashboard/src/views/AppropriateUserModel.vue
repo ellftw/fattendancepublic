@@ -24,7 +24,8 @@
         </template>
         <template v-slot:expand="props" >
           <v-card flat v-if="props.item.userType==='καθηγητής'">
-          <v-card-text><v-card>
+          <v-card-text><v-card style="background: linear-gradient(to bottom, #323232 0%, #3F3F3F 40%, #1C1C1C 150%), linear-gradient(to top, rgba(255,255,255,0.40) 0%, rgba(0,0,0,0.25) 200%);
+          background-blend-mode: multiply;">
         <v-card-title>
           <span class="headline">User Profile</span>
         </v-card-title>
@@ -49,7 +50,8 @@
         </v-card-actions>
       </v-card></v-card-text></v-card>
           <v-card flat v-else>
-          <v-card-text><v-card>
+          <v-card-text><v-card style="background: linear-gradient(to bottom, #323232 0%, #3F3F3F 40%, #1C1C1C 150%),linear-gradient(to top, rgba(255,255,255,0.40) 0%, rgba(0,0,0,0.25) 200%);
+          background-blend-mode: multiply;">
         <v-card-title>
           <span class="headline">User Profile</span>
         </v-card-title>
@@ -83,14 +85,15 @@
         </template>
       </v-data-table>
     </v-card>
-    <v-btn round @click="getNonModeledTeachers()">list Teachers</v-btn>
-    <v-btn round @click="getNonModeledStudents()">list Students</v-btn>
+    <v-btn class="mb-5 mt-4" round @click="getNonModeledTeachers()">list Teachers</v-btn>
+    <v-btn class="mb-5 mt-4" round @click="getNonModeledStudents()">list Students</v-btn>
   </div>
 </template>
 
 <script>
 import StudentService from '@/services/StudentService'
 import TeacherService from '@/services/TeacherService'
+import UserService from '@/services/UserService'
 export default {
   data () {
     return {

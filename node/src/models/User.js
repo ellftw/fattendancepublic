@@ -57,7 +57,8 @@ const userSchema = new Schema({
             validator: validations.userType.condition,
             message: validations.userType.message
             }
-        }
+        },
+    fingerprintID: {required: false, type: Number}
 })
 
 

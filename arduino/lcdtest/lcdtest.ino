@@ -6,13 +6,14 @@
 
 #define wifiSerial Serial2
 
-char ssid[] = "gkarsona b";  // your network SSID (name)
+uint8_t mode;
+char ssid[] = "Kwnstantinos_Katakouzinos";  // your network SSID (name)
 char pass[] = "de sto lew";  // your network password
 int status = WL_IDLE_STATUS; // the Wifi radio's status
-
-char server[] = "192.168.1.8";
+int counter = 0;
+char server[] = "192.168.1.4";
 unsigned long lastConnectionTime = 0;         // last time you connected to the server, in milliseconds
-const unsigned long postingInterval = 10000L; // delay between updates, in milliseconds
+const unsigned long postingInterval = 1000L; // delay between updates, in milliseconds
 
 // Initialize the Ethernet client object
 WiFiEspClient client;
@@ -37,35 +38,59 @@ uint8_t readnumber(void)
 
 void httpRequest()
 {
-  Serial.println();
+  // if there's incoming data from the net connection send it out the serial port
+      // this is for debugging purposes only
+      while (client.available())
+      {
+        char c = client.read();
+        Serial.write(c);
+      }
 
-  // close any connection before send a new request
-  // this will free the socket on the WiFi shield
-  client.stop();
+      // if 10 seconds have passed since your last connection,
+      // then connect again and send data
+      if (millis() - lastConnectionTime > postingInterval && counter < 3)
+      {
+        Serial.println();
 
-  // if there's a successful connection
-  if (client.connect(server, 8080))
-  {
-    Serial.println("Connecting...");
+        // close any connection before send a new request
+        // this will free the socket on the WiFi shield
+        client.stop();
 
-    // send the HTTP PUT request
-    client.println(F("GET /teacher HTTP/1.1"));
-    client.println(F("Host: arduino.cc"));
-    client.println("Connection: close");
-    client.println();
+        // if there's a successful connection
+        if (client.connect(server, 8080))
+        {
+          Serial.println("Connecting...");
 
-    // note the time that the connection was made
-    lastConnectionTime = millis();
-  }
-  else
-  {
-    // if you couldn't make a connection
-    Serial.println("Connection failed");
-  }
+          // send the HTTP PUT request
+          client.println(F("GET /teacher HTTP/1.1"));
+          client.println(F("Host: arduino.cc"));
+          client.println("Connection: close");
+          client.println();
+
+          // note the time that the connection was made
+          lastConnectionTime = millis();
+          Serial.println(lastConnectionTime);
+          counter = counter + 1;
+          
+        }
+        else
+        {
+          // if you couldn't make a connection
+          Serial.println("Connection failed");
+        }
+      }
+      if (counter >= 3) {
+        mode = 0;
+        counter = 0;
+        }
 }
 
 int getFingerprintIDez()
 {
+  Serial.println("Please Place finger");
+  u8g2.clearBuffer();
+  u8g2.drawStr(10, 10, "Please place finger");
+  u8g2.sendBuffer();
   uint8_t p = finger.getImage();
   if (p != FINGERPRINT_OK)
     return -1;
@@ -79,12 +104,23 @@ int getFingerprintIDez()
     return -1;
 
   // found a match!
-  Serial.print("Found ID #");
+  Serial.println("Found ID #");
   Serial.print(finger.fingerID);
   Serial.print(" with confidence of ");
   Serial.println(finger.confidence);
-  Serial.print(finger.fingerID);
-  return finger.fingerID;
+  Serial.println(finger.fingerID);
+  u8g2.clearBuffer();
+  u8g2.drawStr(10, 10, "Found a user");
+  u8g2.sendBuffer();
+  delay(1000);
+  if (finger.fingerID == 1) {
+    Serial.println("Matching IDs");
+    u8g2.clearBuffer();
+    u8g2.drawStr(10, 10, "Found a user");
+    u8g2.sendBuffer();
+    }
+  return p;
+
 }
 
 uint8_t deleteFingerprint(uint8_t id)
@@ -142,7 +178,7 @@ void printWifiStatus()
   Serial.print("SSID: ");
   Serial.println(WiFi.SSID());
   u8g2.clearBuffer();
-  u8g2.drawStr(10, 10, "SSID:");
+  u8g2.drawStr(0, 10, "SSID:");
   u8g2.setCursor(0, 25);
   u8g2.print(WiFi.SSID());
   u8g2.sendBuffer();
@@ -152,7 +188,7 @@ void printWifiStatus()
   IPAddress ip = WiFi.localIP();
   Serial.print("IP Address: ");
   Serial.println(ip);
-  u8g2.drawStr(10, 40, "IP:");
+  u8g2.drawStr(0, 40, "IP:");
   u8g2.setCursor(0, 55);
   u8g2.print(ip);
   u8g2.sendBuffer();
@@ -218,8 +254,7 @@ void setup()
   u8g2.drawStr(0, 10, "Starting connection");
   u8g2.drawStr(0, 30, "to server...");
   u8g2.sendBuffer();
-  delay(1500);
-  httpRequest();
+
 
   while (!Serial)
     ; // For Yun/Leo/Micro/Zero/...
@@ -273,7 +308,7 @@ void loop()
   u8g2.drawStr(0, 40, "3 for HTTP Request");
   u8g2.drawStr(0, 55, "4 for validation");
   u8g2.sendBuffer();
-  uint8_t mode = readnumber();
+  mode = readnumber();
   if (mode == 1)
   {
     Serial.println("Ready to enroll a fingerprint!");
@@ -283,7 +318,7 @@ void loop()
     u8g2.sendBuffer();
     Serial.println("Please type in the ID # (from 1 to 127) you want to save this finger as...");
     id = readnumber();
-    if (id == 0)
+    if (id == 0 || id > 128)
     { // ID #0 not allowed, try again!
       return;
     }
@@ -645,50 +680,15 @@ void loop()
   {
     while (mode == 3)
     {
-      // if there's incoming data from the net connection send it out the serial port
-      // this is for debugging purposes only
-      while (client.available())
-      {
-        char c = client.read();
-        Serial.write(c);
-      }
-
-      // if 10 seconds have passed since your last connection,
-      // then connect again and send data
-      if (millis() - lastConnectionTime > postingInterval)
-      {
-        Serial.println();
-
-        // close any connection before send a new request
-        // this will free the socket on the WiFi shield
-        client.stop();
-
-        // if there's a successful connection
-        if (client.connect(server, 8080))
-        {
-          Serial.println("Connecting...");
-
-          // send the HTTP PUT request
-          client.println(F("GET /teacher HTTP/1.1"));
-          client.println(F("Host: arduino.cc"));
-          client.println("Connection: close");
-          client.println();
-
-          // note the time that the connection was made
-          lastConnectionTime = millis();
-        }
-        else
-        {
-          // if you couldn't make a connection
-          Serial.println("Connection failed");
-        }
-      }
+      httpRequest();
     }
   }
   else if (mode == 4)
   {
     while (mode == 4)
       getFingerprintIDez();
+        httpRequest();
+
   }
   else if (mode == 0)
   {

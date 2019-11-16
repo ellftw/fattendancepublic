@@ -43,7 +43,7 @@ export default {
           value: 'subscribed',
           sortable: true
         },
-        { text: 'Εξάμηνο', value: 'semester', sortable: true}
+        { text: 'Εξάμηνο', value: 'semester', sortable: true }
       ],
       courses: [],
       attends: []
@@ -78,8 +78,6 @@ export default {
             }
           }
         }
-
-
         console.log(response)
         console.log(this.courses)
       } catch (error) {

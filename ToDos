@@ -1,7 +1,12 @@
 αρδουινο[
-    ολοκληρο
+    enroll fingerprint to db
 ]
 
 
-
-??βαθμολογια
+webapp [
+    method to get fingerprint from arduino
+    move fingerprint to user instead of seperate usertype
+    login with fingerprint
+    (optional) confirm actions with fingerprint
+    attendance with fingerprint
+]

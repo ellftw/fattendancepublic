@@ -10,9 +10,9 @@
       <v-card>
         <v-container fluid grid-list-lg>
           <v-layout row wrap>
-            <!-- eslint-disable-next-line -->
-            <v-flex v-for="ann in announcements" xs3>
-              <v-card color="blue-grey darken-2" class="white--text" height="200">
+            <v-flex v-for="ann in announcements" :key="ann" xs3>
+              <v-card style="background: linear-gradient(to bottom, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.15) 100%), radial-gradient(at top center, rgba(255,255,255,0.40) 0%, rgba(0,0,0,0.40) 120%) #989898;
+ background-blend-mode: multiply,multiply;" class="white--text" height="200">
                 <v-card-title primary-title>
                   <div>
                     <div class="headline pb-3">{{ann.title}}</div>
@@ -31,7 +31,8 @@
   </v-layout>
   <v-layout>
     <v-flex pa-3 ma-3 v-if="fullAnnouncement">
-      <v-card color="blue-grey darken-2" class="white--text">
+      <v-card style="background: linear-gradient(to bottom, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.15) 100%), radial-gradient(at top center, rgba(255,255,255,0.40) 0%, rgba(0,0,0,0.40) 120%) #989898;
+ background-blend-mode: multiply,multiply;" class="white--text">
         <v-card-title primary-title>
           <div>
             <div class="headline pb-3">{{fullAnnouncementTitle}}</div>
