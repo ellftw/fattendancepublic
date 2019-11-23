@@ -6,7 +6,7 @@ const Student = require("../models/Student")
 
 let authService = new Object
 authService.getAllUsers = async () => {
-    let users = await User.find({}).select('-_id -password -__v')
+    let users = await User.find({}).select('-_id -password -__v').sort({'fingerprintID': -1})
     console.log(users)
     return users
 }
@@ -73,6 +73,12 @@ authService.semesterBegin = async () => {
     student = await Student.updateMany({}, {semester: newSemester[j]})
     }
 }
+authService.enrollFingerprint = async (email, id) => {
+    let user = await User.findOne({email: email}, function(err,obj) { console.log(obj); })
+    user = await User.update({email: email}, {fingerprintID: id})
+    console.log(user)
+}
+
 
 
 module.exports = authService

@@ -459,5 +459,9 @@ module.exports = {
   },
   addSemesterToStudents: async () => {
     return await StudentService.addSemesterToStudents()
+  },
+
+  addFingerprintIDToUsers: async () => {
+    return await AuthService.addFingerprintIDToUsers()
   }
 }

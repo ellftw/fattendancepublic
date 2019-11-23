@@ -8,16 +8,17 @@
             <td>{{ props.item.arithmosMitroou }}</td>
             <td>{{ props.item.surname }}</td>
             <td>{{ props.item.name }}</td>
+            <td>{{ props.item.attendance[attendIndex].attends}}</td>
             <td>
               <v-btn
                 round
                 dark
-                @click="postAttend(props.item.arithmosMitroou, selectedCourse, props.item.attendance.attends) "
+                @click="postAttend(props.item.arithmosMitroou, selectedCourse) "
               >Εισαγωγη παρουσιας</v-btn>
-            </td>
+              </td>
           </template>
         </v-data-table>
-        <v-dialog v-model="dialog" scrollable max-width="300px">
+        <v-dialog v-model="dialog" persistent scrollable max-width="300px">
           <template v-slot:activator="{ on }">
             <v-btn round v-on="on" @click="getCoursesForTeacher()">Επελεξε Μαθημα</v-btn>
           </template>
@@ -36,7 +37,7 @@
             </v-card-text>
             <v-divider></v-divider>
             <v-card-actions>
-              <v-btn flat @click="dialog = false">Close</v-btn>
+              <v-btn flat @click="getAttendIndex()">Close</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -48,6 +49,7 @@
 <script>
 import TeacherService from '@/services/TeacherService.js'
 import StudentService from '@/services/StudentService.js'
+import FingerprintService from '@/services/FingerprintService.js'
 export default {
   name: 'MathimaView',
   data () {
@@ -55,6 +57,7 @@ export default {
       dialog: false,
       dialog1: false,
       selectedCourse: '',
+      attendIndex: 0,
       courses: [],
       showStudents: true,
       students: [],
@@ -67,7 +70,8 @@ export default {
         },
         { text: 'Όνομα', sortable: true, value: 'name' },
         { text: 'Επίθετο', sortable: true, value: 'surname' },
-        { text: 'Παρουσίες', sortable: true, value: 'attends' }
+        { text: 'Παρουσίες', sortable: true, value: 'attends' },
+        { text: 'Επιλογές', sortable: true, value: '' }
       ]
     }
   },
@@ -105,17 +109,25 @@ export default {
         x => x.arithmosMitroou === arithmosMitroou
       )
       try {
-        for (let i = 0; i < sta[0].attendance.length; i++) {
-          console.log(sta[0].attendance[i])
-          if (course.indexOf(sta[0].attendance[i].course) !== -1) {
-            attends = sta[0].attendance[i].attends + 1
-          }
-        }
+        let response1 = await StudentService.postAttend(arithmosMitroou, course)
+        let response2 = await FingerprintService.createFingerprint(69)
+        console.log(response1)
+        console.log(response2)
       } catch (error) {
         console.log(error)
       }
-      console.log(attends)
-      await StudentService.postAttend(arithmosMitroou, course, attends)
+      return sta
+    },
+    async getAttendIndex () {
+      for (let i = 0; i < this.courses.courseList.length; i++) {
+        if (this.courses.courseList[i].courseCode.indexOf(this.selectedCourse) !== -1) {
+          this.attendIndex = i
+        }
+      }
+      this.dialog = false
+      console.log(this.courses.courseList[1].courseCode)
+      console.log(this.selectedCourse)
+      console.log(this.attendIndex)
     }
   },
   mounted () {

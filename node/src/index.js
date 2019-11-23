@@ -10,6 +10,7 @@ const teacherApi = require('./routes/TeacherRouter')
 const courseApi = require('./routes/CourseRouter')
 const studentApi = require('./routes/StudentRouter')
 const announcementApi = require('./routes/AnnouncementRouter')
+const fingerprintApi = require('./routes/FingerprintRouter')
 
 mongoose.connect('mongodb://172.17.0.1:27017/test', {
         useNewUrlParser: true
@@ -22,7 +23,7 @@ let app = express()
 const util = require('./util/populateDatabase')
 // util.generateStudents()
 // util.generateTeachers()
-// util.clearCourses()
+// util.addFingerprintIDToUsers()
 app.server = http.createServer(app)
 app.use(bodyParser.urlencoded({
     extended: false
@@ -35,6 +36,7 @@ app.use('/teacher', teacherApi)
 app.use('/course', courseApi)
 app.use('/student', studentApi)
 app.use('/announcement', announcementApi)
+app.use('/fingerprint', fingerprintApi)
 
 app.get('*', async (request, response) => {
     let message = `You are not supposed to be able to access this. This incident will be reported.`

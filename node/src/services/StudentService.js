@@ -36,19 +36,11 @@ StudentService.addCourseToStudent = async (email, courseCode) => {
     await student.save()
 }
 
-StudentService.postAttend = async (arithmosMitroou, course, attends) => {
+StudentService.postAttend = async (arithmosMitroou, course) => {
     let student = await Student.findOne({
         arithmosMitroou: arithmosMitroou
     })
-    for (let i = 0; i<student.attendance.length; i++) {
-        if (student.attendance[i].course === course) {
-            student.attendance.splice(i, 1, attends)
-            student.attendance.splice(i, 0, {course: course, attends: attends})
-            break
-        }
-    }
-    await student.save()
-    console.log(student)
+    student = await Student.updateOne({"arithmosMitroou": arithmosMitroou, "attendance.course": course}, {$inc: {"attendance.$.attends": 1}})
 }
 
 module.exports = StudentService

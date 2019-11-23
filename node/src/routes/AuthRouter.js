@@ -56,4 +56,16 @@ authRouter.post('/semesterbegin', async (request, response) => {
     }
 })
 
+authRouter.post('/enroll', async (request, response) => {
+    try {
+        let fingerprintID = await authService.enrollFingerprint(request.body.email, request.body.id)
+        console.log(request.body)
+        return response.status(200).json({ success: true, fingerprintID})
+    } catch (error) {
+        return response.status(200).json({ success: false, error: `${error}` })
+    }
+})
+
+
+
 module.exports = authRouter

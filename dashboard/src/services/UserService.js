@@ -28,6 +28,14 @@ const UserService = {
   semesterBegin: async function () {
     let response = await axios.post(`http://0.0.0.0:8080/auth/semesterbegin`)
     return response
+  },
+  enrollFingerprint: async function (email, id) {
+    let response = await axios.post(`http://0.0.0.0:8080/auth/enroll`, {
+      email: email,
+      id: id
+    })
+    console.log(response)
+    return response
   }
 }
 export default UserService

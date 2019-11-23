@@ -34,11 +34,10 @@ const StudentService = {
     })
     return response.data
   },
-  postAttend: async function (arithmosMitroou, course, attends) {
+  postAttend: async function (arithmosMitroou, course) {
     let response = await axios.post(`http://0.0.0.0:8080/student/postAttend`, {
       arithmosMitroou: arithmosMitroou,
-      course: course,
-      attends: attends
+      course: course
     })
     console.log(response.data)
     return response.data

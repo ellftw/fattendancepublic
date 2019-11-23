@@ -13,6 +13,7 @@
             <td class="text-xs-left">{{ props.item.surname }}</td>
             <td class="text-xs-left">{{ props.item.email }}</td>
             <td class="text-xs-left">{{ props.item.userType }}</td>
+            <td class="text-xs-left">{{ props.item.fingerprintID }}</td>
           </tr>
         </template>
         <template v-slot:no-results>
@@ -33,13 +34,13 @@
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs6 >
-                <v-text-field v-model="newTeacher.name" label="name" :placeholder="props.item.name"></v-text-field>
+                <v-text-field disabled v-model="newTeacher.name" label="name" :placeholder="props.item.name"></v-text-field>
               </v-flex>
               <v-flex xs6 >
-                <v-text-field v-model="newTeacher.surname" label="surname" :placeholder="props.item.surname"></v-text-field>
+                <v-text-field disabled v-model="newTeacher.surname" label="surname" :placeholder="props.item.surname"></v-text-field>
               </v-flex>
               <v-flex xs6>
-                <v-text-field v-model="newTeacher.email" label="E-mail" :placeholder="props.item.email"></v-text-field>
+                <v-text-field disabled v-model="newTeacher.email" label="E-mail" :placeholder="props.item.email"></v-text-field>
               </v-flex>
             </v-layout>
           </v-container>
@@ -47,9 +48,10 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" flat @click="createTeacher(props.item.name, props.item.surname, props.item.email)">Create</v-btn>
+          <v-btn color="blue darken-1" flat @click="enrollFingerprint(props.item.email)">Enroll fingerprint</v-btn>
         </v-card-actions>
       </v-card></v-card-text></v-card>
-          <v-card flat v-else>
+          <v-card flat v-else-if="props.item.userType==='σπουδαστής'">
           <v-card-text><v-card style="background: linear-gradient(to bottom, #323232 0%, #3F3F3F 40%, #1C1C1C 150%),linear-gradient(to top, rgba(255,255,255,0.40) 0%, rgba(0,0,0,0.25) 200%);
           background-blend-mode: multiply;">
         <v-card-title>
@@ -59,13 +61,13 @@
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs6 >
-                <v-text-field v-model="newStudent.name" label="name" :placeholder="props.item.name"></v-text-field>
+                <v-text-field disabled v-model="newStudent.name" label="name" :placeholder="props.item.name"></v-text-field>
               </v-flex>
               <v-flex xs6 >
-                <v-text-field v-model="newStudent.surname" label="surname" :placeholder="props.item.surname"></v-text-field>
+                <v-text-field disabled v-model="newStudent.surname" label="surname" :placeholder="props.item.surname"></v-text-field>
               </v-flex>
               <v-flex xs6>
-                <v-text-field v-model="newStudent.email" label="E-mail" :placeholder="props.item.email"></v-text-field>
+                <v-text-field disabled v-model="newStudent.email" label="E-mail" :placeholder="props.item.email"></v-text-field>
               </v-flex>
               <v-flex xs6>
                 <v-text-field v-model="newStudent.arithmosMitroou" label="Student Number" :placeholder="newStudent.arithmosMitroou"></v-text-field>
@@ -78,7 +80,35 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
+          <v-btn v-if="props.item.fingerprintID === 0" color="blue darken-1" flat @click="enrollFingerprint(props.item.email)">Enroll fingerprint</v-btn>
           <v-btn color="blue darken-1" flat @click="createStudent(props.item.name, props.item.surname, props.item.email, newStudent.arithmosMitroou, newStudent.semester)">Create</v-btn>
+        </v-card-actions>
+      </v-card></v-card-text>
+          </v-card>
+          <v-card flat v-else>
+          <v-card-text><v-card style="background: linear-gradient(to bottom, #323232 0%, #3F3F3F 40%, #1C1C1C 150%),linear-gradient(to top, rgba(255,255,255,0.40) 0%, rgba(0,0,0,0.25) 200%);
+          background-blend-mode: multiply;">
+        <v-card-title>
+          <span class="headline">User Profile</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container grid-list-md>
+            <v-layout wrap>
+              <v-flex xs6 >
+                <v-text-field disabled v-model="newStudent.name" label="name" :placeholder="props.item.name"></v-text-field>
+              </v-flex>
+              <v-flex xs6 >
+                <v-text-field disabled v-model="newStudent.surname" label="surname" :placeholder="props.item.surname"></v-text-field>
+              </v-flex>
+              <v-flex xs6>
+                <v-text-field disabled v-model="newStudent.email" label="E-mail" :placeholder="props.item.email"></v-text-field>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn v-if="props.item.fingerprintID === 0" color="blue darken-1" flat @click="enrollFingerprint(props.item.email)">Enroll fingerprint</v-btn>
         </v-card-actions>
       </v-card></v-card-text>
           </v-card>
@@ -87,6 +117,7 @@
     </v-card>
     <v-btn class="mb-5 mt-4" round @click="getNonModeledTeachers()">list Teachers</v-btn>
     <v-btn class="mb-5 mt-4" round @click="getNonModeledStudents()">list Students</v-btn>
+    <v-btn class="mb-5 mt-4" round @click="getNonFingerprintEnrolledUsers()">list non fingerpint enrolled users</v-btn>
   </div>
 </template>
 
@@ -101,7 +132,8 @@ export default {
         { text: 'Όνομα', value: 'name', sortable: true },
         { text: 'Επίθετο', value: 'surname', sortable: true },
         { text: 'Email', value: 'email', sortable: true },
-        { text: 'Τύπος Χρήστη', value: 'userType', sortable: true }
+        { text: 'Τύπος Χρήστη', value: 'userType', sortable: true },
+        { text: 'Δακτυλικο αποτυπωμα', value: 'fingerprintID', sortable: true }
       ],
       users: [],
       teachers: [],
@@ -207,9 +239,13 @@ export default {
         arithmosMitroou: arithmosMitroou
       }
       let response = await StudentService.createStudent(ns)
-      if (response.success === true) {
-        window.alert('Successfully modeled student')
-        location.reload(true)
+      try {
+        if (response.success === true) {
+          window.alert('Successfully modeled student')
+          location.reload(true)
+        }
+      } catch (error) {
+        window.alert(error)
       }
     },
     async createTeacher (name, surname, email) {
@@ -221,9 +257,32 @@ export default {
       }
       let response = await TeacherService.createNewTeacher(nt)
       console.log(response)
-      if (response.success === true) {
-        window.alert('Successfully modeled teacher')
-        location.reload(true)
+      try {
+        if (response.success === true) {
+          window.alert('Successfully modeled teacher')
+          location.reload(true)
+        }
+      } catch (error) {
+        window.alert(error)
+      }
+    },
+    async getNonFingerprintEnrolledUsers () {
+      for (let i = 0; i < this.users.length; i++) {
+        if (this.users[i].fingerprintID === 0) {
+          this.UnlistedUsers.push(this.users[i])
+        }
+      }
+    },
+    async enrollFingerprint (email, id) {
+      id = this.users[0].fingerprintID + 1
+      try {
+        window.alert('WARNING! Enroll fingerprint in device now and then press ok to continue the proccess')
+        let response = await UserService.enrollFingerprint(email, id)
+        if (response.data.success === true) {
+          location.reload(true)
+        }
+      } catch (error) {
+        console.log(error)
       }
     }
   },
