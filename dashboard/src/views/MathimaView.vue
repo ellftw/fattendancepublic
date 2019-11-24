@@ -3,12 +3,12 @@
     <v-layout row wrap>
       <v-flex xs10 offset-xs1>
         <p class="display-3">{{selectedCourse}}</p>
-        <v-data-table :headers="headers" :items="studentsToAttend" class="elevation-8">
+        <v-data-table :headers="headers" :items="studentsToAttend" class="elevation-8" >
           <template slot="items" slot-scope="props">
             <td>{{ props.item.arithmosMitroou }}</td>
             <td>{{ props.item.surname }}</td>
             <td>{{ props.item.name }}</td>
-            <td>{{ props.item.attendance[attendIndex].attends}}</td>
+            <td>{{ props.item.attendance[props.item.index].attends}}</td>
             <td>
               <v-btn
                 round
@@ -37,7 +37,7 @@
             </v-card-text>
             <v-divider></v-divider>
             <v-card-actions>
-              <v-btn flat @click="getAttendIndex()">Close</v-btn>
+              <v-btn flat @click="dialog = false">Close</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -57,7 +57,6 @@ export default {
       dialog: false,
       dialog1: false,
       selectedCourse: '',
-      attendIndex: 0,
       courses: [],
       showStudents: true,
       students: [],
@@ -99,35 +98,48 @@ export default {
       for (let i = 0; i < as.length; i++) {
         for (let j = 0; j < as[i].attendance.length; j++) {
           if (selectedCourse.indexOf(as[i].attendance[j].course) !== -1) {
-            this.studentsToAttend.push(as[i])
+            this.studentsToAttend.push({
+              arithmosMitroou: as[i].arithmosMitroou,
+              attendance: as[i].attendance,
+              email: as[i].email,
+              name: as[i].name,
+              semester: as[i].semester,
+              studentCourses: as[i].studentCourses,
+              surname: as[i].surname,
+              index: 0
+            })
           }
         }
       }
+      this.getAttendIndex()
     },
-    async postAttend (arithmosMitroou, course, attends) {
-      let sta = this.studentsToAttend.filter(
-        x => x.arithmosMitroou === arithmosMitroou
-      )
+    async postAttend (arithmosMitroou, course) {
       try {
+        let index = ''
         let response1 = await StudentService.postAttend(arithmosMitroou, course)
         let response2 = await FingerprintService.createFingerprint(69)
-        console.log(response1)
-        console.log(response2)
+        for (let i = 0; i < this.studentsToAttend.length; i++) {
+          if (this.studentsToAttend[i].arithmosMitroou === arithmosMitroou) {
+            index = i
+          }
+        }
+        console.log(index)
+        console.log(this.studentsToAttend[index])
+        if (response1.success === true || response2.success === true) {
+          this.studentsToAttend.splice(index, 1)
+        }
       } catch (error) {
         console.log(error)
       }
-      return sta
     },
     async getAttendIndex () {
-      for (let i = 0; i < this.courses.courseList.length; i++) {
-        if (this.courses.courseList[i].courseCode.indexOf(this.selectedCourse) !== -1) {
-          this.attendIndex = i
+      for (let i = 0; i < this.studentsToAttend.length; i++) {
+        for (let j = 0; j < this.studentsToAttend[i].attendance.length; j++) {
+          if (this.studentsToAttend[i].attendance[j].course === this.selectedCourse) {
+            this.studentsToAttend[i].index = j
+          }
         }
       }
-      this.dialog = false
-      console.log(this.courses.courseList[1].courseCode)
-      console.log(this.selectedCourse)
-      console.log(this.attendIndex)
     }
   },
   mounted () {

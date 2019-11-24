@@ -18,7 +18,6 @@ FingerprintService.getFingerprint = async () => {
 FingerprintService.cleanFingerprint = async () => {
     let fingerprint = Fingerprint.find({}).select('-_id -__v')
     fingerprint = Fingerprint.deleteMany()
-    //use remove if it doesnt work
     if(!fingerprint) throw new Error (`Couldn't find any fingerprints`)
     return fingerprint
 }

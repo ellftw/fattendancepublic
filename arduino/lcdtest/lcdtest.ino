@@ -69,11 +69,10 @@ void httpRequest()
       client.println("Cache-Control: no-cache");
       client.print("Content-Length: ");
       client.println(String(PostData.length()));
-            client.println("Content-Type: application/x-www-form-urlencoded; charset=utf-8");
+      client.println("Content-Type: application/x-www-form-urlencoded; charset=utf-8");
 
       client.println();
       client.print(PostData);
-      client.print(String(value));
       client.println('\r\n\r\n');
 
       // note the time that the connection was made
@@ -132,7 +131,50 @@ int getFingerprintIDez()
   mode = 4;
   while (mode == 4)
   {
-    httpRequest();
+  while (client.available())
+  {
+    char c = client.read();
+    Serial.write(c);
+  }
+
+  // if 10 seconds have passed since your last connection,
+  // then connect again and send data
+  if (millis() - lastConnectionTime > postingInterval && counter < 2)
+  {
+    Serial.println();
+
+    // close any connection before send a new request
+    // this will free the socket on the WiFi shield
+    client.stop();
+
+    // if there's a successful connection
+    if (client.connect(server, 8080))
+    {
+      Serial.println("Connecting...");
+
+      // send the HTTP PUT request
+      client.println(F("GET /fingerprint HTTP/1.1"));
+      client.println(F("Host: arduino.cc"));
+      client.println("Connection: close");
+      client.println();
+
+      // note the time that the connection was made
+      lastConnectionTime = millis();
+      Serial.println(lastConnectionTime);
+      counter = counter + 1;
+    }
+    else
+    {
+      // if you couldn't make a connection
+      Serial.println("Connection failed");
+    }
+  }
+  if (counter >= 2)
+  {
+    mode = 0;
+    counter = 0;
+  }
+
   }
   return p;
 }
