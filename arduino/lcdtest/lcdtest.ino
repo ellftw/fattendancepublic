@@ -12,8 +12,8 @@ char pass[] = "de sto lew";                // your network password
 int status = WL_IDLE_STATUS;               // the Wifi radio's status
 int counter = 0;
 char server[] = "192.168.1.4";
-unsigned long lastConnectionTime = 0;        // last time you connected to the server, in milliseconds
-const unsigned long postingInterval = 1000L; // delay between updates, in milliseconds
+unsigned long lastConnectionTime = 0;
+const unsigned long postingInterval = 1000L;         // delay between updates, in milliseconds
 
 // Initialize the Ethernet client object
 WiFiEspClient client;
@@ -34,63 +34,6 @@ uint8_t readnumber(void)
     num = Serial.parseInt();
   }
   return num;
-}
-
-void httpRequest()
-{
-  // if there's incoming data from the net connection send it out the serial port
-  // this is for debugging purposes only
-  while (client.available())
-  {
-    char c = client.read();
-    Serial.write(c);
-  }
-
-  // if 10 seconds have passed since your last connection,
-  // then connect again and send data
-  if (millis() - lastConnectionTime > postingInterval && counter < 2)
-  {
-    Serial.println();
-
-    // close any connection before send a new request
-    // this will free the socket on the WiFi shield
-    client.stop();
-
-    // if there's a successful connection
-    if (client.connect(server, 8080))
-    {
-      Serial.println("Connecting...");
-
-      // send the HTTP PUT request
-      int value = 6;
-      String PostData = String(value)  ;
-      client.println("POST /fingerprint/create HTTP/1.1");
-      client.println("Host: localhost");
-      client.println("Cache-Control: no-cache");
-      client.print("Content-Length: ");
-      client.println(String(PostData.length()));
-      client.println("Content-Type: application/x-www-form-urlencoded; charset=utf-8");
-
-      client.println();
-      client.print(PostData);
-      client.println('\r\n\r\n');
-
-      // note the time that the connection was made
-      lastConnectionTime = millis();
-      Serial.println(lastConnectionTime);
-      counter = counter + 1;
-    }
-    else
-    {
-      // if you couldn't make a connection
-      Serial.println("Connection failed");
-    }
-  }
-  if (counter >= 2)
-  {
-    mode = 0;
-    counter = 0;
-  }
 }
 
 int getFingerprintIDez()
@@ -131,50 +74,53 @@ int getFingerprintIDez()
   mode = 4;
   while (mode == 4)
   {
-  while (client.available())
-  {
-    char c = client.read();
-    Serial.write(c);
-  }
 
-  // if 10 seconds have passed since your last connection,
-  // then connect again and send data
-  if (millis() - lastConnectionTime > postingInterval && counter < 2)
-  {
-    Serial.println();
-
-    // close any connection before send a new request
-    // this will free the socket on the WiFi shield
-    client.stop();
-
-    // if there's a successful connection
-    if (client.connect(server, 8080))
+    while (client.available())
     {
-      Serial.println("Connecting...");
-
-      // send the HTTP PUT request
-      client.println(F("GET /fingerprint HTTP/1.1"));
-      client.println(F("Host: arduino.cc"));
-      client.println("Connection: close");
-      client.println();
-
-      // note the time that the connection was made
-      lastConnectionTime = millis();
-      Serial.println(lastConnectionTime);
-      counter = counter + 1;
+      char c = client.read();
+      Serial.write(c);
     }
-    else
+
+    // if 10 seconds have passed since your last connection,
+    // then connect again and send data
+    if (millis() - lastConnectionTime > postingInterval && counter < 1)
     {
-      // if you couldn't make a connection
-      Serial.println("Connection failed");
-    }
-  }
-  if (counter >= 2)
-  {
-    mode = 0;
-    counter = 0;
-  }
+      Serial.println();
+      // close any connection before send a new request
+      // this will free the socket on the WiFi shield
+      client.stop();
 
+      // if there's a successful connection
+      if (client.connect(server, 8080))
+      {
+        Serial.println("Connecting...");
+        String postData = "POST /fingerprint/create/";
+        postData += finger.fingerID;
+        postData += " HTTP/1.1";
+        // send the HTTP PUT request
+        client.println(postData);
+        client.println(F("X-Powered-By: Express"));
+        client.println(F("Access-Control-Allow-Origin: *"));
+        client.println(F("Content-Type: application/json; charset=utf-8"));
+        client.println();
+        client.println('\r\n\r\n');
+
+        // note the time that the connection was made
+        lastConnectionTime = millis();
+        Serial.println(lastConnectionTime);
+        counter = counter + 1;
+      }
+      else
+      {
+        // if you couldn't make a connection
+        Serial.println("Connection failed");
+      }
+    }
+    if (counter >= 1)
+    {
+      mode = 0;
+      counter = 0;
+    }
   }
   return p;
 }
@@ -194,7 +140,7 @@ void enrollUser()
     return;
   }
   u8g2.clearBuffer();
-  u8g2.drawStr(10, 10, "Enrolling ID #");
+  u8g2.drawStr(0, 10, "Enrolling ID #");
   u8g2.setCursor(0, 25);
   u8g2.print(id);
   u8g2.sendBuffer();
@@ -206,7 +152,8 @@ void enrollUser()
 
     u8g2.clearBuffer();
     u8g2.drawStr(10, 10, "Waiting for valid");
-    u8g2.drawStr(10, 30, "finger to enroll as #");
+    u8g2.drawStr(10, 25, "finger to enroll as #");
+    u8g2.setCursor(0,40);
     u8g2.print(id);
     u8g2.sendBuffer();
     Serial.print("Waiting for valid finger to enroll as #");
@@ -214,7 +161,6 @@ void enrollUser()
     while (p != FINGERPRINT_OK)
     {
       p = finger.getImage();
-      Serial.println(p);
       switch (p)
       {
       case FINGERPRINT_OK:
@@ -253,7 +199,6 @@ void enrollUser()
     delay(1500);
     // OK success!
     p = finger.image2Tz(1);
-    Serial.println(p);
     switch (p)
     {
     case FINGERPRINT_OK:
@@ -269,7 +214,6 @@ void enrollUser()
       u8g2.drawStr(10, 10, "Image too messy");
       u8g2.sendBuffer();
       delay(1500);
-      Serial.println(p);
       return p;
     case FINGERPRINT_PACKETRECIEVEERR:
       Serial.println("Communication error");
@@ -277,7 +221,6 @@ void enrollUser()
       u8g2.drawStr(10, 10, "Communication error");
       u8g2.sendBuffer();
       delay(1500);
-      Serial.println(p);
       return p;
     case FINGERPRINT_FEATUREFAIL:
       Serial.println("Could not find fingerprint features");
@@ -285,7 +228,6 @@ void enrollUser()
       u8g2.drawStr(10, 10, "Could not find");
       u8g2.drawStr(10, 30, "fingerprint features");
       u8g2.sendBuffer();
-      Serial.println(p);
       delay(1500);
       return p;
     case FINGERPRINT_INVALIDIMAGE:
@@ -294,7 +236,6 @@ void enrollUser()
       u8g2.drawStr(10, 10, "Could not find");
       u8g2.drawStr(10, 30, "fingerprint features");
       u8g2.sendBuffer();
-      Serial.println(p);
       delay(1500);
       return p;
     default:
@@ -303,7 +244,6 @@ void enrollUser()
       u8g2.drawStr(10, 10, "Unknown error");
       u8g2.sendBuffer();
       delay(1500);
-      Serial.println(p);
       return p;
     }
 
@@ -316,7 +256,6 @@ void enrollUser()
     while (p != FINGERPRINT_NOFINGER)
     {
       p = finger.getImage();
-      Serial.println(p);
     }
     Serial.print("ID ");
     Serial.println(id);
@@ -330,7 +269,6 @@ void enrollUser()
     while (p != FINGERPRINT_OK)
     {
       p = finger.getImage();
-      Serial.println(p);
       switch (p)
       {
       case FINGERPRINT_OK:
@@ -385,7 +323,6 @@ void enrollUser()
       u8g2.drawStr(0, 10, "Image too messy");
       u8g2.sendBuffer();
       delay(1500);
-      Serial.println(p);
       return p;
     case FINGERPRINT_PACKETRECIEVEERR:
       Serial.println("Communication error");
@@ -393,7 +330,6 @@ void enrollUser()
       u8g2.drawStr(10, 10, "Communication error");
       u8g2.sendBuffer();
       delay(1500);
-      Serial.println(p);
       return p;
     case FINGERPRINT_FEATUREFAIL:
       Serial.println("Could not find fingerprint features");
@@ -402,7 +338,6 @@ void enrollUser()
       u8g2.drawStr(10, 30, "fingerprint features");
       u8g2.sendBuffer();
       delay(1500);
-      Serial.println(p);
       return p;
     case FINGERPRINT_INVALIDIMAGE:
       Serial.println("Could not find fingerprint features");
@@ -411,7 +346,6 @@ void enrollUser()
       u8g2.drawStr(10, 30, "fingerprint features");
       u8g2.sendBuffer();
       delay(1500);
-      Serial.println(p);
       return p;
     default:
       Serial.println("Unknown error");
@@ -419,7 +353,6 @@ void enrollUser()
       u8g2.drawStr(10, 10, "Unknown error");
       u8g2.sendBuffer();
       delay(1500);
-      Serial.println(p);
       return p;
     }
 
@@ -447,7 +380,6 @@ void enrollUser()
       u8g2.drawStr(10, 10, "Communication error");
       u8g2.sendBuffer();
       delay(1500);
-      Serial.println(p);
       return p;
     }
     else if (p == FINGERPRINT_ENROLLMISMATCH)
@@ -458,7 +390,6 @@ void enrollUser()
       u8g2.drawStr(0, 30, "match");
       u8g2.sendBuffer();
       delay(1500);
-      Serial.println(p);
       return p;
     }
     else
@@ -468,7 +399,6 @@ void enrollUser()
       u8g2.drawStr(10, 10, "Unknown error");
       u8g2.sendBuffer();
       delay(1500);
-      Serial.println(p);
       return p;
     }
 
@@ -482,13 +412,7 @@ void enrollUser()
       u8g2.drawStr(0, 10, "Stored!");
       u8g2.sendBuffer();
       delay(1500);
-      Serial.println(p);
-      mode = 4;
-      while (mode == 4)
-      {
-        httpRequest();
-      }
-      return p;
+      mode = 0;
     }
     else if (p == FINGERPRINT_PACKETRECIEVEERR)
     {
@@ -497,7 +421,6 @@ void enrollUser()
       u8g2.drawStr(10, 10, "Communication error");
       u8g2.sendBuffer();
       delay(3500);
-      Serial.println(p);
       return p;
     }
     else if (p == FINGERPRINT_BADLOCATION)
@@ -508,7 +431,6 @@ void enrollUser()
       u8g2.drawStr(10, 30, "in that location");
       u8g2.sendBuffer();
       delay(3500);
-      Serial.println(p);
       return p;
     }
     else if (p == FINGERPRINT_FLASHERR)
@@ -519,7 +441,6 @@ void enrollUser()
       u8g2.drawStr(10, 30, "flash");
       u8g2.sendBuffer();
       delay(3500);
-      Serial.println(p);
       return p;
     }
     else
@@ -529,10 +450,10 @@ void enrollUser()
       u8g2.drawStr(10, 10, "Unknown error");
       u8g2.sendBuffer();
       delay(3500);
-      Serial.println(p);
       return p;
     }
   }
+  mode = 0;
 }
 
 void printWifiStatus()
@@ -664,11 +585,11 @@ void loop()
   u8g2.drawStr(15, 25, " templates");
   u8g2.sendBuffer();
   delay(500);
-  Serial.println("Please choose 1 for enroll 2 for HTTP request 3 for finger validation");
+  Serial.println("Please choose 1 for enroll 2 for finger validation");
   u8g2.clearBuffer();
   u8g2.drawStr(0, 10, "Please choose 1 for");
-  u8g2.drawStr(0, 25, "enroll 2 for HTTP Request");
-  u8g2.drawStr(0, 40, "3 for validation");
+  u8g2.drawStr(0, 25, "enroll 2 for");
+  u8g2.drawStr(0, 40, "validation");
   u8g2.sendBuffer();
   mode = readnumber();
   if (mode == 1)
@@ -681,13 +602,6 @@ void loop()
   else if (mode == 2)
   {
     while (mode == 2)
-    {
-      httpRequest();
-    }
-  }
-  else if (mode == 3)
-  {
-    while (mode == 3)
     {
       getFingerprintIDez();
     }

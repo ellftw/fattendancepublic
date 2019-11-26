@@ -40,6 +40,7 @@
 import { validationMixin } from 'vuelidate'
 import { required, minLength, email } from 'vuelidate/lib/validators'
 import UserService from '@/services/UserService.js'
+import FingerprintService from '@/services/FingerprintService.js'
 import util from '@/utils/util.js'
 
 export default {
@@ -47,7 +48,8 @@ export default {
 
   validations: {
     email: { required, email },
-    password: { required, minLength: minLength(8) }
+    password: { required, minLength: minLength(8) },
+    fingerprintID: ''
   },
 
   data: () => ({
@@ -79,11 +81,11 @@ export default {
     }
   },
   methods: {
-    async login () {
+    async login (fingerprintID) {
       this.showAlert = false
       this.loading = true
       try {
-        let user = await UserService.login(this.email, this.password)
+        let user = await UserService.login(this.email, this.password, this.fingerprintID)
         this.alertMessage = 'Είσοδος επιτυχής!'
         this.alertType = 'success'
         this.showAlert = true
@@ -98,13 +100,14 @@ export default {
           this.$router.push('/')
         }
       } catch (error) {
-        console.log(`${error}`)
-        this.alertMessage = `${error}`
+        console.log(error)
+        this.alertMessage = error
         this.alertType = 'error'
         await util.sleep(900)
       } finally {
         this.showAlert = true
         this.loading = false
+        await FingerprintService.cleanFingerprint()
       }
     },
     async forgotPassword () {
@@ -117,7 +120,32 @@ export default {
         this.showAlert = true
         this.loading = false
       }
+    },
+    async fingerLogin () {
+      try {
+        let response = await FingerprintService.getFingerprint()
+        while (response.fingerprint.length === 0) {
+          let toConfirm = await FingerprintService.getFingerprint()
+          if (toConfirm.fingerprint !== undefined) {
+            response = toConfirm
+          }
+          await util.sleep(1000)
+        }
+        let allusers = await UserService.getAllUsers()
+        for (let i = 0; i < allusers.length; i++) {
+          if (response.fingerprint[0].fid === allusers[i].fingerprintID) {
+            this.email = allusers[i].email
+            this.fingerprintID = allusers[i].fingerprintID
+          }
+        }
+        this.login()
+      } catch (error) {
+        console.log(error)
+      }
     }
+  },
+  beforeMount () {
+    this.fingerLogin()
   }
 }
 </script>

@@ -18,7 +18,6 @@ const StudentService = {
       email: course.email,
       courseCode: course.courseCode
     })
-    console.log(response)
     return response.data
   },
   createStudent: async function (student) {
@@ -39,7 +38,6 @@ const StudentService = {
       arithmosMitroou: arithmosMitroou,
       course: course
     })
-    console.log(response.data)
     return response.data
   }
 }

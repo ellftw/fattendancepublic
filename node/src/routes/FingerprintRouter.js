@@ -10,12 +10,11 @@ fingerprintRouter.get('/', async(request, response) => {
     }
 })
 
-fingerprintRouter.post('/create', async (request, response) => {
+fingerprintRouter.post('/create/:fid', async (request, response) => {
     try {
-        console.log(request.body)
-        let fingerprint = await FingerprintService.createFingerprint(request.body.fid)
-        console.log(fingerprint)
-        response.status(200).json({ success:true, fid: request.body.fid  })
+        
+        let fingerprint = await FingerprintService.createFingerprint(request.params.fid)
+        response.status(200).json({ success:true, fingerprint: fingerprint })
     } catch(error) {
         response.status(200).json({ success: false, error: `${error}` })
     }

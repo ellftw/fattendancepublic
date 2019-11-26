@@ -3,7 +3,7 @@
     <v-layout row wrap>
       <v-flex xs10 offset-xs1>
         <p class="display-3">{{selectedCourse}}</p>
-        <v-data-table :headers="headers" :items="studentsToAttend" class="elevation-8" >
+        <v-data-table :headers="headers" :items="studentsToAttend" class="elevation-8">
           <template slot="items" slot-scope="props">
             <td>{{ props.item.arithmosMitroou }}</td>
             <td>{{ props.item.surname }}</td>
@@ -15,7 +15,7 @@
                 dark
                 @click="postAttend(props.item.arithmosMitroou, selectedCourse) "
               >Εισαγωγη παρουσιας</v-btn>
-              </td>
+            </td>
           </template>
         </v-data-table>
         <v-dialog v-model="dialog" persistent scrollable max-width="300px">
@@ -30,7 +30,7 @@
                 v-model="selectedCourse"
                 column
                 v-for="course in courses.courseList"
-                :key="course"
+                :key="course.courselist"
               >
                 <v-radio :label="course.courseCode" :value="course.courseCode"></v-radio>
               </v-radio-group>
@@ -41,7 +41,22 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-btn round v-if="selectedCourse" @click="getStudentsToAttend(selectedCourse)">Λιστα μαθητων</v-btn>
+        <v-btn
+          round
+          v-if="selectedCourse"
+          @click="getStudentsToAttend(selectedCourse)"
+        >Λιστα μαθητων</v-btn>
+        <v-dialog v-model="dialog1" persistent max-width="290">
+          <v-card>
+            <v-card-title class="headline">Παρακαλω εισαγετε δακτυλικο αποτυπωμα</v-card-title>
+            <v-card-text class="text-xs-center">
+              <v-icon x-large>{{fingericon}}</v-icon>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-flex>
     </v-layout>
   </v-container>
@@ -50,14 +65,19 @@
 import TeacherService from '@/services/TeacherService.js'
 import StudentService from '@/services/StudentService.js'
 import FingerprintService from '@/services/FingerprintService.js'
+import UserService from '@/services/UserService.js'
+import util from '@/utils/util.js'
+
 export default {
   name: 'MathimaView',
   data () {
     return {
       dialog: false,
+      fingericon: 'fas fa-fingerprint',
       dialog1: false,
       selectedCourse: '',
       courses: [],
+      allusers: [],
       showStudents: true,
       students: [],
       studentsToAttend: [],
@@ -80,7 +100,6 @@ export default {
         this.courses = await TeacherService.getCoursesForTeacher(
           this.$store.getters.user.email
         )
-        console.log(this.courses)
       } catch (error) {
         console.log(error)
       }
@@ -88,7 +107,13 @@ export default {
     async getAllStudents () {
       try {
         this.students = await StudentService.getAllStudents()
-        console.log(this.students[1].attendance[0])
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async getAllUsers () {
+      try {
+        this.allusers = await UserService.getAllUsers()
       } catch (error) {
         console.log(error)
       }
@@ -115,18 +140,40 @@ export default {
     },
     async postAttend (arithmosMitroou, course) {
       try {
-        let index = ''
-        let response1 = await StudentService.postAttend(arithmosMitroou, course)
-        let response2 = await FingerprintService.createFingerprint(69)
+        let allusers = await UserService.getAllUsers()
+        let finger = ''
+        let index = 0
+        let response1 = ''
+        this.dialog1 = true
+        let confirm = await FingerprintService.getFingerprint()
         for (let i = 0; i < this.studentsToAttend.length; i++) {
           if (this.studentsToAttend[i].arithmosMitroou === arithmosMitroou) {
             index = i
           }
         }
-        console.log(index)
-        console.log(this.studentsToAttend[index])
-        if (response1.success === true || response2.success === true) {
+        for (let j = 0; j < allusers.length; j++) {
+          if (this.studentsToAttend[index].email.indexOf(allusers[j].email) !== -1) {
+            finger = allusers[j].fingerprintID
+          }
+        }
+        while (confirm.fingerprint.length === 0) {
+          let toConfirm = await FingerprintService.getFingerprint()
+          if (toConfirm.fingerprint !== undefined) {
+            confirm = toConfirm
+          }
+          await util.sleep(1500)
+        }
+        if (confirm.fingerprint[0].fid === finger) {
+          response1 = await StudentService.postAttend(arithmosMitroou, course)
+        }
+        if (response1.success === true) {
           this.studentsToAttend.splice(index, 1)
+          this.dialog1 = false
+          await FingerprintService.cleanFingerprint()
+        } else {
+          window.alert('Invalid fingerprint')
+          await FingerprintService.cleanFingerprint()
+          this.dialog1 = false
         }
       } catch (error) {
         console.log(error)
@@ -144,6 +191,7 @@ export default {
   },
   mounted () {
     this.getAllStudents()
+    this.getAllUsers()
   }
 }
 </script>

@@ -7,7 +7,6 @@ const Student = require("../models/Student")
 let authService = new Object
 authService.getAllUsers = async () => {
     let users = await User.find({}).select('-_id -password -__v').sort({'fingerprintID': -1})
-    console.log(users)
     return users
 }
 
@@ -26,14 +25,12 @@ authService.getAllSecretaryUsers = async () => {
     return secretaries
 }
 
-authService.login = async (email, password) => {
+authService.login = async (email, password, fingerprintID) => {
     let user = await User.findOne({
         email: email
-    })
-    if (user == undefined) throw new Error('Δεν υφίσταται χρήστης με αυτό το email')
-    if (!bcrypt.compareSync(password, user.password)) {
-        throw new Error('Λάθος κωδικός')
-    } else {
+    })    
+    if ((user !== undefined && fingerprintID !== undefined ) || (bcrypt.compareSync(password, user.password) && user !== undefined))
+    {
         let token = jwt.sign({
             email: email
         }, secret, {
@@ -44,10 +41,16 @@ authService.login = async (email, password) => {
             surname: user.surname,
             email: user.email,
             userType: user.userType,
+            fingerprintID: user.fingerprintID,
             token: token
         }
         return responseObject
+    } else if (!bcrypt.compareSync(password, user.password)) {
+        throw new Error('Λάθος κωδικός')
+    } else if (user == undefined) {
+        throw new Error('Δεν υφίσταται χρήστης με αυτό το email')
     }
+
 }
 
 authService.register = async (userToRegister) => {
@@ -59,7 +62,8 @@ authService.register = async (userToRegister) => {
             password: passwordHash,
             name: userToRegister.name,
             surname: userToRegister.surname,
-            userType: userToRegister.userType
+            userType: userToRegister.userType,
+            fingerprintID: userToRegister.fingerprintID
         })
     await user.save()
 }
@@ -73,12 +77,11 @@ authService.semesterBegin = async () => {
     student = await Student.updateMany({}, {semester: newSemester[j]})
     }
 }
-authService.enrollFingerprint = async (email, id) => {
-    let user = await User.findOne({email: email}, function(err,obj) { console.log(obj); })
-    user = await User.update({email: email}, {fingerprintID: id})
-    console.log(user)
+
+authService.resetFingerprint = async (email) => {
+    email = "Arleta.Pilch@tei.edu"
+    let user = await User.findOne({ email: email})
+    user = await User.updateOne({email: email}, {fingerprintID: 3})
 }
-
-
 
 module.exports = authService

@@ -22,7 +22,7 @@
             label="Semester"
           ></v-text-field>
             <v-layout row justify-start>
-              <v-dialog v-model="dialog" persistent>
+              <v-dialog v-model="dialog" persistent max-width="290">
                 <template v-slot:activator="{ on }">
                   <v-btn round dark v-on="on">Δημιουργια</v-btn>
                 </template>
@@ -70,7 +70,6 @@ export default {
         }
         let response = await CourseService.createCourse(newCourse)
         if (response.success === true) {
-          window.alert('Course successfully registered')
           this.Course = {
             name: '',
             courseCode: '',
@@ -78,9 +77,10 @@ export default {
             semester: ''
           }
           this.dialog = false
+          location.reload(true)
         }
       } catch (error) {
-        window.alert(error)
+        console.log(error)
       }
     }
   }

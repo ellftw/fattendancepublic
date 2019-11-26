@@ -11,7 +11,8 @@ export default new Vuex.Store({
       email: localStorage.getItem('email') || '',
       name: localStorage.getItem('name') || '',
       surname: localStorage.getItem('surname') || '',
-      userType: localStorage.getItem('userType') || ''
+      userType: localStorage.getItem('userType') || '',
+      fingerprintID: localStorage.getItem('fingerprintID') || ''
     }
   },
   mutations: {
@@ -27,6 +28,7 @@ export default new Vuex.Store({
       localStorage.setItem('name', user.name)
       localStorage.setItem('surname', user.surname)
       localStorage.setItem('userType', user.userType)
+      localStorage.setItem('fingerprintID', user.fingerprintID)
       state.user = user
     },
     unsetToken (state) {
@@ -38,7 +40,8 @@ export default new Vuex.Store({
       localStorage.removeItem('name')
       localStorage.removeItem('surname')
       localStorage.removeItem('userType')
-      state.user = { email: '', name: '', surname: '', userType: '' }
+      localStorage.removeItem('fingerprintID')
+      state.user = { email: '', name: '', surname: '', userType: '', fingerprintID: '' }
     }
   },
   actions: {

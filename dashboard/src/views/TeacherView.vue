@@ -2,7 +2,7 @@
   <v-container align-center grid-list-md>
     <v-layout row wrap>
       <v-flex xs12>
-        <h1 @click="test($store.getters.user)">Καλωσηρθες {{this.$store.getters.user.name}} {{this.$store.getters.user.surname}}</h1>
+        <h1>Καλωσηρθες {{this.$store.getters.user.name}} {{this.$store.getters.user.surname}}</h1>
         <v-data-table :headers="headers" :items="courses" class="elevation-8">
           <template slot="items" slot-scope="props">
             <td>{{ props.item.courseCode }}</td>
@@ -78,8 +78,6 @@ export default {
             }
           }
         }
-        console.log(response)
-        console.log(this.courses)
       } catch (error) {
         window.alert(error)
       }

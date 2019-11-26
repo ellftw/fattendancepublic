@@ -13,8 +13,6 @@ studentRouter.post('/create', async (request, response) => {
 
 
 studentRouter.get('/', async (request, response) => {
-
-    console.log("Get students")
     try {
         let allStudents = await StudentService.getAllStudents()
         return response.status(200).json({ success: true, allStudents: allStudents})
@@ -24,9 +22,6 @@ studentRouter.get('/', async (request, response) => {
 })
 
 studentRouter.delete('/', async (request, response) => {
-    console.log(`Delete request ${request.body.arithmosMitroou}`)
-
-    console.log(request.body)
     try {
         let deleteStudent = await StudentService.deleteStudent(request.body.arithmosMitroou)
         return response.status(200).json({ success: true, deleteStudent: deleteStudent})

@@ -11,15 +11,14 @@ authRouter.get('/', async (request, response) => {
 })
 
 authRouter.get('/:userType', async (request, response) => {
-    console.log(request.params.userType)
     try {
         switch(request.params.userType) {
             case 'spoudastis':
                 return response.status(200).json({success: true, allStudentUsers: (await authService.getAllStudentUsers()) })
             case 'kathigitis':
-                return response.status(200).json({success: true, allStudentUsers: (await authService.getAllTeacherUsers()) })
+                return response.status(200).json({success: true, allTeacherUsers: (await authService.getAllTeacherUsers()) })
             case 'grammateas':
-                return response.status(200).json({success: true, allStudentUsers: (await authService.getAllSecretaryUsers()) })
+                return response.status(200).json({success: true, allSecretaryUsers: (await authService.getAllSecretaryUsers()) })
             default:
                 return response.status(200).json({ success: true })
         }
@@ -30,8 +29,7 @@ authRouter.get('/:userType', async (request, response) => {
 
 authRouter.post('/login', async (request, response) => {
     try {
-        console.log(request.body)
-        let responseObject = await authService.login(request.body.email, request.body.password)
+        let responseObject = await authService.login(request.body.email, request.body.password, request.body.fingerprintID)
         return response.status(200).json({ success: true, responseObject })
     } catch(error) {
         return response.status(200).json({ success: false, error: `${error}` })
@@ -56,16 +54,13 @@ authRouter.post('/semesterbegin', async (request, response) => {
     }
 })
 
-authRouter.post('/enroll', async (request, response) => {
+authRouter.post('/reset', async (request, response) => {
     try {
-        let fingerprintID = await authService.enrollFingerprint(request.body.email, request.body.id)
-        console.log(request.body)
-        return response.status(200).json({ success: true, fingerprintID})
-    } catch (error) {
+        await authService.resetFingerprint()
+        return response.status(200).json({ success: true})
+    } catch(error) {
         return response.status(200).json({ success: false, error: `${error}` })
     }
 })
-
-
 
 module.exports = authRouter

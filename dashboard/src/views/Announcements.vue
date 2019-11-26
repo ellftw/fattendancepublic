@@ -86,7 +86,6 @@ export default {
         title: this.createAnnouncement.title,
         content: this.createAnnouncement.content
       }
-      console.log(ann)
       let response = await AnnouncementService.createAnnouncement(ann)
       if (response.success === true) {
         this.createAnnouncement = {

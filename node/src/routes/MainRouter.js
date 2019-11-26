@@ -21,7 +21,6 @@ apiRouter.get('/getCoursesForTeacher/:teacherEmail', async (req, res) => {
             email: req.params.teacherEmail
         })
         let kodikoiMathimaton = teacher.mathimata
-        console.log(teacher)
         let mathimata = await Course.find({
             kwdikosMathimatos: {
                 $in: kodikoiMathimaton

@@ -37,13 +37,14 @@
               required
             ></v-select>
              <v-layout row justify-start>
-              <v-dialog v-model="dialog" persistent max-width="290">
+              <v-dialog v-model="dialog" persistent max-width="500">
                 <template v-slot:activator="{ on }">
                   <v-btn round dark v-on="on">Δημιουργια</v-btn>
                 </template>
                 <v-card>
-                  <v-card-title class="headline">Δημιουργια νεου μαθηματος</v-card-title>
-                  <v-card-text>Ειστε σιγουροι οτι τα στοιχεια του μαθηματος ειναι σωστα και οτι θελετε να δημιουργησετε αυτο το μαθημα;
+                  <v-card-title class="headline">Δημιουργια νεου χρηστη</v-card-title>
+                  <v-card-text>Παρακαλώ βεβαιωθειτε οτι εγγραφηκατε επιτυχως στο μηχανημα σαρωσης
+                    δακτυλικου αποτυπωματος. Επειτα πατηστε επιβεβαιωση για τη καταχωρηση στη βαση δεδομενων
                   </v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
@@ -88,23 +89,18 @@ export default {
   },
   methods: {
     async createNewUser () {
+      let users = await UserService.getAllUsers()
       let nu = {
         email: this.newUser.email,
         password: this.newUser.password,
         name: this.newUser.name,
         surname: this.newUser.surname,
-        userType: this.newUser.userType
+        userType: this.newUser.userType,
+        fingerprintID: users[0].fingerprintID + 1
       }
       let response = await UserService.register(nu)
       if (response.success === true) {
-        this.newUser = {
-          email: '',
-          password: '',
-          name: '',
-          surname: '',
-          userType: ''
-        }
-        this.dialog = false
+        location.reload(true)
       }
     }
   }

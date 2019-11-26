@@ -141,18 +141,14 @@ export default {
         }
       } else {
         let courseToAdd = await StudentService.addCourseToStudent(theeCourse)
-        console.log(courseToAdd)
         if (courseToAdd.success === true) {
           location.reload(true)
         }
-        console.log(this.courses)
-        console.log(this.currentUser)
       }
     }
   },
   mounted () {
     this.getAllCourses()
-    console.log(this.currentUser)
   }
 }
 </script>

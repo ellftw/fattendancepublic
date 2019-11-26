@@ -45,4 +45,4 @@ app.get('*', async (request, response) => {
     })
 })
 
-app.listen(8080, () => console.log("Started server at 8080"))
+app.listen(8080)

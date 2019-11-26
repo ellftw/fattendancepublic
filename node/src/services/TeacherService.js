@@ -19,7 +19,6 @@ teacherService.addCourseToTeacher = async (email, courseCode) => {
     let teacher = await Teacher.findOne({
         email: email
     })
-    console.log(email)
     if (!teacher) throw new Error(`Failed to find teacher with email: ${email}`)
 
     courseAlreadyExists = (teacher.teachingCourses.indexOf(courseCode) > -1)
@@ -32,7 +31,6 @@ teacherService.addCourseToTeacher = async (email, courseCode) => {
 teacherService.getCoursesForTeacher = async (email) => {
     let teacher = await Teacher.findOne({email: email})
     if (!teacher) throw new Error (`Failed to find teacher with email: ${email}`)
-    console.log(teacher.teachingCourses)
     const courses = await Course.find({
         'courseCode': {$in:teacher.teachingCourses}
     }).select('-_id -__v')

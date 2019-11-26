@@ -21,11 +21,8 @@ teacherRouter.post('/createCourse', async (request, response) => {
 })
 
 teacherRouter.get('/', async (request, response) => {
-
-    console.log("Get teachers")
     try {
         let allTeachers = await TeacherService.getAllTeachers()
-        console.log(allTeachers)
         return response.status(200).json({ success: true, allTeachers: allTeachers})
     } catch (error) {
         return response.status(200).json({ success: false, error: `${error}`})
@@ -43,7 +40,6 @@ teacherRouter.get('/getCoursesForTeacher/:email', async (request, response) => {
 
 teacherRouter.post('/addCourseToTeacher', async (request, response) => {
     try {
-        console.log(request.body)
         let course = await TeacherService.addCourseToTeacher(request.body.email, request.body.courseCode)
         response.status(200).json({ success: true, course: course})
     } catch(error) {

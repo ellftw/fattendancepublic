@@ -8,6 +8,7 @@ import store from './store'
 import 'vuetify/dist/vuetify.min.css'
 import '@mdi/font/css/materialdesignicons.css'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
+import '@fortawesome/fontawesome-free/css/all.css'
 
 Vue.use(Vuetify, {
   theme: {
@@ -20,7 +21,7 @@ Vue.use(Vuetify, {
     warning: '#FFC107'
   },
   customProperties: true,
-  iconfont: 'mdi'
+  iconfont: 'mdi' || 'fa'
 })
 Vue.config.productionTip = false
 
