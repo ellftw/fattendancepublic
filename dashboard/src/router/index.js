@@ -93,7 +93,7 @@ let router = new Router({
     },
     {
       path: '/mathitis',
-      name: 'Αρχική',
+      name: 'Αρχικη',
       component: StudentView,
       meta: {
         requiresAuth: true,
@@ -129,7 +129,7 @@ let router = new Router({
     },
     {
       path: '/model',
-      name: 'Εγγραφή',
+      name: 'Μοντελοποίηση',
       component: AppropriateUserModel,
       meta: {
         requiresAuth: true,

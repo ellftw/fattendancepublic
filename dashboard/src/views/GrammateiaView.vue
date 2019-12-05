@@ -45,7 +45,7 @@
     <v-dialog v-model="dialog1" persistent max-width="290">
       <v-card>
         <v-card-title class="headline">Διαγραφη χρηστη</v-card-title>
-        <v-card-text>ΠΡΟΣΟΧΗ! Ειστε σιγουροι οτι θελετε να διαγραψετε τον συγκεκριμενο χρηστη;</v-card-text>
+        <v-card-text class="pa-5">ΠΡΟΣΟΧΗ! Ειστε σιγουροι οτι θελετε να διαγραψετε τον συγκεκριμενο χρηστη;</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="pink darken-1" flat @click="dialog1 = false">Disagree</v-btn>

@@ -48,7 +48,7 @@ export default {
     student: [],
     courses: []
   }),
-  mounted () {
+  beforeMount () {
     this.getCurrentStudent()
     this.getAllCourses()
   },
@@ -56,7 +56,7 @@ export default {
     async getCurrentStudent () {
       let all = await StudentService.getAllStudents()
       for (let i = 0; i < all.length; i++) {
-        if (all[i].name === this.$store.getters.user.name) {
+        if (all[i].email === this.$store.getters.user.email) {
           this.student[0] = all[i]
           return this.student[0]
         }

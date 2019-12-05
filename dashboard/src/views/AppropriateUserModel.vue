@@ -69,7 +69,7 @@
                 <v-text-field disabled v-model="newStudent.email" label="E-mail" :placeholder="props.item.email"></v-text-field>
               </v-flex>
               <v-flex xs6>
-                <v-text-field v-model="newStudent.arithmosMitroou" label="Student Number" :placeholder="newStudent.arithmosMitroou"></v-text-field>
+                <v-text-field v-model="newStudent.arithmosMitroou" label="Student Number" placeholder="newStudent.arithmosMitroou"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6>
                 <v-text-field v-model="newStudent.semester" label="semester"></v-text-field>
@@ -193,7 +193,7 @@ export default {
       }
       this.newStudent.arithmosMitroou = am[0] + 1
     },
-    async createStudent (name, surname, email, semester, arithmosMitroou) {
+    async createStudent (name, surname, email, arithmosMitroou, semester) {
       let ns = {
         name: name,
         surname: surname,

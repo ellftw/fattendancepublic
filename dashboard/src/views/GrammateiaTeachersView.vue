@@ -129,7 +129,8 @@ export default {
           await util.sleep(1500)
         }
         if (this.response1.fingerprint.length !== 0) {
-          this.dialog3 = false
+          this.dialog = false
+          await FingerprintService.cleanFingerprint()
           this.dialog1 = true
         }
       } catch (error) {
