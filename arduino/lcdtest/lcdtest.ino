@@ -13,7 +13,14 @@ int status = WL_IDLE_STATUS;               // the Wifi radio's status
 int counter = 0;
 char server[] = "192.168.1.4";
 unsigned long lastConnectionTime = 0;
-const unsigned long postingInterval = 1000L;         // delay between updates, in milliseconds
+const unsigned long postingInterval = 1000L; // delay between updates, in milliseconds
+int buttonState1 = 0;
+int buttonState2 = 0;
+int buttonState3 = 0;
+
+const int buttonPin1 = 3;
+const int buttonPin2 = 4;
+const int buttonPin3 = 5;
 
 // Initialize the Ethernet client object
 WiFiEspClient client;
@@ -42,6 +49,12 @@ int getFingerprintIDez()
   u8g2.clearBuffer();
   u8g2.drawStr(10, 10, "Please place finger");
   u8g2.sendBuffer();
+  buttonState3 = digitalRead(buttonPin3);
+  if (buttonState3 == HIGH)
+  {
+    mode = 0;
+    return;
+  }
   uint8_t p = finger.getImage();
   if (p != FINGERPRINT_OK)
     return -1;
@@ -153,7 +166,7 @@ void enrollUser()
     u8g2.clearBuffer();
     u8g2.drawStr(10, 10, "Waiting for valid");
     u8g2.drawStr(10, 25, "finger to enroll as #");
-    u8g2.setCursor(0,40);
+    u8g2.setCursor(0, 40);
     u8g2.print(id);
     u8g2.sendBuffer();
     Serial.print("Waiting for valid finger to enroll as #");
@@ -172,6 +185,12 @@ void enrollUser()
         break;
       case FINGERPRINT_NOFINGER:
         Serial.println(".");
+        buttonState3 = digitalRead(buttonPin3);
+        if (buttonState3 == HIGH)
+        {
+          mode = 0;
+          return;
+        }
         break;
       case FINGERPRINT_PACKETRECIEVEERR:
         Serial.println("Communication error");
@@ -569,11 +588,17 @@ void setup()
       delay(1);
     }
   }
+  pinMode(buttonPin1, INPUT);
+  pinMode(buttonPin2, INPUT);
+  pinMode(buttonPin3, INPUT);
 }
 
 void loop()
 
 {
+  buttonState1 = digitalRead(buttonPin1);
+  buttonState2 = digitalRead(buttonPin2);
+  buttonState3 = digitalRead(buttonPin3);
   finger.getTemplateCount();
   Serial.print("Sensor contains ");
   Serial.print(finger.templateCount);
@@ -585,29 +610,25 @@ void loop()
   u8g2.drawStr(15, 25, " templates");
   u8g2.sendBuffer();
   delay(500);
-  Serial.println("Please choose 1 for enroll 2 for finger validation");
-  u8g2.clearBuffer();
-  u8g2.drawStr(0, 10, "Please choose 1 for");
-  u8g2.drawStr(0, 25, "enroll 2 for");
-  u8g2.drawStr(0, 40, "validation");
-  u8g2.sendBuffer();
-  mode = readnumber();
-  if (mode == 1)
+  if (buttonState1 == HIGH)
   {
+    mode = 1;
     while (mode == 1)
     {
+      if (buttonState3 == HIGH)
+      {
+        mode = 0;
+        return;
+      }
       enrollUser();
     }
   }
-  else if (mode == 2)
+  if (buttonState2 == HIGH)
   {
+    mode = 2;
     while (mode == 2)
     {
       getFingerprintIDez();
     }
-  }
-  else if (mode == 0)
-  {
-    return;
   }
 }
